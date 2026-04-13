@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angler's Tactical Report – Ireland</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Barlow:wght@300;400;500&family=Barlow+Condensed:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1a10;--green:#6db358;--teal:#3ab899;--gold:#c8a830;
+  --text:#c8dfc0;--text-dim:#7aaa88;--text-muted:#5a8068;
+  --border:#254535;
+  --font-h:'Playfair Display',serif;
+  --font-b:'Barlow',sans-serif;
+  --font-m:'Share Tech Mono',monospace;
+}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b)}
+
+.hero{min-height:100vh;position:relative;display:flex;flex-direction:column;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(13,26,16,.75) 0%,rgba(13,26,16,.25) 35%,rgba(13,26,16,.55) 65%,rgba(13,26,16,.9) 100%)}
+
+nav{position:relative;z-index:10;padding:20px 32px;display:flex;justify-content:space-between;align-items:center}
+.nav-brand{font-family:var(--font-h);font-size:20px;color:var(--green);font-style:italic}
+.nav-brand span{font-size:12px;font-family:var(--font-b);font-style:normal;font-weight:300;color:var(--text-muted);margin-left:8px}
+#clock{font-family:var(--font-m);font-size:11px;color:var(--text-muted)}
+
+.hero-content{position:relative;z-index:10;padding:20px 32px 24px;max-width:640px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.hero-tag{font-family:var(--font-m);font-size:10px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px}
+.hero-title{font-family:var(--font-h);font-size:clamp(38px,6vw,70px);line-height:1.05;color:#e8f8e0;margin-bottom:10px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.hero-title em{color:var(--green);font-style:italic}
+.hero-sub{font-size:14px;color:var(--text-dim);max-width:460px;line-height:1.7;font-weight:300}
+
+.menu-grid{position:relative;z-index:10;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;padding:0 32px 28px;max-width:860px}
+.menu-card{background:rgba(14,28,18,0.82);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:6px;padding:20px 22px;text-decoration:none;display:block;transition:all .2s;position:relative;overflow:hidden}
+.menu-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:0;transition:opacity .2s}
+.menu-card:hover{border-color:var(--c);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.menu-card:hover::after{opacity:1}
+.mc-icon{font-size:26px;margin-bottom:8px}
+.mc-title{font-family:var(--font-h);font-size:20px;color:var(--text);margin-bottom:5px}
+.mc-desc{font-size:11px;color:var(--text-dim);line-height:1.6;font-weight:300}
+.mc-meta{margin-top:10px;font-family:var(--font-m);font-size:9px;color:var(--text-muted);letter-spacing:.3px}
+.mc-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px;opacity:.3;transition:all .2s;color:var(--c)}
+.menu-card:hover .mc-arrow{opacity:1;right:10px}
+
+.season-strip{position:relative;z-index:10;display:flex;gap:18px;padding:10px 32px;border-top:1px solid var(--border);background:rgba(13,26,16,.82);backdrop-filter:blur(4px);flex-wrap:wrap}
+.si{font-family:var(--font-m);font-size:10px;color:var(--text-muted)}
+.si b{color:var(--text)}.si.live{color:var(--green)}
+
+@media(max-width:600px){
+  nav,.hero-content,.season-strip{padding-left:16px;padding-right:16px}
+  .menu-grid{padding:0 16px 20px;grid-template-columns:1fr}
+  .hero-title{font-size:36px}
+}
+
+/* ── RIVER QUICK SELECT on landing ── */
+.river-quick{position:relative;z-index:10;padding:0 32px 24px;max-width:860px}
+.rq-title{font-family:var(--font-m);font-size:10px;letter-spacing:2px;color:var(--text-muted);
+  text-transform:uppercase;margin-bottom:10px}
+.rq-grid{display:flex;flex-wrap:wrap;gap:8px}
+.rq-sys{font-family:var(--font-m);font-size:9px;letter-spacing:1px;color:var(--text-muted);
+  text-transform:uppercase;padding:2px 8px;background:rgba(20,40,28,.8);
+  border:1px solid var(--border);border-radius:2px;align-self:center;white-space:nowrap}
+.rq-btn{font-family:var(--font-m);font-size:11px;padding:7px 16px;
+  border:1px solid var(--border);background:rgba(14,30,20,.85);
+  color:var(--text);border-radius:3px;cursor:pointer;text-decoration:none;
+  transition:all .15s;white-space:nowrap;display:inline-block}
+.rq-btn:hover{border-color:var(--green);color:var(--green);
+  background:rgba(20,50,30,.9);transform:translateY(-1px)}
+@media(max-width:600px){.river-quick{padding:0 16px 20px}}
+</style>
+</head>
+<body>
+<div class="hero">
+
+<!-- SVG background: Irish river at dusk with fly angler -->
+<svg class="hero-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+  <linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#08181f"/><stop offset="55%" stop-color="#0c2018"/><stop offset="100%" stop-color="#080f08"/></linearGradient>
+  <linearGradient id="gwat" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0e2d38"/><stop offset="100%" stop-color="#060e12"/></linearGradient>
+  <linearGradient id="ghill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a1e0e"/><stop offset="100%" stop-color="#050c06"/></linearGradient>
+  <radialGradient id="gmoon" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ddeedd" stop-opacity=".35"/><stop offset="60%" stop-color="#aaccbb" stop-opacity=".15"/><stop offset="100%" stop-color="#aaccbb" stop-opacity="0"/></radialGradient>
+  <filter id="fblur"><feGaussianBlur stdDeviation="2.5"/></filter>
+</defs>
+<rect width="1440" height="900" fill="url(#gsky)"/>
+<!-- Stars -->
+<g fill="#90b8a0" opacity=".5"><circle cx="80" cy="55" r="1"/><circle cx="230" cy="38" r="1.2"/><circle cx="460" cy="70" r=".8"/><circle cx="690" cy="42" r="1"/><circle cx="880" cy="28" r="1.2"/><circle cx="1060" cy="65" r=".9"/><circle cx="1250" cy="44" r="1"/><circle cx="1400" cy="80" r=".8"/><circle cx="160" cy="105" r=".9"/><circle cx="390" cy="92" r="1"/><circle cx="620" cy="58" r=".7"/><circle cx="820" cy="90" r="1.1"/><circle cx="1140" cy="35" r=".8"/><circle cx="1340" cy="110" r="1"/></g>
+<!-- Moon glow -->
+<circle cx="1080" cy="130" r="60" fill="url(#gmoon)"/>
+<circle cx="1080" cy="130" r="28" fill="#e0eed8" opacity=".18"/>
+<circle cx="1080" cy="130" r="20" fill="#eef8e8" opacity=".12"/>
+<!-- Far hills -->
+<path d="M0,490 Q150,370 320,400 Q500,430 680,395 Q780,375 900,400 Q1020,425 1150,390 Q1300,355 1440,385 L1440,520 L0,520Z" fill="url(#ghill)" opacity=".85" filter="url(#fblur)"/>
+<!-- Tree silhouettes left -->
+<g fill="#07120a" opacity=".95">
+  <path d="M20,500 L30,465 L40,500Z"/><path d="M35,500 L50,455 L65,500Z"/><path d="M55,498 L75,448 L95,498Z"/>
+  <path d="M80,500 L100,460 L120,500Z"/><path d="M110,498 L130,452 L150,498Z"/>
+  <path d="M140,500 L162,458 L184,500Z"/><path d="M170,498 L195,450 L220,498Z"/>
+  <rect x="29" y="480" width="3" height="22"/><rect x="63" y="478" width="4" height="24"/>
+  <rect x="93" y="478" width="4" height="24"/><rect x="118" y="478" width="4" height="22"/>
+  <rect x="148" y="480" width="4" height="22"/><rect x="193" y="472" width="5" height="28"/>
+</g>
+<!-- Tree silhouettes right -->
+<g fill="#07120a" opacity=".9">
+  <path d="M1200,498 L1225,455 L1250,498Z"/><path d="M1240,500 L1268,450 L1296,500Z"/>
+  <path d="M1280,498 L1310,448 L1340,498Z"/><path d="M1320,500 L1355,452 L1390,500Z"/>
+  <path d="M1370,498 L1400,455 L1430,498Z"/>
+  <rect x="1223" y="476" width="4" height="24"/><rect x="1266" y="472" width="5" height="28"/>
+  <rect x="1308" y="470" width="5" height="30"/><rect x="1353" y="474" width="5" height="26"/>
+  <rect x="1398" y="476" width="4" height="24"/>
+</g>
+<!-- River bank far side -->
+<path d="M0,508 Q300,492 600,505 Q900,518 1200,498 Q1350,490 1440,500 L1440,558 L0,558Z" fill="#0a1c0e" opacity=".95"/>
+<!-- River -->
+<path d="M0,552 Q240,535 480,548 Q720,562 960,540 Q1200,525 1440,542 L1440,750 L0,750Z" fill="url(#gwat)"/>
+<!-- Water ripples -->
+<g stroke="#2a6050" stroke-width=".8" fill="none" opacity=".3">
+  <path d="M80,592 Q200,587 320,592"/><path d="M120,610 Q260,604 400,610"/>
+  <path d="M60,630 Q210,623 360,630"/><path d="M380,588 Q520,582 660,588"/>
+  <path d="M420,608 Q580,601 740,608"/><path d="M460,630 Q650,622 840,630"/>
+  <path d="M780,590 Q940,584 1100,590"/><path d="M820,612 Q1000,605 1180,612"/>
+  <path d="M860,635 Q1060,627 1260,635"/>
+</g>
+<!-- Moon on water -->
+<ellipse cx="1080" cy="650" rx="35" ry="90" fill="#c8d8c0" opacity=".04"/>
+<!-- Near bank -->
+<path d="M0,728 Q180,710 360,722 Q540,734 720,718 L720,900 L0,900Z" fill="#050c06"/>
+<path d="M680,732 Q900,714 1100,726 Q1280,738 1440,720 L1440,900 L680,900Z" fill="#050c06"/>
+<!-- Rushes -->
+<g stroke="#0e2212" stroke-width="1.5" fill="none" opacity=".9">
+  <line x1="30" y1="728" x2="25" y2="700"/><line x1="50" y1="730" x2="55" y2="698"/>
+  <line x1="80" y1="726" x2="78" y2="695"/><line x1="105" y1="728" x2="110" y2="696"/>
+  <line x1="1330" y1="724" x2="1328" y2="694"/><line x1="1360" y1="726" x2="1365" y2="696"/>
+  <line x1="1395" y1="722" x2="1392" y2="692"/><line x1="1420" y1="724" x2="1425" y2="694"/>
+</g>
+
+<!-- ═══ FLY ANGLER ═══ -->
+<g transform="translate(540,508)">
+  <!-- Water disturbance -->
+  <ellipse cx="0" cy="168" rx="40" ry="7" fill="none" stroke="#2a5545" stroke-width="1.8" opacity=".5"/>
+  <ellipse cx="0" cy="168" rx="55" ry="10" fill="none" stroke="#1a4035" stroke-width=".8" opacity=".3"/>
+  <!-- Waders/legs -->
+  <path d="M-9,115 Q-11,145 -10,168" stroke="#1a3528" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M9,115 Q12,142 13,168" stroke="#1a3528" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <!-- Wader body -->
+  <path d="M-15,55 Q-18,85 -9,115 L9,115 Q18,85 15,55Z" fill="#1e3828"/>
+  <!-- Jacket -->
+  <path d="M-15,55 Q-20,25 -12,15 L12,15 Q20,25 15,55Z" fill="#2d5035"/>
+  <!-- Head -->
+  <circle cx="0" cy="3" r="13" fill="#243020"/>
+  <!-- Fishing hat -->
+  <ellipse cx="0" cy="-4" rx="20" ry="5" fill="#1a2818"/>
+  <path d="M-20,-4 Q0,-20 20,-4" fill="#1a2818"/>
+  <!-- Hat detail -->
+  <path d="M-14,-4 Q0,-16 14,-4" fill="none" stroke="#0e1a0c" stroke-width="1"/>
+
+  <!-- Left arm – rod hand raised -->
+  <path d="M-15,30 Q-40,5 -52,-28" stroke="#2d5035" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <!-- Right arm – line hand -->
+  <path d="M15,30 Q35,22 46,18" stroke="#2d5035" stroke-width="9" stroke-linecap="round" fill="none"/>
+
+  <!-- ── FLY ROD ── -->
+  <!-- Rod grip at -52,-28 curving to tip at 160,-210 -->
+  <path d="M-52,-28 Q0,-90 80,-150 Q120,-180 160,-210" stroke="#7a9070" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <!-- Rod sections highlight -->
+  <path d="M-52,-28 Q-20,-65 10,-100" stroke="#8aa080" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Reel -->
+  <ellipse cx="-44" cy="-16" rx="6" ry="7" fill="none" stroke="#587055" stroke-width="2.2"/>
+  <circle cx="-44" cy="-16" r="2" fill="#587055"/>
+
+  <!-- ── FLY LINE LOOP IN AIR ── -->
+  <!-- Back loop -->
+  <path d="M160,-210 Q185,-255 155,-285 Q125,-315 95,-298 Q65,-280 78,-255 Q92,-232 118,-220 Q138,-210 155,-208"
+        fill="none" stroke="#b8c898" stroke-width="1.4" opacity=".75"/>
+  <!-- Leader -->
+  <path d="M155,-208 Q170,-202 180,-190 Q190,-175 185,-162"
+        fill="none" stroke="#b8c898" stroke-width=".9" opacity=".6"/>
+  <!-- Fly -->
+  <circle cx="185" cy="-160" r="3.5" fill="#c8a030" opacity=".85"/>
+  <path d="M182,-160 Q189,-154 187,-162 Q184,-168 182,-160" fill="#d4b040" opacity=".85"/>
+  <path d="M188,-158 Q196,-152 194,-160" stroke="#b09020" stroke-width=".8" fill="none" opacity=".7"/>
+</g>
+
+<!-- Second angler – background, wading deeper -->
+<g transform="translate(960,530) scale(0.5)" opacity=".28">
+  <path d="M-9,115 Q-10,148 -9,168" stroke="#1a3528" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M9,115 Q11,145 12,168" stroke="#1a3528" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M-15,55 Q-18,85 -9,115 L9,115 Q18,85 15,55Z" fill="#1e3828"/>
+  <path d="M-15,55 Q-20,25 -12,15 L12,15 Q20,25 15,55Z" fill="#2d5035"/>
+  <circle cx="0" cy="3" r="13" fill="#243020"/>
+  <ellipse cx="0" cy="-4" rx="20" ry="5" fill="#1a2818"/>
+  <path d="M-20,-4 Q0,-20 20,-4" fill="#1a2818"/>
+  <path d="M-15,30 Q-40,5 -52,-28" stroke="#2d5035" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <path d="M-52,-28 Q20,-100 130,-180" stroke="#7a9070" stroke-width="2.5" fill="none"/>
+</g>
+</svg>
+
+<div class="hero-overlay"></div>
+
+<nav>
+  <div class="nav-brand">🎣 Angler's Tactical Report <span>Ireland</span></div>
+  <div id="clock">—</div>
+</nav>
+
+<div class="hero-content">
+  <div class="hero-tag">Live Conditions &nbsp;·&nbsp; Fly Intelligence &nbsp;·&nbsp; AI Verdict</div>
+  <h1 class="hero-title">Where to fish.<br><em>Right now.</em></h1>
+  <p class="hero-sub">Live river levels, weather, tides and hatch intelligence for Cork's spate rivers and Ireland's great limestone loughs — with AI-powered go/wait/stay-home decisions.</p>
+</div>
+
+<div class="menu-grid">
+  <a href="/rivers.html" class="menu-card" style="--c:var(--green)">
+    <div class="mc-icon">🏞️</div>
+    <div class="mc-title">Rivers</div>
+    <div class="mc-desc">Live OPW levels, spate phase, tide windows, solunar periods and fly recommendations. Select a river, set your start location, get an AI verdict.</div>
+    <div class="mc-meta">Blackwater · Owennabue · Bandon · Lee · Laune · Moy · Slaney · Corrib</div>
+    <div class="mc-arrow">→</div>
+  </a>
+  <a href="/loughs.html" class="menu-card" style="--c:var(--teal)">
+    <div class="mc-icon">🌊</div>
+    <div class="mc-title">Irish Loughs</div>
+    <div class="mc-desc">Brown trout planner for the limestone loughs. Hatch calendar, drift compass, hourly day planner and Dennis Moss boat fishing tactics.</div>
+    <div class="mc-meta">Conn &nbsp;·&nbsp; Corrib &nbsp;·&nbsp; Melvin &nbsp;·&nbsp; Sheelin</div>
+    <div class="mc-arrow">→</div>
+  </a>
+  <a href="/rivers.html#catch-log-section" class="menu-card" style="--c:var(--gold)">
+    <div class="mc-icon">📓</div>
+    <div class="mc-title">Catch Log</div>
+    <div class="mc-desc">Log your catches with photos, fly details and conditions. Stored privately on your device — your personal fishing diary.</div>
+    <div class="mc-meta">Photo upload &nbsp;·&nbsp; Private storage &nbsp;·&nbsp; No account needed</div>
+    <div class="mc-arrow">→</div>
+  </a>
+</div>
+
+<div class="river-quick">
+  <div class="rq-title">⚡ Jump directly to a river:</div>
+  <div class="rq-grid">
+    <span class="rq-sys">Blackwater (W→E)</span>
+    <a href="/rivers.html?river=0" class="rq-btn">Keale Bridge</a>
+    <a href="/rivers.html?river=1" class="rq-btn">Mallow</a>
+    <a href="/rivers.html?river=2" class="rq-btn">Killavullen</a>
+    <a href="/rivers.html?river=3" class="rq-btn">Ballyduff</a>
+    <span class="rq-sys">Owennabue</span>
+    <a href="/rivers.html?river=4" class="rq-btn">Ballea</a>
+    <span class="rq-sys">Bandon</span>
+    <a href="/rivers.html?river=5" class="rq-btn">Bandon Town</a>
+    <span class="rq-sys">Lee (Cork)</span>
+    <a href="/rivers.html?river=6" class="rq-btn">Inniscarra</a>
+    <a href="/rivers.html?river=7" class="rq-btn">Waterworks</a>
+    <span class="rq-sys">Laune / Kerry</span>
+    <a href="/rivers.html?river=8" class="rq-btn">Killorglin</a>
+    <a href="/rivers.html?river=9" class="rq-btn">Flesk</a>
+    <span class="rq-sys">Moy (Mayo)</span>
+    <a href="/rivers.html?river=10" class="rq-btn">Ballina</a>
+    <span class="rq-sys">Slaney</span>
+    <a href="/rivers.html?river=12" class="rq-btn">Enniscorthy</a>
+    <span class="rq-sys">Corrib</span>
+    <a href="/rivers.html?river=13" class="rq-btn">Ballygaddy</a>
+    <a href="/rivers.html" class="rq-btn" style="border-color:var(--green);color:var(--green)">All Rivers →</a>
+  </div>
+</div>
+<div class="season-strip">
+  <div class="si live">🟢 <b>Season open</b> 15 Feb – 12 Oct</div>
+  <div class="si">📋 Salmon C&R until 1 June · Max 3/season Jun–Aug</div>
+  <div class="si">🎣 Brown trout: no licence on most loughs</div>
+  <div class="si">📍 Set your start location on the Rivers page</div>
+</div>
+
+</div>
+
+<script>
+function tick(){
+  const d=new Date();
+  document.getElementById('clock').textContent=
+    d.toLocaleDateString('en-IE',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})
+    +' '+d.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+}
+setInterval(tick,1000);tick();
+</script>
+</body>
+</html>

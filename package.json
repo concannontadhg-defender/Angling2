@@ -1,0 +1,5 @@
+{
+  "name": "angling-tactical-report",
+  "version": "8.0.0",
+  "engines": { "node": "24.x" }
+}

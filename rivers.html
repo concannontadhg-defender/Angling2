@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angler's Tactical Report v8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1a10;--surface:#111f14;--card:#152218;--card-hi:#1a2e1e;
+  --border:#2a4530;--border-light:#3a6048;
+  --text:#cce0c0;--text-muted:#6a9070;--text-dim:#90aa88;
+  --green:#7ec868;--amber:#c97d18;--blue:#4290ad;--red:#c45a4a;
+  --cyan:#3fa8a0;--yellow:#c8a84a;--purple:#8b6eb0;
+  --prime-bg:#1e1000;--prime-border:#6b3a00;
+  --font-h:'Bebas Neue','Barlow Condensed',sans-serif;
+  --font-b:'Barlow',sans-serif;--font-m:'Share Tech Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);background-image:radial-gradient(ellipse 60% 40% at 20% 10%,rgba(30,60,20,.18) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 80% 90%,rgba(15,40,30,.15) 0%,transparent 70%);color:var(--text);font-family:var(--font-b);font-size:13px;line-height:1.5}
+
+/* HEADER */
+header{background:linear-gradient(180deg,#0b120a,#0d1a10);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.logo{font-family:var(--font-h);font-size:24px;letter-spacing:2px;color:var(--green)}
+.logo small{color:var(--text-dim);font-size:11px;font-family:var(--font-b);letter-spacing:0;font-weight:300;margin-left:8px}
+.header-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.meta-chip{font-family:var(--font-m);font-size:10px;color:var(--text-dim);background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 8px}
+.meta-chip b{color:var(--text)}
+#today-score-badge{font-family:var(--font-h);font-size:18px;letter-spacing:1px;padding:4px 12px;border-radius:3px;border:1px solid var(--border)}
+.score-badge-low{background:#1a0808;border-color:#4a1010;color:var(--red)}
+.score-badge-mid{background:#1a1400;border-color:#5a4000;color:var(--yellow)}
+.score-badge-good{background:#0a1e0a;border-color:#205520;color:var(--green)}
+.share-btn,.notif-btn,.refresh-btn{background:var(--border);border:1px solid var(--border-light);color:var(--text-dim);font-family:var(--font-m);font-size:11px;padding:4px 10px;border-radius:3px;cursor:pointer;transition:all .15s}
+.share-btn:hover,.notif-btn:hover,.refresh-btn:hover{background:var(--border-light);color:var(--text)}
+#countdown{font-family:var(--font-m);font-size:10px;color:var(--text-muted)}
+
+/* ALERTS */
+#alerts{padding:0 14px}
+.prime-alert,.flow-alert{font-family:var(--font-m);font-size:12px;padding:8px 14px;margin:8px 0;border-radius:3px}
+.prime-alert{background:var(--prime-bg);border:1px solid var(--prime-border);border-left:4px solid var(--amber);color:var(--amber);animation:pulse-border 1.5s ease-in-out infinite}
+.flow-alert{background:#001a0a;border:1px solid #1a4a20;border-left:4px solid var(--green);color:#7ecf70}
+.flow-alert.rising{background:#1a0800;border-left-color:var(--red);color:#e07060}
+@keyframes pulse-border{0%,100%{border-left-color:var(--amber)}50%{border-left-color:#7b4800}}
+
+/* NIGHT PLANNER */
+#night-planner{margin:10px 14px;background:linear-gradient(135deg,#0a0f18,#080c08);border:1px solid #1a2a3a;border-radius:5px;overflow:hidden}
+.night-hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #1a2a3a;cursor:pointer;user-select:none}
+.night-hdr-left{font-family:var(--font-h);font-size:18px;letter-spacing:1.5px;color:#90c0e0}
+.night-quality{font-family:var(--font-m);font-size:11px;padding:3px 10px;border-radius:3px;border:1px solid #2a4060;background:#0a1520}
+.night-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;padding:12px 14px}
+.night-card{background:#0a1018;border:1px solid #1a2a3a;border-radius:4px;padding:8px 10px}
+.night-card-name{font-family:var(--font-h);font-size:14px;letter-spacing:1px;color:#90c0e0;margin-bottom:4px}
+.night-window{font-family:var(--font-m);font-size:11px;color:#70b0d0;margin:2px 0}
+.night-note{font-size:10px;color:#4a7090;margin-top:3px}
+.night-go{color:#60d060;border-color:#20502a}
+.night-fair{color:var(--yellow)}
+.night-poor{color:var(--text-muted)}
+
+/* SHORTLIST */
+#shortlist-section{margin:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.section-hdr{background:linear-gradient(90deg,#14201214,transparent);border-bottom:1px solid var(--border);padding:8px 14px;font-family:var(--font-h);font-size:15px;letter-spacing:1px;color:var(--text-dim);display:flex;align-items:center;justify-content:space-between}
+.shortlist-table{width:100%;border-collapse:collapse;font-family:var(--font-m);font-size:11px}
+.shortlist-table th{padding:5px 10px;text-align:left;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.shortlist-table td{padding:5px 10px;border-bottom:1px solid var(--border)}
+.shortlist-table tr:last-child td{border-bottom:none}
+.shortlist-table tr:hover td{background:var(--card-hi)}
+
+/* 10-DAY CALENDAR */
+#calendar-section{margin:10px 14px}
+.calendar-scroll{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.cal-day{flex-shrink:0;width:90px;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:8px;cursor:pointer;transition:border-color .15s}
+.cal-day:hover{border-color:var(--border-light)}
+.cal-day.today{border-color:var(--green)}
+.cal-day.best-day{border-color:var(--amber);background:var(--prime-bg)}
+.cal-day-name{font-family:var(--font-h);font-size:13px;letter-spacing:.5px;color:var(--text-dim)}
+.cal-day-date{font-size:10px;color:var(--text-muted);margin-bottom:4px}
+.cal-score-bar{height:4px;border-radius:2px;margin:4px 0}
+.cal-score-num{font-family:var(--font-m);font-size:14px;font-weight:bold}
+.cal-rain{font-family:var(--font-m);font-size:10px;color:var(--blue);margin-top:2px}
+.cal-icons{font-size:11px;margin-top:2px}
+
+/* STATIONS GRID */
+#stations-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:12px;padding:10px 14px 16px}
+
+/* STATION CARD */
+.station-card{background:var(--card);border:1px solid var(--border);border-radius:5px;overflow:hidden;transition:border-color .2s}
+.station-card:hover{border-color:var(--border-light)}
+.station-card.prime-window{border-color:var(--prime-border)}
+.card-header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 8px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,#131e1200,#131e1250)}
+.card-title{font-family:var(--font-h);font-size:20px;letter-spacing:1.5px;color:var(--text);line-height:1}
+.card-system{font-size:10px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.card-badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.badge{font-family:var(--font-m);font-size:10px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2px 8px}
+.card-body{padding:10px 14px}
+
+/* DATA ROWS */
+.data-row{display:flex;justify-content:space-between;align-items:baseline;padding:2px 0;border-bottom:1px solid #1c2a1a20;gap:8px}
+.data-row:last-child{border-bottom:none}
+.data-label{font-family:var(--font-m);font-size:10px;color:var(--text-muted);min-width:70px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.data-val{font-family:var(--font-m);font-size:11px;color:var(--text);text-align:right;flex:1}
+.data-note{font-size:10px;color:var(--text-dim);font-style:italic;flex:2;text-align:right}
+.trend-up{color:#f08060}
+.trend-dn{color:var(--blue)}
+.trend-st{color:var(--text-muted)}
+
+/* LEVEL GAUGE */
+.gauge-row{display:flex;align-items:center;gap:10px;margin:6px 0 4px}
+.gauge-outer{flex:1;height:12px;background:#111a10;border:1px solid var(--border);border-radius:2px;overflow:hidden;position:relative}
+.gauge-inner{height:100%;border-radius:1px;transition:width .6s}
+.gauge-ideal-mark{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,200,.4);z-index:2}
+.gauge-label{font-family:var(--font-m);font-size:10px;color:var(--text-muted);width:64px;text-align:right;flex-shrink:0}
+
+/* HISTORY GRAPH */
+.history-graph-wrap{margin:8px 0;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.history-graph-title{font-family:var(--font-m);font-size:9px;color:var(--text-muted);padding:3px 8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.history-svg{width:100%;height:70px;display:block}
+
+/* SPATE PILL */
+.spate-pill{display:inline-block;font-family:var(--font-m);font-size:10px;padding:2px 8px;border-radius:2px;letter-spacing:.3px}
+.spate-prime{background:#301800;color:var(--amber);border:1px solid #6b3a00;animation:pulse-border 1.5s infinite}
+.spate-coming{background:#0d1e08;color:var(--green);border:1px solid #2a4520}
+.spate-flood{background:#1e0808;color:var(--red);border:1px solid #4a1010}
+.spate-low{background:#08181e;color:var(--cyan);border:1px solid #10303a}
+.spate-ideal{background:#0a1e0a;color:#90d880;border:1px solid #205520}
+.spate-default{background:var(--surface);color:var(--text-dim);border:1px solid var(--border)}
+
+/* SOLUNAR */
+.solunar-wrap{margin:8px 0 4px;padding:8px 0;border-top:1px solid var(--border)}
+.solunar-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.solunar-title{font-family:var(--font-h);font-size:12px;letter-spacing:1px;color:var(--text-muted)}
+.solunar-strength{display:flex;gap:2px;align-items:center}
+.sol-dot{width:7px;height:7px;border-radius:50%}
+.sol-dot.filled{background:var(--yellow)}
+.sol-dot.empty{background:var(--border)}
+.solunar-periods{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.sol-period{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:4px 8px;font-family:var(--font-m);font-size:10px}
+.sol-period.active{background:#1a1600;border-color:#4a3800;color:var(--yellow)}
+.sol-period.overlap{background:#0a1800;border-color:#204020;color:var(--green)}
+.sol-type{color:var(--text-muted);font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+.sol-time{color:var(--text);font-size:11px}
+.sol-dur{color:var(--text-muted);font-size:9px}
+
+/* SCORES */
+.scores-section{margin:10px 0 6px;padding:8px 0 0;border-top:1px solid var(--border)}
+.scores-title{font-family:var(--font-h);font-size:12px;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px}
+.score-row{display:flex;align-items:center;gap:8px;margin:4px 0}
+.score-label{font-family:var(--font-m);font-size:10px;color:var(--text-muted);width:68px;flex-shrink:0;text-transform:uppercase}
+.score-bar-outer{flex:1;height:8px;background:#151e14;border:1px solid var(--border);border-radius:2px;overflow:hidden}
+.score-bar-inner{height:100%;border-radius:1px;transition:width .6s}
+.score-bar-inner.high{background:linear-gradient(90deg,#3a7028,var(--green))}
+.score-bar-inner.mid{background:linear-gradient(90deg,#7a5818,var(--yellow))}
+.score-bar-inner.low{background:linear-gradient(90deg,#252525,#383838)}
+.score-num{font-family:var(--font-m);font-size:10px;width:28px;text-align:right;flex-shrink:0}
+.score-num.high{color:var(--green)}.score-num.mid{color:var(--yellow)}.score-num.low{color:var(--text-muted)}
+.score-season{font-size:9px;color:var(--text-muted);width:40px;text-align:right;flex-shrink:0}
+.season-open{color:var(--green)}.season-closed{color:var(--red)}
+
+/* SECTION TOGGLE */
+.section-toggle{cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;padding:6px 0 4px;border-top:1px solid var(--border);margin-top:8px}
+.section-toggle-title{font-family:var(--font-h);font-size:12px;letter-spacing:1px;color:var(--text-muted)}
+.toggle-arrow{font-size:9px;color:var(--text-muted);transition:transform .2s}
+.toggle-arrow.open{transform:rotate(90deg)}
+.collapsible{overflow:hidden;max-height:0;transition:max-height .3s ease-out}
+.collapsible.open{max-height:2000px;transition:max-height .5s ease-in}
+
+/* FLIES */
+.fly-ctx{font-family:var(--font-m);font-size:10px;color:var(--text-muted);margin-bottom:8px;padding:3px 8px;background:var(--surface);border:1px solid var(--border);border-radius:2px}
+.fly-species{font-family:var(--font-m);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.fly-item{margin:4px 0 6px}
+.fly-item-name{color:var(--text);font-weight:500}
+.fly-item-size{font-family:var(--font-m);font-size:9px;color:var(--text-muted);margin-left:6px}
+.fly-item-reason{font-size:10px;color:var(--text-muted);padding-left:18px;margin-top:1px;line-height:1.4}
+.fly-note{font-size:10px;color:var(--amber);margin-top:4px;padding:3px 8px;background:#201000;border-left:2px solid var(--amber)}
+
+/* WEATHER */
+.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin:6px 0}
+.pressure-read{color:var(--yellow);font-size:11px;margin-top:4px}
+.wx-unavail{padding:8px 0;color:var(--red);font-family:var(--font-m);font-size:11px}
+
+/* TIDES */
+.tide-line{font-family:var(--font-m);font-size:11px;color:var(--text-dim);margin:3px 0}
+.leave-line{font-family:var(--font-m);font-size:11px;background:#0a1e0a;border:1px solid #1a3a1a;color:#80d870;padding:4px 10px;border-radius:3px;margin:6px 0 2px;display:flex;justify-content:space-between;align-items:center}
+.leave-now{background:var(--prime-bg);border-color:var(--prime-border);color:var(--amber);animation:pulse-border 1.5s infinite}
+
+/* FORECAST */
+.forecast-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px}
+.forecast-table tr{border-bottom:1px solid var(--border)}
+.forecast-table tr:last-child{border-bottom:none}
+.forecast-table td{padding:3px 4px}
+.f-day{font-family:var(--font-m);color:var(--text-dim);width:70px}
+.f-mm{font-family:var(--font-m);text-align:right;width:44px}
+.f-label{color:var(--text-dim)}.f-tactic{color:var(--text-muted);font-size:10px}
+.rain-low{color:var(--green)}.rain-light{color:var(--cyan)}.rain-mod{color:var(--yellow)}.rain-heavy{color:var(--red)}
+
+/* CATCH LOG */
+#catch-log-section{margin:10px 14px 24px;background:var(--surface);border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.catch-form-wrap{padding:12px 14px;border-bottom:1px solid var(--border)}
+.catch-form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:8px}
+.form-group{display:flex;flex-direction:column;gap:3px}
+.form-group label{font-family:var(--font-m);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px}
+.form-group input,.form-group select,.form-group textarea{background:var(--card);border:1px solid var(--border);color:var(--text);font-family:var(--font-m);font-size:11px;padding:5px 8px;border-radius:3px;outline:none;transition:border-color .15s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--border-light)}
+.form-group select option{background:var(--card)}
+.form-group textarea{resize:vertical;min-height:50px;font-family:var(--font-b)}
+.photo-label{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:3px;padding:6px 10px;cursor:pointer;font-family:var(--font-m);font-size:11px;color:var(--text-dim);transition:border-color .15s}
+.photo-label:hover{border-color:var(--border-light);color:var(--text)}
+#photo-preview{width:60px;height:60px;object-fit:cover;border-radius:3px;border:1px solid var(--border);display:none}
+.save-btn{background:#0a2210;border:1px solid #1a5a20;color:var(--green);font-family:var(--font-h);font-size:14px;letter-spacing:1px;padding:8px 20px;border-radius:3px;cursor:pointer;transition:all .15s;margin-top:8px}
+.save-btn:hover{background:#102a18;border-color:var(--green)}
+.catch-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;padding:12px 14px}
+.catch-card{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:relative}
+.catch-card-photo{width:100%;height:140px;object-fit:cover;display:block;background:var(--surface)}
+.catch-card-photo.no-photo{display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:24px}
+.catch-card-body{padding:8px 10px}
+.catch-card-title{font-family:var(--font-h);font-size:14px;letter-spacing:1px;color:var(--text);margin-bottom:4px}
+.catch-card-meta{font-family:var(--font-m);font-size:10px;color:var(--text-dim);line-height:1.6}
+.catch-delete{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:1px solid var(--red);color:var(--red);font-family:var(--font-m);font-size:10px;padding:2px 6px;border-radius:2px;cursor:pointer;opacity:.7;transition:opacity .15s}
+.catch-delete:hover{opacity:1}
+.catch-empty{padding:24px;text-align:center;color:var(--text-muted);font-family:var(--font-m);font-size:12px}
+
+/* SHARE PANEL */
+#share-panel{display:none;position:fixed;bottom:60px;right:16px;background:var(--card);border:1px solid var(--border-light);border-radius:5px;padding:12px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:200px}
+#share-panel.open{display:block}
+.share-opt{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;font-family:var(--font-m);font-size:11px;color:var(--text-dim);transition:color .15s}
+.share-opt:last-child{border-bottom:none}
+.share-opt:hover{color:var(--text)}
+.share-icon{width:28px;text-align:center;font-size:14px}
+
+/* BOTTOM BAR */
+#bottom-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(8,12,8,.95);backdrop-filter:blur(4px);border-top:1px solid var(--border);padding:8px 16px;display:flex;gap:8px;align-items:center;z-index:150}
+.bottom-btn{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);font-family:var(--font-m);font-size:11px;padding:6px;border-radius:3px;cursor:pointer;transition:all .15s;text-align:center}
+.bottom-btn:hover{background:var(--border);color:var(--text)}
+.bottom-btn.active{border-color:var(--green);color:var(--green)}
+
+/* LOADING */
+.loading-card{background:var(--card);border:1px solid var(--border);border-radius:5px;padding:24px;text-align:center;color:var(--text-muted);font-family:var(--font-m);font-size:12px}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-chip{font-family:var(--font-m);font-size:10px;color:var(--red);background:#1e0808;border:1px solid #4a1010;padding:1px 6px;border-radius:2px}
+
+/* MISC */
+@media(max-width:600px){#stations-grid{grid-template-columns:1fr;padding:8px}header{padding:8px 12px}}
+.tag-open{color:var(--green)}.tag-closed{color:var(--red)}
+
+/* ── AI VERDICT ─────────────────────────────────────────────────── */
+.ai-btn{background:linear-gradient(135deg,#0a1e10,#0e2818);border:1px solid #254535;
+  color:var(--green);font-family:var(--font-m);font-size:10px;padding:4px 10px;
+  border-radius:3px;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.ai-btn:hover{background:#142e1c;border-color:var(--green)}
+.ai-btn:disabled{opacity:.5;cursor:wait}
+.ai-verdict{margin:10px 0;background:linear-gradient(135deg,#080e08,#0a140a);
+  border:1px solid #1e3520;border-left:3px solid var(--green);border-radius:4px;
+  overflow:hidden}
+.ai-verdict-hdr{display:flex;justify-content:space-between;align-items:center;
+  padding:6px 12px;border-bottom:1px solid #1e3520;
+  font-family:var(--font-m);font-size:10px;color:var(--text-muted)}
+.ai-verdict-body{padding:10px 12px;font-size:12px;line-height:1.65;color:var(--text-dim)}
+.ai-verdict-body b{color:var(--text)}
+.ai-go{border-left-color:#60d060!important}
+.ai-wait{border-left-color:var(--amber)!important}
+.ai-no{border-left-color:var(--red)!important}
+.ai-loading{display:flex;align-items:center;gap:8px;padding:10px 12px;
+  color:var(--text-muted);font-family:var(--font-m);font-size:11px}
+.ai-loading .spinner{width:14px;height:14px;border-width:2px;margin:0}
+
+/* ── RIVER SELECTOR ──────────────────────────────────────────────── */
+#river-selector-wrap{padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
+.river-select-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.river-select-label{font-family:var(--font-m);font-size:11px;color:var(--text-muted);white-space:nowrap}
+.river-btn{font-family:var(--font-m);font-size:11px;padding:6px 14px;border:1px solid var(--border);
+  background:var(--card);color:var(--text-muted);border-radius:3px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.river-btn:hover{border-color:var(--border-light);color:var(--text)}
+.river-btn.active{border-color:var(--green);color:var(--green);background:#0a1810}
+.river-sys-label{font-family:var(--font-c);font-size:10px;letter-spacing:1px;color:var(--text-muted);
+  text-transform:uppercase;padding:2px 8px;background:var(--border);border-radius:2px;white-space:nowrap}
+/* ── START LOCATION ─────────────────────────────────────────────── */
+#location-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;
+  background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.loc-label{font-family:var(--font-m);font-size:10px;color:var(--text-muted);white-space:nowrap}
+.loc-input{background:var(--card);border:1px solid var(--border);color:var(--text);
+  font-family:var(--font-m);font-size:11px;padding:5px 10px;border-radius:3px;
+  outline:none;flex:1;min-width:180px;transition:border-color .15s}
+.loc-input:focus{border-color:var(--border-light)}
+.loc-btn{background:#0a1e10;border:1px solid #254535;color:var(--green);
+  font-family:var(--font-m);font-size:11px;padding:5px 12px;border-radius:3px;
+  cursor:pointer;white-space:nowrap;transition:all .15s}
+.loc-btn:hover{background:#142e1c;border-color:var(--green)}
+.loc-current{font-family:var(--font-m);font-size:10px;color:var(--text-muted);
+  padding:5px 10px;border:1px solid var(--border);border-radius:3px;cursor:pointer;
+  transition:all .15s;white-space:nowrap}
+.loc-current:hover{color:var(--teal);border-color:var(--teal)}
+
+/* ── OPW STATION BROWSER ───────────────────────────────────────── */
+#station-browser{display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);padding:20px;
+  overflow-y:auto}
+#station-browser.open{display:flex;align-items:flex-start;justify-content:center}
+.sb-panel{background:#0d1a10;border:1px solid var(--border-light);border-radius:8px;
+  width:100%;max-width:680px;overflow:hidden;margin:auto}
+.sb-head{display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,#112018,#0d1a10)}
+.sb-title{font-family:var(--font-h);font-size:20px;color:var(--text)}
+.sb-close{font-family:var(--font-m);font-size:14px;color:var(--text-muted);
+  cursor:pointer;padding:4px 8px;border:1px solid var(--border);border-radius:3px;
+  transition:all .15s}
+.sb-close:hover{color:var(--red);border-color:var(--red)}
+.sb-search-row{padding:12px 18px;border-bottom:1px solid var(--border);
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sb-input{flex:1;min-width:180px;background:var(--card);border:1px solid var(--border);
+  color:var(--text);font-family:var(--font-m);font-size:12px;
+  padding:7px 12px;border-radius:3px;outline:none}
+.sb-input:focus{border-color:var(--border-light)}
+.sb-filter{font-family:var(--font-m);font-size:11px;padding:7px 12px;
+  background:var(--card);border:1px solid var(--border);color:var(--text-dim);
+  border-radius:3px;cursor:pointer;transition:all .15s}
+.sb-filter:hover,.sb-filter.active{border-color:var(--teal);color:var(--teal)}
+.sb-status{padding:6px 18px;font-family:var(--font-m);font-size:10px;
+  color:var(--text-muted);border-bottom:1px solid var(--border)}
+.sb-list{max-height:420px;overflow-y:auto}
+.sb-item{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;
+  padding:10px 18px;border-bottom:1px solid var(--border);transition:background .1s}
+.sb-item:hover{background:var(--card-hi)}
+.sb-item-name{font-family:var(--font-m);font-size:12px;color:var(--text)}
+.sb-item-id{font-family:var(--font-m);font-size:10px;color:var(--text-muted)}
+.sb-item-level{font-family:var(--font-m);font-size:11px;color:var(--teal);
+  min-width:55px;text-align:right}
+.sb-add-btn{font-family:var(--font-m);font-size:10px;padding:4px 10px;
+  background:#0a1810;border:1px solid #254535;color:var(--green);
+  border-radius:3px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.sb-add-btn:hover{background:#142e1c;border-color:var(--green)}
+.sb-add-btn.added{background:#1a1000;border-color:var(--amber);color:var(--amber);cursor:default}
+.sb-empty{padding:24px;text-align:center;color:var(--text-muted);
+  font-family:var(--font-m);font-size:12px}
+.sb-setup{padding:14px 18px;border-top:1px solid var(--border);
+  background:#0a1208;font-size:11px;color:var(--text-dim)}
+.sb-setup b{color:var(--text)}
+.my-rivers-list{padding:8px 18px;max-height:200px;overflow-y:auto}
+.my-river-row{display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;border-bottom:1px solid var(--border)}
+.my-river-row:last-child{border-bottom:none}
+.my-river-name{font-family:var(--font-m);font-size:11px;color:var(--text)}
+.my-river-remove{font-family:var(--font-m);font-size:10px;color:var(--red);
+  cursor:pointer;padding:2px 6px;border:1px solid #4a1010;border-radius:2px;
+  transition:all .15s}
+.my-river-remove:hover{background:#200808}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div style="display:flex;align-items:center;gap:12px">
+    <a href="/" style="font-family:var(--font-m);font-size:10px;color:var(--text-muted);text-decoration:none;
+      border:1px solid var(--border);padding:3px 8px;border-radius:3px;transition:all .15s"
+      onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text-muted)')">← Home</a>
+    <div class="logo">🎣 RIVERS <small id="clock"></small></div>
+  </div>
+  </div>
+  <div class="header-right">
+    <a href="/loughs.html" target="_blank" style="background:var(--border);border:1px solid var(--border-light);color:var(--text-dim);font-family:var(--font-m);font-size:11px;padding:4px 10px;border-radius:3px;cursor:pointer;text-decoration:none;transition:all .15s">🎣 Loughs</a>
+    <div id="today-score-badge" class="score-badge-mid">TODAY: —</div>
+    <div class="meta-chip">🌙 <b id="hdr-lunar">—</b></div>
+    <div class="meta-chip"><b id="hdr-season">—</b></div>
+    <span id="countdown"></span>
+    <button class="refresh-btn" onclick="runReport()">↻ REFRESH</button>
+    <button class="notif-btn" id="notif-btn" onclick="toggleNotifications()">🔔 ALERTS</button>
+    <button class="share-btn" onclick="toggleSharePanel()">↑ SHARE</button>
+  </div>
+</header>
+
+<!-- LOCATION BAR -->
+<div id="location-bar">
+  <span class="loc-label">📍 FROM:</span>
+  <input class="loc-input" id="start-location" type="text" 
+    placeholder="Enter your starting address, e.g. Crosshaven, Cork" 
+    value="Crosshaven, Cork"
+    onkeydown="if(event.key==='Enter') updateLocation()">
+  <button class="loc-btn" onclick="updateLocation()">✓ Set</button>
+  <button class="loc-current" onclick="useCurrentLocation()" title="Use my GPS location">📍 Use GPS</button>
+  <span id="loc-status" style="font-family:var(--font-m);font-size:10px;color:var(--text-muted)"></span>
+</div>
+
+<!-- RIVER SELECTOR -->
+
+<!-- OPW STATION BROWSER MODAL -->
+<div id="station-browser">
+  <div class="sb-panel">
+    <div class="sb-head">
+      <div>
+        <div class="sb-title">Add a River</div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--text-muted);margin-top:2px">
+          All ~380 OPW gauged rivers in Ireland · Live data
+        </div>
+      </div>
+      <button class="sb-close" onclick="closeStationBrowser()">✕ Close</button>
+    </div>
+    
+    <!-- My Saved Rivers -->
+    <div id="sb-my-section" style="border-bottom:1px solid var(--border)">
+      <div style="padding:8px 18px 4px;font-family:var(--font-m);font-size:10px;
+        color:var(--teal);letter-spacing:.5px;text-transform:uppercase">⭐ My saved rivers</div>
+      <div class="my-rivers-list" id="sb-my-list"></div>
+    </div>
+    
+    <!-- Search -->
+    <div class="sb-search-row">
+      <input class="sb-input" id="sb-search" placeholder="Search by river or station name..." 
+        oninput="filterStations()" autocomplete="off">
+      <button class="sb-filter active" id="sb-f-all"   onclick="setSbFilter('all')">All</button>
+      <button class="sb-filter"        id="sb-f-Kerry"  onclick="setSbFilter('Kerry')">Kerry</button>
+      <button class="sb-filter"        id="sb-f-Cork"   onclick="setSbFilter('Cork')">Cork</button>
+      <button class="sb-filter"        id="sb-f-West"   onclick="setSbFilter('West')">West</button>
+      <button class="sb-filter"        id="sb-f-South"  onclick="setSbFilter('South')">South</button>
+    </div>
+    <div class="sb-status" id="sb-status">Loading OPW station list...</div>
+    <div class="sb-list" id="sb-list">
+      <div class="sb-empty"><div class="spinner"></div>Fetching live OPW data...</div>
+    </div>
+    
+    <div class="sb-setup">
+      <b>How to use:</b> Search for any Irish river, click <b>＋ Add</b> to add it to your <b>⭐ Custom</b> list.
+      You'll need to set the <b>ideal fishing level</b> yourself — check the OPW website for typical fishable levels on that river.
+      Data from <a href="https://waterlevel.ie" target="_blank" style="color:var(--teal)">waterlevel.ie</a> (OPW, CC-BY 4.0).
+    </div>
+  </div>
+</div>
+<div id="river-selector-wrap">
+  <div class="river-select-row">
+    <span class="river-select-label">SELECT RIVER:</span>
+    <span class="river-sys-label">Blackwater</span>
+    <button class="river-btn" onclick="selectRiver(0)" id="rbtn-0">Keale Bridge</button>
+    <button class="river-btn" onclick="selectRiver(1)" id="rbtn-1">Mallow</button>
+    <button class="river-btn" onclick="selectRiver(2)" id="rbtn-2">Killavullen</button>
+    <button class="river-btn" onclick="selectRiver(3)" id="rbtn-3">Ballyduff</button>
+    <span class="river-sys-label">Owennabue</span>
+    <button class="river-btn" onclick="selectRiver(4)" id="rbtn-4">Ballea</button>
+    <span class="river-sys-label">Bandon</span>
+    <button class="river-btn" onclick="selectRiver(5)" id="rbtn-5">Bandon</button>
+    <button class="river-btn active" onclick="selectRiver(-1)" id="rbtn-all">All Rivers</button>
+  </div>
+</div>
+
+<div id="alerts"></div>
+
+<!-- IFI 2026 REGULATIONS BANNER -->
+<div id="regs-banner" style="margin:8px 14px;background:#0a0e0a;border:1px solid var(--border);border-left:4px solid var(--amber);border-radius:4px;overflow:hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;cursor:pointer" onclick="toggleSection('regs-body')">
+    <span style="font-family:var(--font-h);font-size:14px;letter-spacing:1px;color:var(--amber)">📋 2026 IFI REGULATIONS – SALMON &amp; SEA TROUT</span>
+    <div style="display:flex;gap:12px;align-items:center">
+      <span id="regs-status-chip" style="font-family:var(--font-m);font-size:11px;padding:2px 8px;border-radius:3px"></span>
+      <span class="toggle-arrow" id="regs-arrow">▶</span>
+    </div>
+  </div>
+  <div id="regs-body" class="collapsible open" style="padding:0 14px 12px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:6px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:8px 10px">
+        <div style="font-family:var(--font-h);font-size:12px;letter-spacing:.5px;color:var(--yellow);margin-bottom:4px">NOW – 31 MAY</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--red);margin-bottom:2px">🔴 SALMON: CATCH &amp; RELEASE ONLY</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--red);margin-bottom:2px">🔴 SEA TROUT (over 40cm): C&amp;R ONLY</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--green)">🟢 Sea trout under 40cm: up to 3/day</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Single/double barbless hooks only on C&amp;R rivers</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:8px 10px">
+        <div style="font-family:var(--font-h);font-size:12px;letter-spacing:.5px;color:var(--green);margin-bottom:4px">1 JUNE – 31 AUGUST</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--green);margin-bottom:2px">🟢 SALMON: CAN RETAIN (open rivers only)</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--text);margin-bottom:2px">Daily limit: 3 fish/day (or 1 with day licence)</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--amber)">⚠ SEASONAL TOTAL: MAX 3 FISH</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Blue gill tag required on every retained fish. Brown tag on quota rivers.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:8px 10px">
+        <div style="font-family:var(--font-h);font-size:12px;letter-spacing:.5px;color:var(--cyan);margin-bottom:4px">1 SEPTEMBER</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--red);margin-bottom:2px">🔴 SALMON: CATCH &amp; RELEASE ONLY</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--red);margin-bottom:2px">🔴 SEA TROUT (over 40cm): C&amp;R ONLY</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">No worms as bait on C&amp;R rivers. Barbless hooks only.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:8px 10px">
+        <div style="font-family:var(--font-h);font-size:12px;letter-spacing:.5px;color:var(--purple);margin-bottom:4px">RIVER STATUS 2026</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--text);margin-bottom:2px">🟢 Bandon: <span style="color:var(--green)">Open</span> (June–Aug harvest)</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--text);margin-bottom:2px">🟢 Munster Blackwater: <span style="color:var(--green)">Open</span> (C&amp;R from Sep)</div>
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--text)">🟢 Sea Trout open: 15 Feb – 12 Oct</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Licence + logbook required at all times. Return logbook by 19 Oct.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NIGHT PLANNER -->
+<div id="night-planner">
+  <div class="night-hdr" onclick="toggleSection('night-body')">
+    <span class="night-hdr-left">🌙 TONIGHT'S SEA TROUT PLANNER</span>
+    <span class="night-quality" id="night-quality">Loading...</span>
+    <span class="toggle-arrow" id="night-arrow">▶</span>
+  </div>
+  <div id="night-body" class="collapsible">
+    <div id="night-grid" class="night-grid"></div>
+  </div>
+</div>
+
+<!-- SHORTLIST -->
+<div id="shortlist-section">
+  <div class="section-hdr">
+    ▸ DESTINATION SHORTLIST
+    <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-b)">sorted by salmon score</span>
+  </div>
+  <div id="shortlist-body"><div style="padding:10px 14px;color:var(--text-muted);font-family:var(--font-m);font-size:11px">Loading...</div></div>
+</div>
+
+<!-- 10-DAY CALENDAR -->
+<div id="calendar-section">
+  <div style="margin:10px 14px 6px;font-family:var(--font-h);font-size:16px;letter-spacing:1.5px;color:var(--text-dim)">▸ 10-DAY PLANNER</div>
+  <div class="calendar-scroll" id="calendar-scroll">
+    <div class="loading-card" style="width:300px"><div class="spinner"></div>Building calendar...</div>
+  </div>
+</div>
+
+<!-- STATIONS -->
+<div id="stations-grid"></div>
+
+<!-- CATCH LOG -->
+<div id="catch-log-section">
+  <div class="section-hdr">
+    📓 CATCH LOG &amp; DIARY
+    <span style="font-size:10px;font-family:var(--font-b);color:var(--text-muted)">stored locally on this device</span>
+  </div>
+  <div class="catch-form-wrap">
+    <div style="font-family:var(--font-h);font-size:14px;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">LOG A CATCH</div>
+    <div class="catch-form-grid">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="c-date">
+      </div>
+      <div class="form-group">
+        <label>River</label>
+        <select id="c-river">
+          <option value="">Select river...</option>
+          <option value="Bandon">Bandon</option>
+          <option value="Ballea / Cork Harbour">Ballea / Cork Harbour</option>
+          <option value="Blackwater (Mallow)">Blackwater (Mallow)</option>
+          <option value="Blackwater (Killavullen)">Blackwater (Killavullen)</option>
+          <option value="Blackwater (Ballyduff)">Blackwater (Ballyduff)</option>
+          <option value="Owennabue">Owennabue</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Beat / Location</label>
+        <input type="text" id="c-beat" placeholder="e.g. Cable Island, Pool 3">
+      </div>
+      <div class="form-group">
+        <label>Species</label>
+        <select id="c-species">
+          <option value="Atlantic Salmon">Atlantic Salmon</option>
+          <option value="Sea Trout">Sea Trout</option>
+          <option value="Brown Trout">Brown Trout</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Weight / Length</label>
+        <input type="text" id="c-size" placeholder="e.g. 4.2kg / 62cm">
+      </div>
+      <div class="form-group">
+        <label>Fly / Lure</label>
+        <input type="text" id="c-fly" placeholder="e.g. Ally's Shrimp sz 10">
+      </div>
+      <div class="form-group">
+        <label>Method</label>
+        <select id="c-method">
+          <option value="Wet Fly">Wet Fly</option>
+          <option value="Dry Fly">Dry Fly</option>
+          <option value="Nymph">Nymph</option>
+          <option value="Tube Fly">Tube Fly</option>
+          <option value="Spinner">Spinner</option>
+          <option value="Worm">Worm</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Time of Day</label>
+        <input type="time" id="c-time">
+      </div>
+      <div class="form-group">
+        <label>Water Level (m)</label>
+        <input type="number" id="c-wl" step="0.01" placeholder="auto if available">
+      </div>
+      <div class="form-group">
+        <label>Water Temp (°C)</label>
+        <input type="number" id="c-wt" step="0.1" placeholder="auto if available">
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:8px">
+      <label>Notes</label>
+      <textarea id="c-notes" placeholder="Conditions, observations, tactics..."></textarea>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap">
+      <label class="photo-label" for="c-photo">
+        📷 Add photo
+        <input type="file" id="c-photo" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+      </label>
+      <img id="photo-preview" alt="preview">
+      <div style="font-family:var(--font-m);font-size:10px;color:var(--text-muted)">Fish caught or fly used</div>
+    </div>
+    <button class="save-btn" onclick="saveCatch()">SAVE CATCH</button>
+    <div id="catch-msg" style="font-family:var(--font-m);font-size:11px;margin-top:6px;display:none"></div>
+  </div>
+  <div id="catch-gallery"></div>
+</div>
+
+<!-- SHARE PANEL -->
+<div id="share-panel">
+  <div style="font-family:var(--font-h);font-size:13px;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">SHARE REPORT</div>
+  <div class="share-opt" onclick="shareEmail()"><span class="share-icon">📧</span>Send by Email</div>
+  <div class="share-opt" onclick="shareWhatsApp()"><span class="share-icon">💬</span>WhatsApp</div>
+  <div class="share-opt" onclick="copySummary()"><span class="share-icon">📋</span>Copy to Clipboard</div>
+  <div class="share-opt" onclick="window.print()"><span class="share-icon">🖨️</span>Print / Save PDF</div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div id="bottom-bar">
+  <button class="bottom-btn" onclick="scrollToSection('shortlist-section')">📊 Shortlist</button>
+  <button class="bottom-btn" onclick="scrollToSection('night-planner')">🌙 Tonight</button>
+  <button class="bottom-btn" onclick="scrollToSection('calendar-section')">📅 10 Days</button>
+  <button class="bottom-btn" onclick="scrollToSection('stations-grid')">🎣 Rivers</button>
+  <button class="bottom-btn" onclick="scrollToSection('catch-log-section')">📓 Log</button>
+</div>
+
+<div style="height:50px"></div>
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════════════════
+// STATION CONFIG
+// ═══════════════════════════════════════════════════════════════════
+const STATIONS = [
+  // drive = default from Crosshaven; updated dynamically by user location
+  { system:'Blackwater', name:'Keale Bridge', riverId:'18112', bearing:290, drive:70, tide:'youghal', lat:52.091, lon:-9.028, ideal:0.45 },
+  { system:'Blackwater', name:'Mallow',        riverId:'18055', bearing:115, drive:60, tide:'youghal', lat:52.138, lon:-8.646, ideal:0.90 },
+  { system:'Blackwater', name:'Killavullen',   riverId:'18003', bearing:105, drive:75, tide:'youghal', lat:52.147, lon:-8.515, ideal:0.50 },
+  { system:'Blackwater', name:'Ballyduff',     riverId:'18002', bearing:100, drive:85, tide:'youghal', lat:52.148, lon:-8.053, ideal:0.50 },
+  { system:'Owennabue',  name:'Ballea',   riverId:'19001', bearing: 90, drive:15, tide:'cork',    lat:51.820, lon:-8.420, ideal:0.50 },
+  { system:'Bandon System', name:'Bandon',   riverId:'20001', bearing:110, drive:40, tide:'kinsale', lat:51.746, lon:-8.735, ideal:1.10 },
+  // ── Lee (Cork) ─────────────────────────────────────────────────
+  { system:'Lee (Cork)', name:'Lee Inniscarra', riverId:'19109', bearing: 90, drive:25, tide:'cork', lat:51.882, lon:-8.640, ideal:1.40 },
+  { system:'Lee (Cork)', name:'Lee Waterworks',  riverId:'19102', bearing: 90, drive:20, tide:'cork', lat:51.897, lon:-8.518, ideal:0.80 },
+  // ── Laune / Kerry ──────────────────────────────────────────────
+  { system:'Laune (Kerry)', name:'Laune Killorglin', riverId:'22009', bearing:270, drive:115, tide:null, lat:52.062, lon:-9.795, ideal:0.80 },
+  { system:'Laune (Kerry)', name:'Flesk Bridge',     riverId:'22006', bearing:270, drive:110, tide:null, lat:52.038, lon:-9.522, ideal:0.70 },
+  // ── Moy (Mayo) ─────────────────────────────────────────────────
+  { system:'Moy (Mayo)', name:'Moy Ballina',    riverId:'34061', bearing:350, drive:235, tide:null, lat:54.116, lon:-9.154, ideal:0.90 },
+  { system:'Moy (Mayo)', name:'Moy Ballylahan', riverId:'34004', bearing:350, drive:230, tide:null, lat:53.970, lon:-9.057, ideal:1.20 },
+  // ── Slaney (Wexford) ───────────────────────────────────────────
+  { system:'Slaney (Wexford)', name:'Slaney Enniscorthy', riverId:'12002', bearing: 80, drive:165, tide:null, lat:52.501, lon:-6.559, ideal:0.60 },
+  // ── Corrib (Galway) ────────────────────────────────────────────
+  { system:'Corrib (Galway)', name:'Corrib Ballygaddy', riverId:'30007', bearing:330, drive:165, tide:null, lat:53.465, lon:-9.083, ideal:0.50 },
+];
+
+// User location state
+let userLocation = { name:'Crosshaven, Cork', lat:51.800, lon:-8.290 };
+
+// Estimate drive time (straight-line distance × 1.6 road factor, 60km/h avg)
+function estimateDrive(stLat, stLon) {
+  const R=6371, dLat=(stLat-userLocation.lat)*Math.PI/180;
+  const dLon=(stLon-userLocation.lon)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(userLocation.lat*Math.PI/180)*Math.cos(stLat*Math.PI/180)*Math.sin(dLon/2)**2;
+  const km=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))*1.6; // road factor
+  return Math.max(10, Math.round(km/60*60)); // minutes at 60km/h
+}
+
+async function geocodeLocation(address) {
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=ie`,
+      {headers:{'User-Agent':'AnglingReport/1.0'}});
+    const data = await r.json();
+    if(data && data[0]) return { lat:parseFloat(data[0].lat), lon:parseFloat(data[0].lon), name:data[0].display_name.split(',').slice(0,2).join(',') };
+  } catch(e) { console.warn('Geocode failed:', e.message); }
+  return null;
+}
+
+async function updateLocation() {
+  const input = document.getElementById('start-location').value.trim();
+  if(!input) return;
+  const status = document.getElementById('loc-status');
+  status.textContent = '⏳ Finding...';
+  const geo = await geocodeLocation(input);
+  if(geo) {
+    userLocation = { name:input, lat:geo.lat, lon:geo.lon };
+    // Update all drive times
+    STATIONS.forEach(s => s.drive = estimateDrive(s.lat, s.lon));
+    status.textContent = `✓ Set to ${input}`;
+    status.style.color = 'var(--green)';
+    setTimeout(()=>status.textContent='', 3000);
+    runReport(); // refresh with new drive times
+  } else {
+    status.textContent = '✗ Address not found – try a town name';
+    status.style.color = 'var(--red)';
+    setTimeout(()=>{ status.textContent=''; status.style.color=''; }, 4000);
+  }
+}
+
+function useCurrentLocation() {
+  if(!navigator.geolocation) { alert('GPS not available on this device.'); return; }
+  const status = document.getElementById('loc-status');
+  status.textContent = '⏳ Getting GPS...';
+  navigator.geolocation.getCurrentPosition(pos => {
+    userLocation = { name:'Current location', lat:pos.coords.latitude, lon:pos.coords.longitude };
+    document.getElementById('start-location').value = 'Current location';
+    STATIONS.forEach(s => s.drive = estimateDrive(s.lat, s.lon));
+    status.textContent = '✓ GPS location set';
+    status.style.color = 'var(--green)';
+    setTimeout(()=>{ status.textContent=''; status.style.color=''; }, 3000);
+    runReport();
+  }, err => {
+    status.textContent = '✗ GPS unavailable – enter address manually';
+    status.style.color = 'var(--red)';
+    setTimeout(()=>{ status.textContent=''; status.style.color=''; }, 4000);
+  });
+}
+
+// River selector state
+let selectedRiverIdx = -1; // -1 = all rivers
+
+function selectRiver(idx) {
+  selectedRiverIdx = idx;
+  document.querySelectorAll('.river-btn').forEach(b => b.classList.remove('active'));
+  const btnId = idx === -1 ? 'rbtn-all' : idx === -2 ? 'rbtn-custom' : 'rbtn-' + idx;
+  document.getElementById(btnId)?.classList.add('active');
+  runReport();
+}
+
+
+// ════════════════════════════════════════════════════════════════
+// OPW STATION BROWSER
+// Fetches live GeoJSON from waterlevel.ie (all ~380 stations)
+// Allows user to search, preview level, and add to custom list
+// ════════════════════════════════════════════════════════════════
+let _opwStations = [];   // cached full list
+let _sbFilter = 'all';
+
+// Region bounding boxes [minLat, maxLat, minLon, maxLon]
+const SB_REGIONS = {
+  Kerry:  [51.5, 52.5, -10.5, -9.0],
+  Cork:   [51.5, 52.3, -9.5,  -7.8],
+  West:   [52.5, 55.5, -10.5, -8.0],
+  South:  [51.5, 52.5, -8.0,  -6.0],
+};
+
+async function fetchOPWStations() {
+  if (_opwStations.length > 0) return _opwStations;
+  try {
+    const r = await fetch('https://waterlevel.ie/geojson/latest/', {
+      cache: 'no-store',
+      headers: { 'User-Agent': 'AnglingReport/1.0' }
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    _opwStations = (data.features || [])
+      .filter(f => f.properties && f.geometry)
+      .map(f => ({
+        id:    String(f.properties.station_id || f.properties.ref || '').replace(/^0+/,''),
+        name:  String(f.properties.station_name || f.properties.name || ''),
+        value: parseFloat(f.properties.value || f.properties.level || 0),
+        lat:   f.geometry.coordinates[1],
+        lon:   f.geometry.coordinates[0],
+      }))
+      .filter(s => s.id && s.name && s.name.length > 1)
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return _opwStations;
+  } catch(e) {
+    console.error('[OPW GeoJSON]', e.message);
+    return [];
+  }
+}
+
+function setSbFilter(f) {
+  _sbFilter = f;
+  document.querySelectorAll('.sb-filter').forEach(b => b.classList.remove('active'));
+  document.getElementById('sb-f-' + f)?.classList.add('active');
+  filterStations();
+}
+
+function filterStations() {
+  const query = (document.getElementById('sb-search')?.value || '').toLowerCase().trim();
+  const existing = loadCustomStations().map(s => s.riverId);
+  const builtIn  = STATIONS.map(s => s.riverId);
+
+  let list = _opwStations;
+
+  // Region filter
+  if (_sbFilter !== 'all' && SB_REGIONS[_sbFilter]) {
+    const [minLat, maxLat, minLon, maxLon] = SB_REGIONS[_sbFilter];
+    list = list.filter(s => s.lat >= minLat && s.lat <= maxLat && s.lon >= minLon && s.lon <= maxLon);
+  }
+
+  // Text filter
+  if (query) {
+    list = list.filter(s => s.name.toLowerCase().includes(query) || s.id.includes(query));
+  } else if (!query && _sbFilter === 'all') {
+    // Show top 60 by default (no search, no filter)
+    list = list.slice(0, 60);
+  }
+
+  const statusEl = document.getElementById('sb-status');
+  const listEl   = document.getElementById('sb-list');
+
+  if (!list.length) {
+    statusEl.textContent = 'No stations found';
+    listEl.innerHTML = '<div class="sb-empty">No matching stations. Try a different search term.</div>';
+    return;
+  }
+
+  const shown = list.slice(0, 120);
+  statusEl.textContent = `Showing ${shown.length} of ${list.length} stations`;
+
+  listEl.innerHTML = shown.map(s => {
+    const isCustom   = existing.includes(s.id);
+    const isBuiltIn  = builtIn.includes(s.id);
+    const btnLabel   = isBuiltIn ? '✓ Built-in' : isCustom ? '✓ Added' : '＋ Add';
+    const btnClass   = (isBuiltIn || isCustom) ? 'sb-add-btn added' : 'sb-add-btn';
+    const disabled   = (isBuiltIn || isCustom) ? 'disabled' : '';
+    const levelStr   = isNaN(s.value) || s.value === 0 ? '—' : s.value.toFixed(3) + ' m';
+    return `<div class="sb-item">
+      <div>
+        <div class="sb-item-name">${s.name}</div>
+        <div class="sb-item-id">Station: ${s.id} &nbsp; <span style="font-size:9px">${s.lat.toFixed(3)}, ${s.lon.toFixed(3)}</span></div>
+      </div>
+      <div class="sb-item-level">${levelStr}</div>
+      <button class="${btnClass}" ${disabled}
+        onclick="promptAddStation('${s.id}','${s.name.replace(/'/g,"\'")}',${s.lat},${s.lon},${s.value||0})"
+      >${btnLabel}</button>
+    </div>`;
+  }).join('');
+}
+
+function promptAddStation(id, name, lat, lon, currentLevel) {
+  const idealStr = prompt(
+    `Add "${name}" (station ${id})
+
+Enter the IDEAL FISHING LEVEL in metres for this river.
+` +
+    `Current level: ${currentLevel.toFixed ? currentLevel.toFixed(3) : currentLevel}m
+` +
+    `(Check waterlevel.ie or ask a local ghillie for typical fishable levels)
+
+Ideal level (metres):`,
+    (currentLevel * 0.8).toFixed(2)
+  );
+  if (idealStr === null) return; // cancelled
+  const ideal = parseFloat(idealStr);
+  if (isNaN(ideal) || ideal <= 0) { alert('Please enter a valid level in metres.'); return; }
+
+  // Pick bearing roughly from lat/lon relative to Crosshaven
+  const bearing = Math.round(Math.atan2(lon - userLocation.lon, lat - userLocation.lat) * 180 / Math.PI + 360) % 360;
+  const station = {
+    system: 'My Rivers',
+    name,
+    riverId: id,
+    bearing,
+    drive: estimateDrive(lat, lon),
+    tide: null,
+    lat,
+    lon,
+    ideal,
+    _custom: true
+  };
+  if (addCustomStation(station)) {
+    renderMyRiversList();
+    filterStations(); // refresh button states
+    // Flash confirmation
+    const btn = event?.target;
+    if (btn) { btn.textContent = '✓ Added!'; btn.classList.add('added'); btn.disabled = true; }
+    setTimeout(() => runReport(), 500); // refresh main view
+  }
+}
+
+function renderMyRiversList() {
+  const custom = loadCustomStations();
+  const el = document.getElementById('sb-my-list');
+  const section = document.getElementById('sb-my-section');
+  if (!custom.length) {
+    if (el) el.innerHTML = '<div style="padding:6px 0;font-family:var(--font-m);font-size:11px;color:var(--text-muted)">No custom rivers yet — search below and click ＋ Add</div>';
+    return;
+  }
+  if (el) el.innerHTML = custom.map(s =>
+    `<div class="my-river-row">
+      <span class="my-river-name">⭐ ${s.name} <span style="color:var(--text-muted)">(${s.riverId})</span> · ideal: ${s.ideal}m</span>
+      <button class="my-river-remove" onclick="removeCustomStation('${s.riverId}');renderMyRiversList();filterStations();runReport()">Remove</button>
+    </div>`
+  ).join('');
+}
+
+async function openStationBrowser() {
+  document.getElementById('station-browser').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderMyRiversList();
+  const listEl = document.getElementById('sb-list');
+  const statusEl = document.getElementById('sb-status');
+  statusEl.textContent = 'Fetching live OPW station list...';
+  listEl.innerHTML = '<div class="sb-empty"><div class="spinner" style="margin:12px auto"></div>Loading...</div>';
+  const stations = await fetchOPWStations();
+  if (!stations.length) {
+    statusEl.textContent = 'Could not load OPW stations — check your connection';
+    listEl.innerHTML = '<div class="sb-empty">Unable to load station list from waterlevel.ie.<br>You can add stations manually by entering the station ID from waterlevel.ie</div>';
+    return;
+  }
+  statusEl.textContent = `Loaded ${stations.length} OPW stations`;
+  filterStations();
+}
+
+function closeStationBrowser() {
+  document.getElementById('station-browser').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.getElementById('station-browser')?.addEventListener('click', function(e) {
+  if (e.target === this) closeStationBrowser();
+});
+
+function getActiveStations() {
+  const custom = loadCustomStations();
+  const allStations = [...STATIONS, ...custom];
+  if(selectedRiverIdx === -1)  return allStations;
+  if(selectedRiverIdx === -2)  return custom.length ? custom : STATIONS; // custom only
+  return [allStations[selectedRiverIdx]];
+}
+
+// ── Custom station persistence ────────────────────────────────────
+function loadCustomStations() {
+  try { return JSON.parse(localStorage.getItem('custom_stations_v1') || '[]'); }
+  catch { return []; }
+}
+function saveCustomStations(arr) {
+  try { localStorage.setItem('custom_stations_v1', JSON.stringify(arr)); } catch {}
+}
+function addCustomStation(station) {
+  const existing = loadCustomStations();
+  if (existing.find(s => s.riverId === station.riverId)) return false; // already added
+  existing.push(station);
+  saveCustomStations(existing);
+  return true;
+}
+function removeCustomStation(riverId) {
+  saveCustomStations(loadCustomStations().filter(s => s.riverId !== riverId));
+}
+
+// SEASON TABLE – sea trout opens Feb 15 on Cork/SW rivers, closes 12 October
+// stOpenDay:15 = sea trout open from 15th of opening month
+const SEASON_TABLE = {
+  'Bandon System': { salO:2,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:2,brOpenDay:15,brC:9 },
+  'Owennabue':  { salO:3,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:3,brC:9 },
+  'Blackwater':    { salO:2,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:3,brC:9 },
+  // New rivers – using IFI standard dates; check fisheriesireland.ie for season updates
+  'Lee (Cork)':       { salO:3,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:3,brC:9 },
+  'Laune (Kerry)':    { salO:2,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:2,brC:9 },
+  'Moy (Mayo)':       { salO:2,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:2,brC:9 },
+  'Slaney (Wexford)': { salO:2,salC:9,stO:3,stOpenDay:1, stC:10,stCloseDay:12,brO:3,brC:9 },
+  'Corrib (Galway)':  { salO:2,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:2,brC:9 },
+};
+
+const SCORE_W = {
+  Salmon:   { water:.35,pressure:.25,precip:.15,wind:.10,base:.15 },
+  SeaTrout: { tide:.45,wind:.20,pressure:.15,water:.10,precip:.10 },
+  Brown:    { light:.35,water:.25,pressure:.20,wind:.15,precip:.05 },
+};
+const SPATE = { floodAbove:.40,primeDropRate:-.003,comingIn:.10,lowClear:-.20 };
+
+// ═══════════════════════════════════════════════════════════════════
+// MATH / UTILITY
+// ═══════════════════════════════════════════════════════════════════
+const clamp=(x,mn,mx)=>Math.max(mn,Math.min(mx,x));
+function hump01(x,a,oL,oH,b){if(x<=a||x>=b)return 0;if(x<oL)return(x-a)/(oL-a);if(x<=oH)return 1;return 1-(x-oH)/(b-oH)}
+function compassDir(deg){const d=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return d[Math.round((deg%360)/22.5)%16]}
+function dirAlign01(w,r){if(isNaN(w)||isNaN(r))return.5;const d=Math.abs(((w-r+540)%360)-180);return 1-d/180}
+function fmt(v,d=1){return isNaN(v)||v==null?'—':v.toFixed(d)}
+function fmtTime(dt){if(!dt)return'—';const d=dt instanceof Date?dt:new Date(dt);return isNaN(d)?'—':d.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',hour12:false})}
+function fmtHour(h){const hh=Math.floor(h),mm=Math.round((h-hh)*60);return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`}
+function scrollToSection(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'})}
+
+// ═══════════════════════════════════════════════════════════════════
+// SOLUNAR ENGINE
+// Phase-based approximation – accurate ±15min, sufficient for 2h windows
+// ═══════════════════════════════════════════════════════════════════
+const REF_NEW_MOON = Date.UTC(2000,0,6,18,14,0); // Jan 6 2000 18:14 UTC
+const LUNAR_CYCLE_MS = 29.530589*24*3600*1000;
+const LUNAR_DAY_H = 24.8412;
+
+function getSolunar(lon, date) {
+  const noon = new Date(date); noon.setHours(12,0,0,0);
+  const ms   = (noon.getTime()-REF_NEW_MOON % LUNAR_CYCLE_MS+LUNAR_CYCLE_MS*1000) % LUNAR_CYCLE_MS;
+  const lunDays  = ((noon.getTime()-REF_NEW_MOON)%LUNAR_CYCLE_MS+LUNAR_CYCLE_MS)%LUNAR_CYCLE_MS / (24*3600*1000);
+  const phase    = lunDays / 29.530589;
+  const tzH      = -date.getTimezoneOffset()/60;
+  const solarNoonUTC = 12 - lon/15;
+  let upperUTC = (solarNoonUTC + lunDays*0.8412) % LUNAR_DAY_H;
+  upperUTC = ((upperUTC%24)+24)%24;
+  const upper = ((upperUTC+tzH)%24+24)%24;
+  const lower = (upper+LUNAR_DAY_H/2)%24;
+  const moonrise = (upper-LUNAR_DAY_H/4+48)%24;
+  const moonset  = (upper+LUNAR_DAY_H/4)%24;
+  // Strength: max at new/full, min at quarters
+  const strength = Math.max(1,Math.round(5*(1+Math.cos(4*Math.PI*phase))));
+  const phaseName = phase<.05||phase>.95?'New Moon':phase<.23?'Waxing Crescent':phase<.27?'First Quarter':phase<.48?'Waxing Gibbous':phase<.52?'Full Moon':phase<.73?'Waning Gibbous':phase<.77?'Last Quarter':'Waning Crescent';
+  return { upper, lower, moonrise, moonset, strength, phase, phaseName };
+}
+
+function isSolunarActive(sol, hourNow) {
+  // Returns which period is currently active (or null)
+  const check=(centre,dur)=>{let diff=(hourNow-centre+24)%24;if(diff>12)diff=24-diff;return diff<=dur/2};
+  if(check(sol.upper,  1.5)) return 'MAJOR 1';
+  if(check(sol.lower,  1.5)) return 'MAJOR 2';
+  if(check(sol.moonrise,0.75)) return 'MINOR 1';
+  if(check(sol.moonset, 0.75)) return 'MINOR 2';
+  return null;
+}
+
+function lunarPhase(){
+  const ms=((Date.now()-REF_NEW_MOON)%LUNAR_CYCLE_MS+LUNAR_CYCLE_MS)%LUNAR_CYCLE_MS;
+  const p=ms/LUNAR_CYCLE_MS;
+  if(p<.05||p>.95) return{mode:'NEW MOON',mult:1.5,pct:p};
+  if(p>.45&&p<.55) return{mode:'Full Moon',mult:.9,pct:p};
+  return{mode:'Partial',mult:.8,pct:p};
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SEASON
+// ═══════════════════════════════════════════════════════════════════
+function getSeasonStatus(system,month,day){
+  const t=SEASON_TABLE[system]||{salO:2,salC:9,stO:2,stOpenDay:15,stC:10,stCloseDay:12,brO:3,brC:9};
+  const now=new Date(); if(day===undefined) day=now.getDate();
+  // Sea trout: open from stO/stOpenDay through stC/stCloseDay
+  let stOpen=false;
+  const stOpenDay=t.stOpenDay||1;
+  if(month>t.stO&&month<t.stC) stOpen=true;
+  else if(month===t.stO) stOpen=(day>=stOpenDay);
+  else if(month===t.stC) stOpen=(t.stCloseDay===undefined||day<=t.stCloseDay);
+  // Brown trout
+  let brOpen=false;
+  const brOpenDay=t.brOpenDay||1;
+  if(month>t.brO&&month<t.brC) brOpen=true;
+  else if(month===t.brO) brOpen=(day>=brOpenDay);
+  else if(month===t.brC) brOpen=(day<=31);
+  return{
+    salmon:month>=t.salO&&month<=t.salC?'Open':'Closed',
+    st:stOpen?'Open':'Closed',
+    brown:brOpen?'Open':'Closed',
+  };
+}
+function seasonLabel(m){if(m<=3)return'EarlySeason';if(m<=6)return'Spring';if(m<=8)return'Summer';return'Autumn'}
+
+// ═══════════════════════════════════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════════════════════════════════
+function scorePressure(wx){
+  if(!wx)return 5;
+  const abs=hump01(wx.pressure,1002,1014,1022,1030);
+  const tMap={Rising:1,Steady:.7,Falling:.4};
+  let s=.6*abs+.4*(tMap[wx.trend]||.6);
+  if(wx.delta3h>=1.5&&wx.pressure<1012)s=Math.min(1,s+.05);
+  return Math.round(10*s*10)/10;
+}
+function scoreWind(wx,species,bearing){
+  if(!wx)return 5;
+  const ranges={SeaTrout:[0,8,20,40],Salmon:[0,5,25,45],Brown:[0,6,18,35]};
+  const r=ranges[species]||ranges.Brown;
+  let s=hump01(wx.windSpeed,r[0],r[1],r[2],r[3]);
+  if(wx.windGust>35)s=Math.max(0,s-Math.min(.4,(wx.windGust-35)/50));
+  if(!isNaN(bearing)&&species==='Brown'&&wx.windSpeed>=4&&wx.windSpeed<=15)s+=.08*(2*dirAlign01(wx.windDir,bearing)-1);
+  return Math.round(10*clamp(s,0,1)*10)/10;
+}
+function scorePrecip(wx,species){
+  if(!wx)return 5;
+  const tp=wx.todayPrecip||0,now=wx.nowPrecip||0;
+  const ranges={SeaTrout:[0,2,8,25],Salmon:[0,2,8,25],Brown:[0,0,3,8]};
+  const r=ranges[species]||[0,1,6,20];
+  let s=hump01(tp,r[0],r[1],r[2],r[3]);
+  if(['SeaTrout','Salmon'].includes(species)) s=Math.min(1,s+(tp<1?Math.min(.05,now/20):Math.min(.1,now/10)));
+  else if(species==='Brown'&&now>2) s=Math.max(0,s-.1);
+  return Math.round(10*s*10)/10;
+}
+function scoreWater(wl,wt,species,ideal){
+  if(species==='Salmon'){if(isNaN(wl))return 5;const lo=isNaN(ideal)?.95:ideal;return Math.round(10*hump01(wl,lo-.4,lo,lo+.1,lo+.8)*10)/10}
+  if(species==='SeaTrout')return isNaN(wt)?6.5:Math.round((5+5*hump01(wt,8,11,14,18))*10)/10;
+  if(species==='Brown')return isNaN(wt)?5:Math.round(10*hump01(wt,7,12,15,19)*10)/10;
+  return 5;
+}
+function scoreTide(nextTide){if(!nextTide)return 4;const dtMin=(nextTide-Date.now())/60000;const bias=dtMin<0?.05:0;return Math.round(10*clamp(hump01(dtMin,-90,-60,60,90)+bias,0,1)*10)/10}
+function scoreSolunar(sol){if(!sol)return 5;return sol.strength}
+function scoreSalmon(wx,wl,wt,ideal,bearing){const w=SCORE_W.Salmon;return Math.round(clamp(w.water*scoreWater(wl,wt,'Salmon',ideal)+w.pressure*scorePressure(wx)+w.precip*scorePrecip(wx,'Salmon')+w.wind*scoreWind(wx,'Salmon',bearing)+w.base*6.5,0,10)*10)/10}
+function scoreSeaTrout(wx,wl,wt,nextTide,lunarMult,bearing){const w=SCORE_W.SeaTrout;const m=lunarMult||1;return Math.round(clamp((w.tide*scoreTide(nextTide)+w.wind*scoreWind(wx,'SeaTrout',bearing)+w.pressure*scorePressure(wx)+w.water*scoreWater(wl,wt,'SeaTrout')+w.precip*scorePrecip(wx,'SeaTrout'))*m,0,10)*10)/10}
+function scoreBrown(wx,wl,wt,bearing){const w=SCORE_W.Brown;const lgt=(!isNaN(wt)&&wt>13)?10:8;return Math.round(clamp(w.light*lgt+w.water*scoreWater(wl,wt,'Brown')+w.pressure*scorePressure(wx)+w.wind*scoreWind(wx,'Brown',bearing)+w.precip*scorePrecip(wx,'Brown'),0,10)*10)/10}
+
+function scoreClass(s){return s>=7?'high':s>=5?'mid':'low'}
+
+// DAILY FORECAST SCORE (for calendar)
+function dailyForecastScore(d, sol) {
+  // d = {mm, windMax, tempMax} from forecast
+  const rainScore = d.mm==null?5:d.mm<2?9:d.mm<5?7:d.mm<10?6:d.mm<20?5:3;
+  const windScore = d.windMax==null?5:d.windMax<20?9:d.windMax<35?7:d.windMax<50?5:3;
+  const solScore  = sol ? sol.strength : 5;
+  return Math.round((rainScore*0.35 + windScore*0.25 + solScore*0.4)*10)/10;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CONDITION ANALYSIS
+// ═══════════════════════════════════════════════════════════════════
+function spatePhase(wl,ideal,diff,todayRain=0,priorRain=0){
+  if(isNaN(wl)||isNaN(ideal)){
+    const total=(todayRain||0)+(priorRain||0);
+    if(total<3)  return{label:'Likely low/clear – no gauge data',cls:'spate-low'};
+    if(total<15) return{label:'Likely rising on rain – no gauge data',cls:'spate-coming'};
+    return{label:'Likely flood/spate – no gauge data',cls:'spate-flood'};
+  }
+  const above=wl-ideal,dropping=!isNaN(diff)&&diff<SPATE.primeDropRate;
+  if(above>SPATE.floodAbove&&dropping)return{label:'⚡ DROPPING FROM SPATE – PRIME WINDOW',cls:'spate-prime'};
+  if(above>SPATE.floodAbove&&!dropping)return{label:'Flood level – wait for drop',cls:'spate-flood'};
+  if(above>SPATE.comingIn&&dropping)return{label:'Coming into condition – fish soon',cls:'spate-coming'};
+  if(Math.abs(above)<=SPATE.comingIn)return{label:'Near ideal height',cls:'spate-ideal'};
+  if(above<SPATE.lowClear)return{label:'Low/clear – fine tippet, small flies',cls:'spate-low'};
+  return{label:'Within range',cls:'spate-default'};
+}
+function classifyColour(wl,ideal,diff,todayRain,nowRain,priorRain=0){
+  // If no level data, estimate colour from rainfall alone
+  if(isNaN(wl)||isNaN(ideal)){
+    const totalRain=(todayRain||0)+(priorRain||0);
+    if(totalRain<3)  return{label:'Likely Clear',note:'No gauge data – estimated from rain (dry conditions). Check OPW for confirmation.'};
+    if(totalRain<12) return{label:'Likely Slight Colour',note:'No gauge data – estimated from recent rain. Check OPW for confirmation.'};
+    if(totalRain<25) return{label:'Likely Coloured',note:'No gauge data – estimated from heavy rain. Check OPW for confirmation.'};
+    return{label:'Likely Dirty/Flood',note:'No gauge data – estimated from very heavy rain. Tidal lower beats only.'};
+  }
+  const d=isNaN(diff)?0:diff;
+  let lbl,note;
+  if(Math.abs(wl-ideal)<.05&&Math.abs(d)<.005&&todayRain<2){lbl='Very Clear';note='Near ideal – fine leaders & small flies.'}
+  else if(todayRain<8&&Math.abs(d)<.020){lbl='Slight Colour';note='Soft lift or light rain – medium patterns.'}
+  else if(todayRain<20||Math.abs(d)>=.020){lbl='Coloured';note='Noticeable rise – fish edges, bigger/brighter.'}
+  else{lbl='Dirty/Flood';note='Heavy rain/sharp rise – big/bright/slow; wait.'}
+  if(todayRain<2&&priorRain>12){const m={'Very Clear':['Slight Colour',"Yesterday's rain persists – step up one size."],'Slight Colour':['Coloured','Lagged colour – fish edges with bigger flies.'],'Coloured':['Dirty/Flood','Lagged colour still high – wait for drop.']};if(m[lbl])[lbl,note]=m[lbl]}
+  return{label:lbl,note};
+}
+function hoursToIdeal(wl,ideal,diff,intervalMins=30){
+  if(isNaN(wl)||isNaN(ideal)||isNaN(diff)||diff>=0)return null;
+  const gap=wl-(ideal+.05);if(gap<=0)return 0;
+  const rph=(diff/intervalMins)*60;if(rph>=0)return null;
+  return Math.round((gap/Math.abs(rph))*10)/10;
+}
+function tempTrend(hist,name){
+  // compare last 2 temp readings
+  const arr=hist[name+'_wt'];if(!arr||arr.length<2)return{arrow:'→',cls:'trend-st'};
+  const last=arr[arr.length-1],prev=arr[arr.length-2];
+  if(last-prev>0.2)return{arrow:'↑',cls:'trend-up'};
+  if(prev-last>0.2)return{arrow:'↓',cls:'trend-dn'};
+  return{arrow:'→',cls:'trend-st'};
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DYNAMIC FLY ENGINE (from v7, with river-system awareness)
+// ═══════════════════════════════════════════════════════════════════
+const HATCH_CALENDAR={
+  2:[{name:'Large Dark Olive',sz:'sz 14–16',dry:'LDO Comparadun',nymph:'PTN sz 14',win:[10,13,16]},{name:'Midge',sz:'sz 18–20',dry:'CDC Midge Adult',nymph:'Buzzer sz 16–18',win:[11,14,16]}],
+  3:[{name:'Large Dark Olive',sz:'sz 14',dry:'LDO Emerger',nymph:'PTN sz 14',win:[10,13,16]},{name:'March Brown',sz:'sz 12–14',dry:'March Brown dry',nymph:"Hare's Ear sz 12",win:[11,14,15]}],
+  4:[{name:'Grannom Sedge',sz:'sz 14',dry:'Elk Hair Caddis',nymph:'Grannom Pupa sz 14',win:[10,13,16]},{name:'Iron Blue Dun',sz:'sz 16',dry:'Iron Blue dry',nymph:'Iron Blue Nymph sz 16',win:[11,14,16]},{name:'March Brown',sz:'sz 12–14',dry:'March Brown dry',nymph:"Hare's Ear sz 12",win:[10,12,14]}],
+  5:[{name:'Mayfly',sz:'sz 10–12',dry:'Spent Gnat',nymph:'Mayfly Nymph sz 10',win:[10,13,17]},{name:'Grannom Sedge',sz:'sz 14',dry:'Elk Hair Caddis',nymph:'Grannom Pupa sz 14',win:[9,12,16]}],
+  6:[{name:'BWO / Sherry Spinner',sz:'sz 14–16',dry:'BWO Thorax',nymph:'PTN sz 14',win:[18,20,22]},{name:'Green Peter Sedge',sz:'sz 10–12',dry:'Green Peter Dry',nymph:'Green Peter Pupa',win:[19,21,23]},{name:'Elk Hair Caddis',sz:'sz 12–14',dry:'Elk Hair Caddis',nymph:'Caddis Pupa sz 14',win:[17,20,22]}],
+  7:[{name:'Bibio / heather fly',sz:'sz 10–12',dry:'Bibio Dry',nymph:'Black Pennell sz 10',win:[10,14,20]},{name:'Silver Sedge',sz:'sz 12–14',dry:'Goddard Sedge',nymph:'Caddis Pupa sz 12',win:[18,21,23]},{name:'Black Gnat / Beetles',sz:'sz 14–16',dry:'Foam Beetle',nymph:'Black Spider sz 14',win:[11,15,19]}],
+  8:[{name:'Daddy Long Legs',sz:'sz 10–12',dry:'Daddy (dry/dapped)',nymph:'Crane Fly Nymph',win:[16,20,22]},{name:'Silver Sedge',sz:'sz 12–14',dry:'Goddard Sedge',nymph:'Caddis Pupa sz 12',win:[18,21,23]},{name:'Bibio',sz:'sz 10–12',dry:'Bibio Dry',nymph:'Black Pennell sz 10',win:[10,13,18]}],
+  9:[{name:'Daddy Long Legs',sz:'sz 10–12',dry:'Daddy (wet/dapped)',nymph:'PTN sz 14',win:[15,18,21]},{name:'LDO (autumn)',sz:'sz 14',dry:'LDO Comparadun',nymph:'PTN sz 14',win:[11,14,16]},{name:'Late Sedge',sz:'sz 14',dry:'Elk Hair Caddis',nymph:'Caddis Pupa sz 14',win:[17,20,22]}],
+  10:[{name:'LDO (late season)',sz:'sz 14–16',dry:'LDO Comparadun',nymph:'PTN sz 14',win:[11,14,15]},{name:'Midge',sz:'sz 18–20',dry:'CDC Midge',nymph:'Buzzer sz 18',win:[12,14,16]}],
+};
+
+function buildFlies(wl,diff,wt,wx,moonMode,ideal,month,riverSystem){
+  const now=new Date();const hourNow=now.getHours()+now.getMinutes()/60;
+  const sr=wx?.sunrise?(wx.sunrise.getHours()+wx.sunrise.getMinutes()/60):7;
+  const ss=wx?.sunset?(wx.sunset.getHours()+wx.sunset.getMinutes()/60):20.5;
+  const minsToSunset=(ss-hourNow)*60,minsFromSunrise=(hourNow-sr)*60;
+  const lightPhase=hourNow<sr-.25||hourNow>ss+.75?'night':minsFromSunrise<90?'dawn':minsToSunset<100?'dusk':'day';
+  const above=(!isNaN(wl)&&!isNaN(ideal))?wl-ideal:0;
+  const dropping=!isNaN(diff)&&diff<-.003,rising=(!isNaN(diff)&&diff>.005)||(wx?.todayPrecip||0)>=8;
+  const highWater=above>.40,lowClear=above<-.15;
+  const todayRain=wx?.todayPrecip||0,priorRain=wx?.priorDayPrecip||0;
+  const coloured=todayRain>5||above>.15||priorRain>10,dirty=todayRain>15||(rising&&highWater);
+  const airC=wx?.airTemp||null,waterC=!isNaN(wt)&&wt!=null?wt:(airC!=null?airC-2:null);
+  const tempLabel=waterC==null?null:waterC<7?'very_cold':waterC<10?'cold':waterC<13?'cool':waterC<16?'warm':'hot';
+  const pressRising=wx?.trend==='Rising',pressFalling=wx?.trend==='Falling',delta3h=wx?.delta3h||0;
+  const overcast=(wx?.cloudCover||0)>70,brightDay=lightPhase==='day'&&(wx?.cloudCover||50)<40;
+  const windSp=wx?.windSpeed||0,calm=windSp<6,goodRipple=windSp>=6&&windSp<=22;
+  const isBandon=riverSystem==='Bandon System',isBlackwater=riverSystem==='Blackwater',isCork=riverSystem==='Owennabue';
+  const salSize=tempLabel==='very_cold'?'sz 4–6 double or 1.5in tube':tempLabel==='cold'?'sz 6–8 double':tempLabel==='cool'?'sz 8–10 double':tempLabel==='warm'?'sz 10–12 or micro tube':tempLabel==='hot'?'sz 12–14 or 0.25in tube':'sz 8–10 double';
+  const tempNote=waterC!=null?`${waterC.toFixed(1)}°C water`:'temp unknown';
+  const sal=[];
+  if(dirty||(highWater&&coloured)){sal.push({name:'Willie Gunn / Snaelda',size:'1–1.5in tube',reason:`${tempNote}, dirty/high – maximum profile; fish at a crawl into the bank`});sal.push({name:'Red Frances / Cascade',size:'sz 8–10',reason:'Bright dressing visible through colour; cover soft edges'});sal.push({name:'Black & Yellow Sunray Shadow',size:'1in tube',reason:'Big silhouette on fast sink-tip through deep flood lies'})}
+  else if(dropping&&above>.1){sal.push({name:'Cascade',size:salSize,reason:`${tempNote}, river dropping – prime! Fish are moving; cover every pool`});sal.push({name:"Ally's Shrimp (Orange/Red)",size:salSize,reason:'Slight remaining colour = shrimp deadly on the drop'});sal.push({name:'Blue Charm',size:salSize,reason:'As river clears step to classic wet fly; fish faster in pool necks'})}
+  else if(lowClear){const hitchNote=(lightPhase==='dusk'||lightPhase==='night')?' – ACTIVE WINDOW NOW':' – wait for dusk/dark';sal.push({name:'Hitched micro tube / Wake fly',size:'0.25–0.5in',reason:`${tempNote}, low clear water – surface hitch${hitchNote}`});sal.push({name:"Stoat's Tail (sparse)",size:'sz 12–14',reason:'Low/clear: fine tippet, fish far back; slow the swing'});sal.push({name:'Shrimp (natural/orange)',size:'sz 12–14',reason:'Small sparse shrimp on long fine leader; dead-drift through lies'})}
+  else{if(tempLabel==='very_cold'||tempLabel==='cold'){sal.push({name:'Collie Dog / Garry Dog',size:'1.5in brass tube',reason:`${tempNote} – cold: heavy sinking tube, fish very slowly`});sal.push({name:"Ally's Shrimp (Red)",size:'sz 4–6 double',reason:'Bright but big – visible in cold coloured water'});sal.push({name:'GP / Jock Scott',size:'sz 4–6 double',reason:'Heavy doubles for cold high water; slow sweep through pool tails'})}
+  else if(tempLabel==='cool'){sal.push({name:"Ally's Shrimp (Red/Orange)",size:'sz 8–10 double',reason:`${tempNote} – ideal range; classic spring shrimp on floating or intermediate`});sal.push({name:pressRising?'Cascade (bright)':"Hairy Mary / Blue Charm",size:'sz 8–10 double',reason:pressRising?`Pressure rising ${delta3h>0?'+':''}${delta3h} hPa – bright attractor on the push`:'Steady/falling pressure: dark attractor fished steadily'});sal.push({name:'Munro Killer / Yellow Torrish',size:'sz 8–10',reason:'Yellow/black contrast works on dull days and in moderate colour'})}
+  else{sal.push({name:"Ally's Shrimp (Orange)",size:'sz 10–12',reason:`${tempNote} – warm summer; small shrimp stripped slowly`});sal.push({name:'Silver Stoat / Blue Charm',size:'sz 10–12',reason:'Slim profile for clear warm-water salmon; fine tippet, floating line'});sal.push({name:lightPhase==='dusk'||lightPhase==='night'?'Hitched tube – wake':'Frances (small)',size:lightPhase==='dusk'||lightPhase==='night'?'0.5in':'sz 12',reason:lightPhase==='dusk'||lightPhase==='night'?'Low light – surface wake draws explosive takes':'Tiny Frances when fish are seen and refusing'})}}
+  let salNote='';
+  if(isBlackwater&&(tempLabel==='cool'||tempLabel==='warm'))salNote='Blackwater: Copper Cascade / GP Variant in big Fermoy/Mallow pools';
+  if(isBandon&&lowClear)salNote='Bandon low water: try the hitch at Cable Island and below Innishannon at last light';
+  // Add 2026 harvest regulation reminder
+  const now2=new Date(),m2=now2.getMonth()+1,d2=now2.getDate();
+  const harvestOpen=(m2===6||m2===7||m2===8)||(m2===5&&d2>=12);
+  if(!harvestOpen&&m2<9){salNote=(salNote?salNote+' · ':'')+'⚠ 2026: C&R ONLY until 1 June. Max 3 fish per season when open.';}
+  else if(harvestOpen){salNote=(salNote?salNote+' · ':'')+'⚠ 2026: Max 3 fish per season, 3/day. Blue gill tag required. No harvest in September.';}
+  const st=[];
+  const stTimeNote=lightPhase==='night'?'🌙 Night – prime window':lightPhase==='dusk'?'🌆 Dusk – start of window':lightPhase==='dawn'?'🌅 Dawn – end of night feeding':'☀ Daytime – resting mode';
+  // ── DIRTY/FLOOD WATER: sea trout need clarity unlike salmon ──
+  if(dirty||(highWater&&coloured&&above>0.6)){
+    st.push({name:'⚠ WAIT FOR THE DROP – not worth targeting in dirty flood water',size:'',reason:'Sea trout are sight-feeders and stop feeding in seriously dirty water. Unlike salmon they do not react on instinct/territory in flood conditions.'});
+    st.push({name:'Tidal/estuary lower beats only – RIGHT NOW',size:'',reason:`Fresh saltwater dilutes colour near the sea. Sea trout may still be active in brackish zones as they run in on the tide push. Focus on tidal reaches on ${isBandon?'Innishannon/Kinsale':isBlackwater?'Cappoquin/Youghal':'the tidal lower reach'}.`});
+    st.push({name:'Come back in 24–48 hours',size:'',reason:'Sea trout respond to clearing water faster than salmon. The BEST sea trout fishing often occurs when colour is just coming out (slight stain, river still slightly above ideal).'});
+  }
+  // ── SLIGHTLY COLOURED but fishable ──
+  else if(coloured&&!dirty){
+    st.push({name:'✓ FISHABLE – slight colour can be excellent',size:'',reason:'Fresh-run sea trout entering the river are very active in moderately coloured conditions (first 24–48h of a spate). Go bigger and brighter than normal.'});
+    st.push({name:'Teal Blue & Silver (larger than normal)',size:'sz 6–8',reason:'Step up two sizes from normal – the colour means fish need to see the fly. Fish the edges and slack water where fish hold.'});
+    st.push({name:'White/Silver tube or Medicine',size:'sz 8',reason:`Bigger profile + high-visibility white dressing cuts through colour. Fish the flood push on ${isBandon?'Innishannon/Cable Island':'tidal reaches'} at high water.`});
+  }
+  else if(lightPhase==='night'||lightPhase==='dusk'||lightPhase==='dawn'){
+    if(moonMode==='NEW MOON'){st.push({name:'Black & Silver tube / Medicine',size:'sz 8',reason:`${stTimeNote}; new moon – surface-wake across pool tails`});st.push({name:'Black Lure / Muddler',size:'sz 8–10',reason:'Dark profile silhouettes against sky; dead-drift across current'});st.push({name:'Black Pennell (drab sparse)',size:'sz 10',reason:'Ultra-cautious fish on calm/dark nights – smallest suggestion of life'})}
+    else if(calm){st.push({name:'Teal Blue & Silver (slim)',size:'sz 10–12',reason:`${stTimeNote}; calm flat water – slim bright fly, long leader, slow swing`});st.push({name:"Watson's Fancy",size:'sz 10–12',reason:'Reliable in flat/low light; fish entire pool tail-to-tail'});st.push({name:'Black & Silver tube',size:'sz 8',reason:"When small patterns don't draw – step up to create movement"})}
+    else{st.push({name:'Teal Blue & Silver',size:'sz 8–10',reason:`${stTimeNote}; good ripple – swing confidently on floating line`});st.push({name:(isBandon||isCork)?"Watson's Fancy / Bibio":"Watson's Fancy / Black Pennell",size:'sz 10–12',reason:(isBandon||isCork)?'Proven on Cork/Bandon tidal reaches in a good ripple':'Works anywhere; Bibio particularly good on a windy night'});st.push({name:month===8?'Daddy Long Legs (wet/dapped)':month>=6?'Green Peter wet':'Silver March Brown',size:'sz 10',reason:month===8?'August daddy fall – fish it wet or dapped; deadly at dusk':month>=6?'Green Peter pupa sub-surface from June onwards':'March/April: Silver March Brown – classic cold-water attractor'})}}
+  else{st.push({name:'Peter Ross / Teal Blue & Silver',size:'sz 10–12',reason:'Daytime: resting fish; slow-sunk wet fly past their nose can provoke a reaction take'});st.push({name:'Streamer (white/silver)',size:'sz 8',reason:'Strip a small streamer through deep lies to provoke response'});st.push({name:'Best tactic: return at dusk',size:'',reason:`Sea trout feed most actively from dusk. Tonight starts around ${wx?.sunset?fmtTime(wx.sunset):'sunset'}`})}
+  if(pressRising&&delta3h>1)st.push({name:'Pearl Invicta / Silver flash',size:'sz 10',reason:`Rising pressure (+${delta3h} hPa/3h) – fish first hour of tide push hard`});
+  if(isBlackwater){const bwNote={name:'Focus: Cappoquin – Youghal tidal stretch',size:'',reason:'Blackwater: pool tails and glides on the flood; biggest fish below Lismore'};if(st.length>=3)st[2]=bwNote;else st.push(bwNote)}
+  const bt=[];const hatches=HATCH_CALENDAR[month]||HATCH_CALENDAR[3];
+  const activeHatches=hatches.filter(h=>hourNow>=h.win[0]&&hourNow<=h.win[2]);
+  const peakHatches=hatches.filter(h=>Math.abs(hourNow-h.win[1])<1.5);
+  const comingHatches=hatches.filter(h=>hourNow<h.win[0]&&h.win[0]-hourNow<2);
+  const surfaceGood=(waterC==null||waterC>=9)&&!brightDay&&!((wx?.windGust||0)>30);
+  if(lightPhase==='night'){bt.push({name:'Night fishing not recommended for brown trout',size:'',reason:'Brown trout largely inactive at night – sea trout are the target after dark'})}
+  else if(activeHatches.length&&surfaceGood){const h=peakHatches[0]||activeHatches[0];bt.push({name:h.dry,size:h.sz,reason:`${h.name} hatching NOW (peak ${h.win[1]}:00) – ${waterC?waterC.toFixed(1)+'°C, ':''}${overcast?'overcast':'light cloud'} – ideal dry fly`});bt.push({name:activeHatches[1]?.dry||h.nymph,size:activeHatches[1]?.sz||h.sz,reason:activeHatches[1]?`${activeHatches[1].name} also active – switch to match what fish key on`:`Emerging ${h.name} nymph in surface film`});bt.push({name:'Klinkhammer / CDC Emerger',size:'sz 14–16',reason:'When fish are sipping quietly – emerger in film often beats hatched adult'})}
+  else if(comingHatches.length&&surfaceGood){const h=comingHatches[0];const mins=Math.round((h.win[0]-hourNow)*60);bt.push({name:h.nymph,size:h.sz,reason:`${h.name} hatch in ~${mins}min – pre-hatch nymph now; switch to dry when fish start rising`});bt.push({name:'Tungsten PTN / Hare\'s Ear',size:'sz 14–16',reason:'Bridge nymph while waiting – gets down to feeding fish in mid-water'});bt.push({name:h.dry,size:h.sz,reason:`Have ready for when ${h.name} hatch breaks – switch quickly on first rises`})}
+  else if(lightPhase==='dusk'&&month>=5&&month<=9){bt.push({name:'Elk Hair Caddis / Goddard Sedge',size:'sz 12–14',reason:`Dusk sedge hatch – ${waterC?waterC.toFixed(1)+'°C, ':''}fish active on surface now. Sunset ~${Math.round(minsToSunset)}min`});bt.push({name:'Klinkhammer (olive/grey)',size:'sz 14',reason:'For fish on crippled/emerging caddis in film – change down if refusals'});bt.push({name:'Sherry Spinner / Spent Olive',size:'sz 14–16',reason:'Spinner falls begin at sunset on calm evenings – dead-drift sipping rises'})}
+  else if(lightPhase==='dawn'&&(waterC==null||waterC>=9)){bt.push({name:'Streamer (Olive/Black)',size:'sz 6–8',reason:`First light – large browns hunting; swing through deep pools before hatches start`});bt.push({name:hatches[0]?.nymph||'PTN sz 14',size:'sz 14',reason:'Transition: switch to nymph as light builds and hatching begins'});bt.push({name:hatches[0]?.dry||'LDO Comparadun',size:'sz 14',reason:`Early morning ${hatches[0]?.name||'olive'} hatch usually starts ${Math.round(sr+.5)}:00–${Math.round(sr+2)}:00`})}
+  else{const rPrefix=brightDay?'Bright day – fish holding deep in shade: ':pressFalling?`Pressure falling (${delta3h} hPa/3h) – fish gone deep: `:waterC!=null&&waterC<9?`${waterC.toFixed(1)}°C below hatch threshold: `:'Off-peak: ';bt.push({name:'Tungsten PTN (beadhead)',size:'sz 14–16',reason:rPrefix+'nymph near bottom through runs and riffles'});bt.push({name:"Hare's Ear Nymph",size:'sz 12–14',reason:'Searching nymph – dead-drifted through likely lies'});if(coloured||rising)bt.push({name:'Olive/Black Streamer',size:'sz 6–8',reason:'Water up/coloured – strip seams first, switch to nymph as clarity improves'});else if(brightDay)bt.push({name:'Dry fly in shaded patches',size:'sz 14–16',reason:'Worth prospecting shaded runs/undercut banks with a dry even in bright conditions'});else bt.push({name:hatches[0]?.dry||'LDO Comparadun',size:'sz 14',reason:`Watch for ${hatches[0]?.name||'olive'} – switch to dry the moment rises appear`})}
+  if(pressFalling&&delta3h<-2.5&&bt[0]?.name&&!bt[0].name.includes('Night')){bt.unshift({name:'⚠ Pressure plummeting',size:'',reason:`${delta3h} hPa/3h – fish gone deep; heavy nymphs / streamers on the bottom`});bt.length=3}
+  const ctx=[waterC!=null?`💧 ${waterC.toFixed(1)}°C`:null,wx?.airTemp?`🌡 air ${wx.airTemp.toFixed(1)}°C`:null,{dawn:'🌅 Dawn',day:'☀ Day',dusk:'🌆 Dusk',night:'🌙 Night'}[lightPhase],wx?.cloudCover!=null?`☁ ${wx.cloudCover}%`:null].filter(Boolean).join(' · ');
+  return{salmon:sal.slice(0,3),st:st.slice(0,3),brown:bt.slice(0,3),ctx,salNote,lightPhase};
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// FORECAST HELPERS
+// ═══════════════════════════════════════════════════════════════════
+function rainImpact(mm){if(mm<2)return{l:'Dry / stable',cls:'rain-low'};if(mm<8)return{l:'Showery – slight lift',cls:'rain-light'};if(mm<20)return{l:'Wet – rising, colour',cls:'rain-mod'};return{l:'Very wet – dirty',cls:'rain-heavy'}}
+function dayTactics(mm){if(mm<2)return'Small flies/long leaders | Dusk sparse darks | Evening sedge/nymphs';if(mm<8)return'Medium patterns | Fish first hour squalls | Nymphs/emergers';if(mm<20)return'Tubes/brights, fish edges | Bigger profiles | Streamers';return'Heavy/bright tubes slow | Switch on drop | Wait for the drop'}
+
+// ═══════════════════════════════════════════════════════════════════
+// DATA FETCHING
+// ═══════════════════════════════════════════════════════════════════
+async function fetchRiver(stationId,sensor){
+  // Try multiple sources in order:
+  // 1. OPW JSON API (most reliable, CORS-friendly)
+  // 2. OPW CSV direct
+  // 3. Vercel server proxy fallback
+  const dataType = sensor==='0001'?'Water+Level':'Water+Temperature';
+  const sources=[
+    { url:`https://waterlevel.ie/hydro-api/station/${stationId}/readings?interval=15Min&dataType=${dataType}&period=Day&format=json`, type:'json' },
+    { url:`https://waterlevel.ie/data/day/${stationId}_${sensor}.csv`, type:'csv' },
+    { url:`/api/river?id=${stationId}&sensor=${sensor}&_=${Date.now()}`, type:'csv' }
+  ];
+  for(const src of sources){
+    try{
+      const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),8000);
+      const r=await fetch(src.url,{cache:'no-store',signal:ctrl.signal,headers:{'Accept':'application/json,text/plain,*/*'}});
+      clearTimeout(timer);
+      if(!r.ok) continue;
+      if(src.type==='json'){
+        const data=await r.json();
+        // OPW JSON format: {values:[{datetime,value},...]}, sorted oldest first
+        const vals=data?.values||data?.data||[];
+        if(!vals.length) continue;
+        const last=vals[vals.length-1];
+        const v=parseFloat(last?.value??last?.Value??last?.reading);
+        if(!isNaN(v)) return{time:last?.datetime||last?.DateTime||'',val:v};
+      } else {
+        const text=await r.text();
+        if(!text||text.trim().length<5||text.startsWith('{')) continue;
+        const lines=text.trim().split('\n').filter(l=>l.trim()&&!l.startsWith('#')&&l.includes(','));
+        if(!lines.length) continue;
+        const last=lines[lines.length-1];
+        const parts=last.split(',');
+        const v=parseFloat(parts[1]?.trim()??parts[parts.length-1]?.trim());
+        if(!isNaN(v)) return{time:parts[0]?.trim(),val:v};
+      }
+    }catch(e){console.warn(`[OPW ${src.type}] ${stationId}/${sensor}:`,e.message)}
+  }
+  return null;
+}
+async function fetchRiverHistory(stationId,sensor){
+  // Call OPW directly from browser first, fall back to server proxy
+  const urls=[
+    `https://waterlevel.ie/data/week/${stationId}_${sensor}.csv`,
+    `/api/river-history?id=${stationId}&sensor=${sensor}&_=${Date.now()}`
+  ];
+  for(const url of urls){
+    try{
+      const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),10000);
+      const r=await fetch(url,{cache:'no-store',signal:ctrl.signal});
+      clearTimeout(timer);
+      if(!r.ok) continue;
+      const text=await r.text();
+      if(!text||text.trim().length<10||text.includes('{')) continue;
+      const rows=text.trim().split('\n').filter(l=>l.trim()&&!l.startsWith('#'));
+      const parsed=rows.map(row=>{const[t,v]=row.split(',');return{time:new Date(t?.trim()),val:parseFloat(v?.trim())}}).filter(r=>!isNaN(r.val)&&r.time instanceof Date&&!isNaN(r.time));
+      if(parsed.length>0) return parsed.slice(-192);
+    }catch(e){console.warn(`[OPW-HIST] ${stationId}:`,e.message)}
+  }
+  return[];
+}
+async function fetchWeather(lat,lon){
+  try{const r=await fetch(`/api/weather?lat=${lat}&lon=${lon}&_=${Date.now()}`,{cache:'no-store'});const env=await r.json();
+  if(!r.ok||env.error){console.error('[WX]',env.error);return null}
+  if(env.source==='open-meteo'){const d=env.data;try{
+    const now=Date.now();let idx=0;
+    for(let i=0;i<d.hourly.time.length;i++){const t=new Date(d.hourly.time[i]).getTime();if(!isNaN(t)&&t<=now)idx=i}
+    const delta3h=idx>=3?+d.hourly.pressure_msl[idx]-+d.hourly.pressure_msl[idx-3]:0;
+    const trend=delta3h>1.5?'Rising':delta3h<-1.5?'Falling':'Steady';
+    const todayISO=new Date().toISOString().slice(0,10),priorISO=new Date(now-86400000).toISOString().slice(0,10);
+    const di=d.daily.time.findIndex(t=>t===todayISO),priorI=d.daily.time.findIndex(t=>t===priorISO);
+    const safe=(arr,i,fb=null)=>(arr&&arr[i]!=null)?+arr[i]:fb;
+    const fcast=[];
+    for(let i=di+1;i<Math.min(di+11,d.daily.time.length);i++){if(d.daily.time[i])fcast.push({date:new Date(d.daily.time[i]+'T12:00:00'),mm:safe(d.daily.precipitation_sum,i,0)||0,windMax:safe(d.daily.wind_speed_10m_max,i,0)||0,tempMax:safe(d.daily.temperature_2m_max,i,null)})}
+    return{source:'Open-Meteo',pressure:Math.round(safe(d.hourly.pressure_msl,idx,NaN)),trend,delta3h:Math.round(delta3h*10)/10,windSpeed:Math.round(safe(d.hourly.wind_speed_10m,idx,NaN)),windGust:Math.round(safe(d.hourly.wind_gusts_10m,idx,NaN)),windDir:safe(d.hourly.wind_direction_10m,idx,NaN),airTemp:safe(d.hourly.temperature_2m,idx,null),cloudCover:safe(d.hourly.cloud_cover,idx,null),todayPrecip:di>=0?safe(d.daily.precipitation_sum,di,0)||0:0,priorDayPrecip:priorI>=0?safe(d.daily.precipitation_sum,priorI,0)||0:0,nowPrecip:safe(d.hourly.precipitation,idx,0)||0,sunrise:di>=0&&d.daily.sunrise[di]?new Date(d.daily.sunrise[di]):null,sunset:di>=0&&d.daily.sunset[di]?new Date(d.daily.sunset[di]):null,forecast:fcast};
+  }catch(e){console.error('[WX parse]',e.message);return null}}
+  if(env.source==='wttr'){const w=env.data,cc=w.current_condition?.[0];if(!cc)return null;const today=w.weather?.[0];const fcast=(w.weather||[]).slice(1,11).map(d=>({date:new Date(d.date+'T12:00:00'),mm:(d.hourly||[]).reduce((s,h)=>s+(+h.precipMM||0),0),windMax:+(d.hourly||[]).reduce((mx,h)=>Math.max(mx,+h.windspeedKmph||0),0)}));return{source:'wttr.in',pressure:+cc.pressure||NaN,trend:'Steady',delta3h:0,windSpeed:Math.round(+cc.windspeedKmph||NaN),windGust:Math.round((+cc.windspeedKmph||0)*1.2),windDir:+cc.winddirDegree||NaN,airTemp:+cc.temp_C||null,cloudCover:+cc.cloudcover||null,todayPrecip:Math.round((today?.hourly||[]).reduce((s,h)=>s+(+h.precipMM||0),0)*10)/10,priorDayPrecip:0,nowPrecip:0,sunrise:null,sunset:null,forecast:fcast}}
+  return null}catch(e){console.error('[WX fetch]',e.message);return null}
+}
+async function fetchTides(tideName){
+  try{const r=await fetch(`/api/tides?loc=${tideName.toLowerCase()}&_=${Date.now()}`,{cache:'no-store'});if(!r.ok)return null;return await r.json()}catch{return null}
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// HISTORY (sessionStorage + temp tracking)
+// ═══════════════════════════════════════════════════════════════════
+function loadHistory(){try{return JSON.parse(sessionStorage.getItem('fish_hist_v8')||'{}')}catch{return{}}}
+function saveHistory(h){try{sessionStorage.setItem('fish_hist_v8',JSON.stringify(h))}catch{}}
+function updateHistory(hist,name,wl,wt){
+  if(!hist[name])hist[name]=[];
+  const cutoff=Date.now()-48*3600*1000;
+  hist[name]=hist[name].filter(p=>new Date(p.t).getTime()>=cutoff).slice(-96);
+  hist[name].push({t:new Date().toISOString(),wl,wt:isNaN(wt)?null:wt});
+  if(!hist[name+'_wt'])hist[name+'_wt']=[];
+  if(!isNaN(wt)&&wt>0)hist[name+'_wt']=(hist[name+'_wt'].slice(-5)).concat([wt]);
+}
+function levelDiff(hist,name,wl){
+  if(isNaN(wl)||!hist[name]||hist[name].length<2)return NaN;
+  const prev=hist[name].slice(0,-1);const vals=prev.map(p=>p.wl).filter(v=>!isNaN(v));
+  if(!vals.length)return NaN;
+  return Math.round((wl-vals.reduce((a,b)=>a+b,0)/vals.length)*10000)/10000;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CATCH LOG (localStorage – works on local laptop)
+// ═══════════════════════════════════════════════════════════════════
+let currentPhotoData = null;
+
+function previewPhoto(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const MAX=600;let w=img.width,h=img.height;
+      if(w>h&&w>MAX){h=Math.round(h*MAX/w);w=MAX}
+      else if(h>w&&h>MAX){w=Math.round(w*MAX/h);h=MAX}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      currentPhotoData=canvas.toDataURL('image/jpeg',0.72);
+      const prev=document.getElementById('photo-preview');
+      prev.src=currentPhotoData;prev.style.display='block';
+    };img.src=e.target.result;
+  };reader.readAsDataURL(file);
+}
+
+function saveCatch(){
+  const date=document.getElementById('c-date').value;
+  const river=document.getElementById('c-river').value;
+  if(!date||!river){showCatchMsg('Please select a date and river.','error');return}
+  const id='catch_'+Date.now();
+  const data={id,date,river,beat:document.getElementById('c-beat').value,species:document.getElementById('c-species').value,size:document.getElementById('c-size').value,fly:document.getElementById('c-fly').value,method:document.getElementById('c-method').value,time:document.getElementById('c-time').value,wl:document.getElementById('c-wl').value,wt:document.getElementById('c-wt').value,notes:document.getElementById('c-notes').value,ts:Date.now()};
+  try{localStorage.setItem('catch_'+id,JSON.stringify(data));if(currentPhotoData)localStorage.setItem('photo_'+id,currentPhotoData);
+  let list=[];try{list=JSON.parse(localStorage.getItem('catch_list')||'[]')}catch{}
+  list.unshift(id);localStorage.setItem('catch_list',JSON.stringify(list));
+  showCatchMsg('✓ Catch saved!','ok');resetCatchForm();renderCatchGallery()}
+  catch(e){showCatchMsg('Storage full – try deleting old catches.','error')}
+}
+function showCatchMsg(msg,type){const el=document.getElementById('catch-msg');el.textContent=msg;el.style.color=type==='ok'?'var(--green)':'var(--red)';el.style.display='block';setTimeout(()=>el.style.display='none',3000)}
+function resetCatchForm(){document.getElementById('c-river').value='';document.getElementById('c-beat').value='';document.getElementById('c-size').value='';document.getElementById('c-fly').value='';document.getElementById('c-time').value='';document.getElementById('c-wl').value='';document.getElementById('c-wt').value='';document.getElementById('c-notes').value='';document.getElementById('c-photo').value='';document.getElementById('photo-preview').style.display='none';currentPhotoData=null}
+function deleteCatch(id){if(!confirm('Delete this catch?'))return;try{localStorage.removeItem('catch_'+id);localStorage.removeItem('photo_'+id);let list=JSON.parse(localStorage.getItem('catch_list')||'[]');localStorage.setItem('catch_list',JSON.stringify(list.filter(x=>x!==id)))}catch{}renderCatchGallery()}
+function renderCatchGallery(){
+  const gallery=document.getElementById('catch-gallery');
+  let list=[];try{list=JSON.parse(localStorage.getItem('catch_list')||'[]')}catch{}
+  if(!list.length){gallery.innerHTML='<div class="catch-empty">No catches logged yet. Use the form above to log your first fish!</div>';return}
+  gallery.innerHTML=list.map(id=>{
+    let d={};try{d=JSON.parse(localStorage.getItem('catch_'+id)||'{}')}catch{}
+    const photo=localStorage.getItem('photo_'+id);
+    const photoHtml=photo?`<img class="catch-card-photo" src="${photo}" alt="catch">`:`<div class="catch-card-photo no-photo">🎣</div>`;
+    const wlStr=d.wl?`Level: ${d.wl}m  `:'';const wtStr=d.wt?`Temp: ${d.wt}°C`:'';
+    return`<div class="catch-card">
+      ${photoHtml}
+      <button class="catch-delete" onclick="deleteCatch('${id}')">✕</button>
+      <div class="catch-card-body">
+        <div class="catch-card-title">${d.species||'Fish'}</div>
+        <div class="catch-card-meta">
+          📅 ${d.date||''}${d.time?' at '+d.time:''}<br>
+          📍 ${d.river||''}${d.beat?' – '+d.beat:''}<br>
+          🎣 ${d.fly||''}${d.method?' ('+d.method+')':''}<br>
+          📏 ${d.size||'—'}<br>
+          ${wlStr||wtStr?'💧 '+wlStr+wtStr+'<br>':''}
+          ${d.notes?'📝 '+d.notes:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PUSH NOTIFICATIONS
+// ═══════════════════════════════════════════════════════════════════
+let notifEnabled=false;
+async function toggleNotifications(){
+  if(!('Notification' in window)){alert('Browser notifications not supported in this browser.');return}
+  if(Notification.permission==='denied'){alert('Notifications blocked. Please allow them in your browser settings, then try again.');return}
+  if(Notification.permission==='granted'&&notifEnabled){notifEnabled=false;document.getElementById('notif-btn').classList.remove('active');document.getElementById('notif-btn').textContent='🔔 ALERTS';return}
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){notifEnabled=true;document.getElementById('notif-btn').classList.add('active');document.getElementById('notif-btn').textContent='🔔 ON';new Notification('🎣 Angler Report',{body:'Prime window alerts enabled! You\'ll be notified when rivers drop from spate.',icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text y="28" font-size="28">🎣</text></svg>'})}
+  else{alert('Notifications permission denied.')}
+}
+function triggerNotification(title,body){
+  if(!notifEnabled||Notification.permission!=='granted')return;
+  new Notification(title,{body,icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text y="28" font-size="28">⚡</text></svg>'});
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SHARE
+// ═══════════════════════════════════════════════════════════════════
+let _reportSummary='';
+function toggleSharePanel(){const p=document.getElementById('share-panel');p.classList.toggle('open');document.addEventListener('click',e=>{if(!p.contains(e.target)&&!e.target.closest('.share-btn'))p.classList.remove('open')},{once:true})}
+function buildShareText(){
+  const now=new Date();
+  let txt=`🎣 ANGLER'S TACTICAL REPORT\n${now.toLocaleDateString('en-IE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})} ${fmtTime(now)}\n\n`;
+  getActiveStations().forEach(s=>{
+    const el=document.querySelector(`#card-${s.name.replace(/\s+/g,'_')} .card-body`);
+    if(el){
+      const sp=el.querySelector('.spate-pill')?.textContent||'';
+      const lvl=el.querySelector('[data-share-wl]')?.dataset.shareWl||'';
+      const scores=el.querySelector('[data-share-scores]')?.dataset.shareScores||'';
+      txt+=`${s.name} (${s.system})\n  Level: ${lvl}  ${sp}\n  Scores: ${scores}\n\n`;
+    }
+  });
+  txt+=`Generated by Angler's Tactical Report – http://localhost:3000`;
+  return txt;
+}
+function shareEmail(){
+  const now=new Date();const sub=encodeURIComponent(`Fishing Report – ${now.toLocaleDateString('en-IE',{day:'2-digit',month:'short',year:'numeric'})}`);
+  const body=encodeURIComponent(buildShareText());
+  window.location.href=`mailto:?subject=${sub}&body=${body}`;
+  document.getElementById('share-panel').classList.remove('open');
+}
+function shareWhatsApp(){
+  const text=encodeURIComponent(buildShareText().substring(0,1000)+'...');
+  window.open(`https://wa.me/?text=${text}`,'_blank');
+  document.getElementById('share-panel').classList.remove('open');
+}
+async function copySummary(){
+  const txt=buildShareText();
+  try{await navigator.clipboard.writeText(txt);const btn=document.querySelector('.share-opt:nth-child(3)');const orig=btn.innerHTML;btn.innerHTML='<span class="share-icon">✓</span>Copied!';setTimeout(()=>btn.innerHTML=orig,2000)}
+  catch{prompt('Copy this report:',txt)}
+  document.getElementById('share-panel').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDERING HELPERS
+// ═══════════════════════════════════════════════════════════════════
+function gaugeHTML(wl,ideal){
+  const maxScale=ideal*2.5,pct=isNaN(wl)?0:Math.min(100,(wl/maxScale)*100);
+  const idealPct=Math.min(100,(ideal/maxScale)*100);
+  const above=wl-ideal;
+  const color=isNaN(wl)?'#333':above>SPATE.floodAbove?'#c45a4a':above>SPATE.comingIn?'#c97d18':above>-.1?'#6db358':'#4290ad';
+  return`<div class="gauge-row">
+    <span class="data-label" style="width:50px">LEVEL</span>
+    <div class="gauge-outer"><div class="gauge-ideal-mark" style="left:${idealPct}%"></div><div class="gauge-inner" style="width:${pct}%;background:${color}"></div></div>
+    <span class="gauge-label">${fmt(wl,3)} m<br><span style="font-size:9px">ideal ${fmt(ideal,2)}</span></span>
+  </div>`;
+}
+
+function historyGraphHTML(histData, ideal, stationName) {
+  if(!histData||histData.length<4) return '';
+  // Take last 48h
+  const cutoff=Date.now()-48*3600*1000;
+  const pts=histData.filter(p=>p.time instanceof Date&&p.time.getTime()>=cutoff&&!isNaN(p.val));
+  if(pts.length<4) return '';
+  const vals=pts.map(p=>p.val);
+  const minV=Math.min(...vals,ideal*.7),maxV=Math.max(...vals,ideal*1.6);
+  const range=maxV-minV||.1;
+  const W=400,H=60,PAD=4;
+  const px=(v)=>((v-minV)/range*(H-PAD*2));
+  const py=(i)=>(PAD+((H-PAD*2)-(px(pts[i].val))));
+  const pathPts=pts.map((p,i)=>`${Math.round(i/(pts.length-1)*(W-1))},${Math.round(py(i))}`).join(' ');
+  const idealY=Math.round(PAD+(H-PAD*2)-(px(ideal)));
+  // Color the line based on last value vs ideal
+  const lastV=vals[vals.length-1],lineColor=lastV>ideal+SPATE.floodAbove?'#c45a4a':lastV>ideal?'#c97d18':lastV>ideal-.1?'#6db358':'#4290ad';
+  // Mark current position
+  const cx=W-1,cy=Math.round(py(pts.length-1));
+  return`<div class="history-graph-wrap">
+    <div class="history-graph-title"><span>48h Level History</span><span style="color:var(--blue)">current: ${fmt(lastV,3)}m</span></div>
+    <svg class="history-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <line x1="0" y1="${idealY}" x2="${W}" y2="${idealY}" stroke="rgba(200,200,100,.3)" stroke-width="1" stroke-dasharray="4,3"/>
+      <polyline points="${pathPts}" fill="none" stroke="${lineColor}" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="${cx}" cy="${cy}" r="3" fill="${lineColor}"/>
+      <text x="${W-4}" y="${Math.min(H-4,cy-5)}" fill="${lineColor}" font-size="9" text-anchor="end">${fmt(lastV,3)}</text>
+      <text x="4" y="${idealY-3}" fill="rgba(200,200,100,.5)" font-size="8">ideal ${fmt(ideal,2)}</text>
+    </svg>
+  </div>`;
+}
+
+function solunarHTML(sol, sr, ss) {
+  if(!sol) return '';
+  const hourNow=new Date().getHours()+new Date().getMinutes()/60;
+  const active=isSolunarActive(sol,hourNow);
+  const dots=Array.from({length:10},(_,i)=>`<span class="sol-dot ${i<sol.strength?'filled':'empty'}"></span>`).join('');
+  // Check if a period overlaps with dawn/dusk (within 1.5h of sunrise or sunset)
+  const nearSunrise=(h)=>Math.abs(((h-sr+24)%24))<1.5||Math.abs(((h-sr+24)%24))>22.5;
+  const nearSunset=(h)=>Math.abs(((h-ss+24)%24))<1.5||Math.abs(((h-ss+24)%24))>22.5;
+  const overlap=(h)=>nearSunrise(h)||nearSunset(h);
+  const isActive=(centre,dur)=>{let d=(hourNow-centre+24)%24;if(d>12)d=24-d;return d<=dur/2};
+  const periodHTML=(type,h,dur,label)=>{
+    const act=isActive(h,dur),ov=overlap(h);
+    const cls=act?'active':ov?'overlap':'';
+    const suffix=act?' ← NOW':ov?' ⭐ dusk/dawn overlap':'';
+    return`<div class="sol-period ${cls}">
+      <div class="sol-type">${label}${suffix?`<span style="font-size:9px">${suffix}</span>`:''}</div>
+      <div class="sol-time">${fmtHour(h)}</div>
+      <div class="sol-dur">${dur===1.5?'1.5h window':'45min window'}</div>
+    </div>`;
+  };
+  return`<div class="solunar-wrap">
+    <div class="solunar-title-row">
+      <span class="solunar-title">SOLUNAR PERIODS</span>
+      <div class="solunar-strength">${dots}<span style="font-family:var(--font-m);font-size:9px;color:var(--text-muted);margin-left:4px">${sol.strength}/10</span></div>
+    </div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--text-muted);margin-bottom:6px">${sol.phaseName}${active?` · <span style="color:var(--yellow)">ACTIVE: ${active}</span>`:''}</div>
+    <div class="solunar-periods">
+      ${periodHTML('Major 1 – Moon overhead',  sol.upper,    1.5,  'Major 1 – Moon overhead')}
+      ${periodHTML('Major 2 – Moon underfoot', sol.lower,    1.5,  'Major 2 – Moon underfoot')}
+      ${periodHTML('Minor – Moonrise',          sol.moonrise, 0.75, 'Minor – Moonrise')}
+      ${periodHTML('Minor – Moonset',           sol.moonset,  0.75, 'Minor – Moonset')}
+    </div>
+  </div>`;
+}
+
+function scoreBarHTML(label,score,season){
+  const cls=scoreClass(score),pct=Math.min(100,score*10);
+  const sc=season==='Open'?'season-open':'season-closed';
+  return`<div class="score-row"><span class="score-label">${label}</span><div class="score-bar-outer"><div class="score-bar-inner ${cls}" style="width:${pct}%"></div></div><span class="score-num ${cls}">${fmt(score)}</span><span class="score-season ${sc}">${season||''}</span></div>`;
+}
+
+function toggleSection(id){
+  const el=document.getElementById(id);const arr=document.querySelector(`[data-toggle="${id}"] .toggle-arrow`)||document.getElementById(id.replace('-body','-arrow'));
+  if(el)el.classList.toggle('open');
+  if(arr)arr.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER STATION CARD
+// ═══════════════════════════════════════════════════════════════════
+function renderCard(s, wx, tideData, histEntry, riverHistory) {
+  const now=new Date(),month=now.getMonth()+1,lunar=lunarPhase(),sl=seasonLabel(month);
+  const season=getSeasonStatus(s.system,month,now.getDate());
+  const wl=histEntry._wl??NaN,wt=histEntry._wt??NaN,diff=histEntry._diff??NaN;
+  const sol=getSolunar(s.lon,now);
+  const sr=wx?.sunrise?(wx.sunrise.getHours()+wx.sunrise.getMinutes()/60):7;
+  const ss=wx?.sunset?(wx.sunset.getHours()+wx.sunset.getMinutes()/60):20.5;
+  const upcomingEvts=(tideData?.upcoming||[]).map(e=>({...e,dt:new Date(e.time)}));
+  const nextHighEvt=upcomingEvts.find(e=>e.type==='high'&&new Date(e.time)>now)||null;
+  const nextHigh=nextHighEvt?nextHighEvt.dt:null;
+  const sSal=scoreSalmon(wx,wl,wt,s.ideal,s.bearing);
+  const sST=scoreSeaTrout(wx,wl,wt,nextHigh,lunar.mult,s.bearing);
+  const sBr=scoreBrown(wx,wl,wt,s.bearing);
+  const todayRain=wx?.todayPrecip||0,priorRain=wx?.priorDayPrecip||0;
+  const sp=spatePhase(wl,s.ideal,diff,todayRain,priorRain);
+  const col=classifyColour(wl,s.ideal,diff,todayRain,wx?.nowPrecip||0,priorRain);
+  const hrs=hoursToIdeal(wl,s.ideal,diff);
+  const flies=buildFlies(wl,diff,wt,wx,lunar.mode,s.ideal,month,s.system);
+  const leaveTime=nextHighEvt?new Date(nextHighEvt.dt.getTime()-(s.drive+40)*60000):null;
+  const leaveNow=leaveTime&&leaveTime<=now;
+  const pressureRead=wx?({Rising:wx.pressure>=1015?'Strongly favourable – prime window opening':'Conditions improving',Steady:'Neutral – stable conditions',Falling:wx.pressure<=1008?'Short aggressive windows – be mobile':'Easing – watch brief lifts'}[wx.trend]||'Neutral'):(wx===null?'Weather unavailable':'—');
+  const wxSrc=wx?.source?`<span style="font-size:9px;color:var(--text-muted)"> (${wx.source})</span>`:'';
+  const ttTrend=histEntry._ttTrend||{arrow:'→',cls:'trend-st'};
+  let fcastRows='';(wx?.forecast||[]).slice(0,5).forEach(d=>{const ri=rainImpact(d.mm),dt=d.date.toLocaleDateString('en-IE',{weekday:'short',day:'2-digit',month:'short'});fcastRows+=`<tr><td class="f-day">${dt}</td><td class="f-mm ${ri.cls}">${d.mm.toFixed(1)}mm</td><td class="f-label ${ri.cls}">${ri.l}</td><td class="f-tactic">${dayTactics(d.mm)}</td></tr>`});
+  function fmtTideTime(iso){return new Date(iso).toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',hour12:false})}
+  function fmtTideRow(ev){const past=new Date(ev.time)<now,isH=ev.type==='high',color=isH?'var(--blue)':'var(--text-dim)',icon=isH?'▲':'▼',lbl=isH?'HT':'LT';return`<span style="${past?'opacity:.4;':''}color:${color}">${icon} ${lbl} ${fmtTideTime(ev.time)} <small style="color:var(--text-muted)">${ev.height.toFixed(2)}m</small></span>`}
+  let tideRows='';const grouped=tideData?.grouped||{};
+  for(const day of Object.keys(grouped)){const cells=grouped[day].map(fmtTideRow).join('  ');const dl=day==='Today'?`<b style="color:var(--text-dim)">Today</b>`:day==='Tomorrow'?`<b style="color:var(--text-dim)">Tomorrow</b>`:`<b style="color:var(--text-muted)">${day}</b>`;tideRows+=`<div class="tide-line">${dl}:&nbsp;${cells}</div>`}
+  if(!tideRows)tideRows=`<div class="tide-line" style="color:var(--text-muted)">Tide data unavailable</div>`;
+  const uid=s.name.replace(/\s+/g,'_');
+  const isPrime=sp.cls==='spate-prime';
+  // Store card data for AI verdict
+  window._cardData = window._cardData || {};
+  window._cardData[uid] = {
+    name:s.name, system:s.system, drive:s.drive,
+    wl:isNaN(wl)?null:wl, ideal:s.ideal,
+    wt:isNaN(wt)?null:wt, diff:isNaN(diff)?null:diff,
+    spate:sp.label, colour:col.label,
+    season:{salmon:season.salmon,st:season.st,brown:season.brown},
+    sSal:scoreSalmon(wx,wl,wt,s.ideal,s.bearing),
+    sST:scoreSeaTrout(wx,wl,wt,nextHigh,lunar.mult,s.bearing),
+    sBr:scoreBrown(wx,wl,wt,s.bearing),
+    wx:wx?{pressure:wx.pressure,trend:wx.trend,delta3h:wx.delta3h,
+      windSpeed:wx.windSpeed,windDir:wx.windDir,windGust:wx.windGust,
+      airTemp:wx.airTemp,cloudCover:wx.cloudCover,
+      todayPrecip:wx.todayPrecip,priorDayPrecip:wx.priorDayPrecip,
+      sunrise:wx.sunrise?fmtTime(wx.sunrise):null,
+      sunset:wx.sunset?fmtTime(wx.sunset):null}:null,
+    nextTide:nextHighEvt?{time:fmtTime(nextHighEvt.dt),height:nextHighEvt.height}:null,
+    leaveBy:leaveTime?fmtTime(leaveTime):null,
+    lat:s.lat, lon:s.lon
+  };
+  return`<div class="station-card${isPrime?' prime-window':''}" id="card-${uid}">
+    <div class="card-header">
+      <div><div class="card-title">${s.name}</div><div class="card-system">${s.system}</div></div>
+      <div class="card-badges">
+        <span class="badge">🚗 ${s.drive}min</span>
+        ${!wx?'<span class="error-chip" title="Weather API unavailable – check /api/status">NO WX</span>':''}
+        <button class="ai-btn" id="ai-btn-${uid}" onclick="getAIVerdict('${uid}')">🤖 AI Verdict</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div id="ai-verdict-${uid}"></div>
+      ${isNaN(wl)&&!wx?`<div style="font-family:var(--font-m);font-size:10px;color:var(--amber);background:#1a1000;border:1px solid #4a3000;border-radius:3px;padding:5px 8px;margin-bottom:6px">⚠ Live data unavailable – OPW/weather APIs may be blocked. Scores shown are estimated averages only.</div>`:''}
+      ${gaugeHTML(wl,s.ideal)}
+      ${historyGraphHTML(riverHistory,s.ideal,s.name)}
+      <div class="data-row" style="border-bottom:none;margin-top:4px">
+        <span class="data-label">TEMP</span>
+        <span class="data-val" data-share-wl="${fmt(wl,3)}" data-share-scores="Sal ${fmt(sSal)} ST ${fmt(sST)} Br ${fmt(sBr)}">${isNaN(wt)?'—':wt.toFixed(1)+' °C'} <span class="${ttTrend.cls}" style="font-size:12px">${ttTrend.arrow}</span></span>
+      </div>
+      <div class="data-row"><span class="data-label">COLOUR</span><span class="data-val">${col.label}</span><span class="data-note">${col.note}</span></div>
+      <div class="data-row"><span class="data-label">CHANGE</span><span class="data-val">${isNaN(diff)?'—':(diff>=0?'+':'')+diff.toFixed(4)+' m'}</span>${hrs!==null?`<span class="data-note" style="color:var(--cyan)">~${hrs}h to fishable ↓</span>`:''}</div>
+      <div class="data-row" style="border-bottom:none"><span class="data-label">PHASE</span><span class="spate-pill ${sp.cls}">${sp.label}</span></div>
+      ${solunarHTML(sol, sr, ss)}
+      <div class="scores-section">
+        <div class="scores-title">WINDOW SCORES</div>
+        ${scoreBarHTML('SALMON',sSal,season.salmon)}
+        ${scoreBarHTML('SEA TROUT',sST,season.st)}
+        ${scoreBarHTML('BROWN',sBr,season.brown)}
+      </div>
+      <div class="section-toggle" data-toggle="flies-${uid}" onclick="toggleSection('flies-${uid}')"><span class="toggle-arrow">▶</span><span class="section-toggle-title">FLY RECOMMENDATIONS – ${sl.toUpperCase()}</span></div>
+      <div id="flies-${uid}" class="collapsible"><div style="padding:4px 0 6px">
+        ${flies.ctx?`<div class="fly-ctx">${flies.ctx}</div>`:''}
+        ${['salmon','st','brown'].map((key,ki)=>{
+          const labels=['🐟 SALMON','🌙 SEA TROUT','🎣 BROWN TROUT'],clrs=['var(--blue)','var(--cyan)','var(--green)'],flyList=flies[key];
+          if(!flyList||!flyList.length)return'';
+          const rows=flyList.map((f,i)=>`<div class="fly-item"><span class="fly-item-name">${['①','②','③'][i]||'·'} ${f.name}</span>${f.size?`<span class="fly-item-size">${f.size}</span>`:''}<div class="fly-item-reason">${f.reason}</div></div>`).join('');
+          const note=key==='salmon'&&flies.salNote?`<div class="fly-note">💡 ${flies.salNote}</div>`:'';
+          return`<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)"><div class="fly-species" style="color:${clrs[ki]}">${labels[ki]}</div>${rows}${note}</div>`;
+        }).join('')}
+      </div></div>
+      <div class="section-toggle" data-toggle="wx-${uid}" onclick="toggleSection('wx-${uid}')"><span class="toggle-arrow">▶</span><span class="section-toggle-title">WEATHER${wxSrc}</span></div>
+      <div id="wx-${uid}" class="collapsible">
+        ${wx?`<div class="weather-grid">
+          <div class="data-row"><span class="data-label">PRESSURE</span><span class="data-val">${wx.pressure} hPa &nbsp;${wx.trend} ${{Rising:'/\\',Steady:'→',Falling:'\\/'}[wx.trend]||''} &nbsp;<span style="font-size:10px;color:var(--text-muted)">Δ3h: ${wx.delta3h>=0?'+':''}${wx.delta3h} hPa</span></span></div>
+          <div class="data-row"><span class="data-label">WIND</span><span class="data-val">${wx.windSpeed} km/h &nbsp;gust ${wx.windGust} km/h</span></div>
+          <div class="data-row"><span class="data-label">DIRECTION</span><span class="data-val">${isNaN(wx.windDir)?'—':compassDir(wx.windDir)+' ('+Math.round(wx.windDir)+'°)'}</span></div>
+          <div class="data-row"><span class="data-label">AIR TEMP</span><span class="data-val">${wx.airTemp!=null?wx.airTemp.toFixed(1)+'°C':'—'}</span></div>
+          <div class="data-row"><span class="data-label">RAIN TODAY</span><span class="data-val">${fmt(wx.todayPrecip)} mm &nbsp;<span style="color:var(--text-muted)">(now: ${fmt(wx.nowPrecip,1)} mm/h)</span></span></div>
+          <div class="data-row"><span class="data-label">YESTERDAY</span><span class="data-val">${fmt(wx.priorDayPrecip)} mm</span></div>
+          <div class="data-row"><span class="data-label">CLOUD</span><span class="data-val">${wx.cloudCover!=null?wx.cloudCover+'%':'—'}</span></div>
+          <div class="data-row"><span class="data-label">LIGHT</span><span class="data-val">${wx.sunrise?'↑'+fmtTime(wx.sunrise)+'  ↓'+fmtTime(wx.sunset):'—'}</span></div>
+        </div><div class="pressure-read">${pressureRead}</div>`
+        :`<div class="wx-unavail">⚠ Weather unavailable. Check <a href="/api/status" target="_blank" style="color:var(--amber)">/api/status</a></div>`}
+      </div>
+      <div class="section-toggle" data-toggle="tides-${uid}" onclick="toggleSection('tides-${uid}')"><span class="toggle-arrow">▶</span><span class="section-toggle-title">TIDES &amp; WINDOWS<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-b)"> ${tideData?.source?`– ${tideData.source}`:''}</span></span></div>
+      <div id="tides-${uid}" class="collapsible"><div style="margin:6px 0 4px">
+        ${tideRows}
+        ${nextHighEvt?`<div class="leave-line ${leaveNow?'leave-now':''}"><span>${leaveNow?'⚡ LEAVE NOW':'→ LEAVE BY '+fmtTime(leaveTime)}</span><span>▲ HT ${fmtTime(nextHighEvt.dt)} (${nextHighEvt.height.toFixed(2)}m)</span></div><div class="tide-line">🌙 Sea trout window: <b style="color:var(--blue)">${fmtTime(new Date(nextHighEvt.dt.getTime()-3600000))} – ${fmtTime(new Date(nextHighEvt.dt.getTime()+3600000))}</b> <span style="color:var(--text-muted);font-size:10px">(±1hr of HT)</span></div>`:''}
+        ${wx?.sunset?`<div class="tide-line" style="margin-top:6px">${!isNaN(wt)&&wt>13?'🌅 Brown evening sedge: '+fmtTime(new Date(wx.sunset.getTime()-5400000))+' – '+fmtTime(new Date(wx.sunset.getTime()+1800000)):'🌞 Brown midday nymphs: 11:00 – 15:00'}</div>`:''}
+      </div></div>
+      ${fcastRows?`<div class="section-toggle" data-toggle="fcast-${uid}" onclick="toggleSection('fcast-${uid}')"><span class="toggle-arrow">▶</span><span class="section-toggle-title">5-DAY OUTLOOK</span></div><div id="fcast-${uid}" class="collapsible"><table class="forecast-table"><tbody>${fcastRows}</tbody></table></div>`:''}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// NIGHT PLANNER
+// ═══════════════════════════════════════════════════════════════════
+function renderNightPlanner(summaries, wxCache, tideCache) {
+  const now=new Date(),tonight=new Date(),lunar=lunarPhase();
+  tonight.setHours(0,0,0,0);
+  const firstWx=Object.values(wxCache).find(w=>w)||null;
+  const sunset=firstWx?.sunset;
+  const sunsetH=sunset?(sunset.getHours()+sunset.getMinutes()/60):20.5;
+  const moonMode=lunar.mode;
+  const sol=getSolunar(-8.5,now);
+  const majorNight=(sol.upper>=20||sol.upper<=4||sol.lower>=20||sol.lower<=4);
+
+  // ── Overall quality score incorporates river conditions ──────────
+  let quality=5;
+  if(majorNight)quality+=3;
+  if(moonMode==='NEW MOON')quality+=2;else if(moonMode==='Full Moon')quality-=1;
+  if(firstWx){
+    if(firstWx.windSpeed<15)quality+=1;
+    if(firstWx.windSpeed>30)quality-=2;
+    if((firstWx.todayPrecip||0)>15)quality-=1;
+  }
+  // Penalise for dirty/flood river conditions across all stations
+  const allDirty=(summaries||[]).filter(Boolean).every(st=>st.colour==='Dirty/Flood'||st.colour==='Coloured');
+  const anyDirty=(summaries||[]).filter(Boolean).some(st=>st.colour==='Dirty/Flood');
+  const anyPrime=(summaries||[]).filter(Boolean).some(st=>st.phase&&st.phase.includes('PRIME'));
+  if(anyDirty&&!anyPrime) quality-=3;
+  if(anyPrime) quality+=1; // dropping from spate = sea trout running
+  quality=Math.max(1,Math.min(10,quality));
+  const qLabel=quality>=8?'⭐ EXCELLENT':quality>=6?'GOOD':quality>=4?'FAIR':'POOR';
+  const qColor=quality>=8?'var(--green)':quality>=6?'var(--yellow)':quality>=4?'var(--text-dim)':'var(--text-muted)';
+  document.getElementById('night-quality').innerHTML=`<span style="color:${qColor}">${qLabel} ${quality}/10</span>`;
+
+  const grid=document.getElementById('night-grid');
+  const seaTroutStations=getActiveStations().filter(s=>getSeasonStatus(s.system,now.getMonth()+1,now.getDate()).st==='Open');
+  if(!seaTroutStations.length){grid.innerHTML='<div style="padding:12px;color:var(--text-muted);font-family:var(--font-m);font-size:11px">Sea trout season closed</div>';return}
+
+  grid.innerHTML=seaTroutStations.map(s=>{
+    const td=tideCache[s.tide];
+    const upcomingEvts=(td?.upcoming||[]).map(e=>({...e,dt:new Date(e.time)}));
+    const sunsetDt=sunset?sunset:new Date(tonight.getTime()+sunsetH*3600000);
+    const tomorrowDawn=new Date(tonight.getTime()+30*3600000);
+    const htTonight=upcomingEvts.find(e=>e.type==='high'&&e.dt>=sunsetDt&&e.dt<=tomorrowDawn);
+    const majorTimes=[sol.upper,sol.lower].filter(h=>h>=20||h<=5);
+
+    // ── River conditions for THIS station ─────────────────────────
+    const stSum=(summaries||[]).find(st=>st&&st.name===s.name);
+    const riverColour=stSum?.colour||'Unknown';
+    const riverPhase=stSum?.phase||'';
+    const wl=stSum?._wl??NaN;
+    const isDirty=riverColour==='Dirty/Flood';
+    const isColoured=riverColour==='Coloured';
+    const isDropping=riverPhase.includes('PRIME')||riverPhase.includes('dropping');
+    const isLowClear=riverColour==='Very Clear'||riverColour==='Low/clear';
+    const hasLevel=!isNaN(wl);
+
+    // ── Derive water-condition verdict ─────────────────────────────
+    let waterVerdict='', waterCls='night-fair', waterEmoji='💧';
+    if(isDirty&&!isDropping){
+      waterVerdict='⛔ River dirty/flood – sea trout not feeding. Wait for drop.';
+      waterCls='night-poor'; waterEmoji='🟤';
+    } else if(isDirty&&isDropping){
+      waterVerdict='⚡ River dropping from spate – sea trout running NOW. Prime!';
+      waterCls='night-go'; waterEmoji='⚡';
+    } else if(isColoured&&isDropping){
+      waterVerdict='✓ Slight colour dropping – good fishing. Step up fly size.';
+      waterCls='night-go'; waterEmoji='🟢';
+    } else if(isColoured){
+      waterVerdict='⚠ Coloured water – tidal lower beats only tonight.';
+      waterCls='night-fair'; waterEmoji='🟡';
+    } else if(isLowClear){
+      waterVerdict='Low clear water – fine tippet sz 12, fish the hitch at last light.';
+      waterCls='night-fair'; waterEmoji='🔵';
+    } else if(hasLevel){
+      waterVerdict='River in fishable condition – normal tactics apply.';
+      waterCls='night-go'; waterEmoji='🟢';
+    } else {
+      waterVerdict='River level unknown – check conditions before going out.';
+      waterCls='night-poor'; waterEmoji='❓';
+    }
+
+    // ── Tide window ───────────────────────────────────────────────
+    let windowStr='—'; let windowCls='night-poor';
+    if(htTonight){
+      const htH=htTonight.dt.getHours()+htTonight.dt.getMinutes()/60;
+      const w1=fmtHour((htH-1+24)%24),w2=fmtHour((htH+1)%24);
+      windowStr=`${w1} – ${w2} (HT ${fmtTime(htTonight.dt)})`;
+      const solOverlap=majorTimes.some(mt=>Math.abs(((mt-htH+24)%24))<=2||Math.abs(((mt-htH+24)%24))>=22);
+      windowCls=isDirty&&!isDropping?'night-poor':solOverlap?'night-go':'night-fair';
+      if(solOverlap&&!isDirty)windowStr+=' ⭐';
+    } else if(majorTimes.length){
+      const t=majorTimes[0];
+      windowStr=`${fmtHour((t-.75+24)%24)} – ${fmtHour((t+.75)%24)} (solunar major)`;
+      windowCls=isDirty&&!isDropping?'night-poor':'night-fair';
+    }
+
+    // ── Fly recommendation based on conditions ────────────────────
+    let flyRec='';
+    if(isDirty&&!isDropping){
+      flyRec='Stay home – fish the tidal estuary only if accessible.';
+    } else if(isDropping||(isColoured&&!isDirty)){
+      flyRec='Teal Blue & Silver sz 6–8 (bigger than normal). Fish pool tails.';
+    } else if(isLowClear){
+      flyRec="Watson's Fancy or Teal B&S sz 12, fine tippet, hitch at last light.";
+    } else {
+      flyRec=moonMode==='NEW MOON'
+        ?'Black & Silver tube sz 8 – dark profile on a dark night.'
+        :'Teal Blue & Silver sz 10 – swing slowly on floating line.';
+    }
+
+    // ── Wind/presentation notes ───────────────────────────────────
+    const wx=firstWx;
+    const notes=[];
+    if(moonMode==='NEW MOON')notes.push('New moon – ideal darkness');
+    else if(moonMode==='Full Moon')notes.push('Full moon – fish cautious');
+    if(wx?.windSpeed<8)notes.push('Calm – fine leader essential');
+    else if(wx?.windSpeed<=20)notes.push('Good ripple – swing confidently');
+    else if(wx?.windSpeed>25)notes.push('Strong wind – fish sheltered bends');
+
+    const stSeason=getSeasonStatus(s.system,now.getMonth()+1,now.getDate());
+    return`<div class="night-card">
+      <div class="night-card-name">${s.name} <span style="font-size:10px;color:var(--text-muted)">${riverColour!=='Unknown'?'('+riverColour+')':''}</span></div>
+      <div class="night-window ${waterCls}" style="margin-bottom:4px">${waterEmoji} ${waterVerdict}</div>
+      <div class="night-window ${windowCls}">🌙 ${windowStr}</div>
+      ${majorTimes.length&&!isDirty?`<div class="night-window" style="color:var(--purple);margin-top:2px">🌙 Solunar: ${majorTimes.map(fmtHour).join(', ')}</div>`:''}
+      <div class="night-note" style="margin-top:4px">🪰 ${flyRec}</div>
+      <div class="night-note">${notes.join(' · ')||''}</div>
+      <div class="night-note">Season: <span class="${stSeason.st==='Open'?'tag-open':'tag-closed'}">${stSeason.st}</span>${hasLevel?` · Level: ${fmt(wl,3)}m`:''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// 10-DAY CALENDAR
+// ═══════════════════════════════════════════════════════════════════
+function renderCalendar(forecastDays) {
+  // forecastDays: [{date, mm, windMax, tempMax}] from first station's weather
+  const scroll=document.getElementById('calendar-scroll');
+  if(!forecastDays||!forecastDays.length){
+    // No forecast: build solunar-only calendar for next 10 days
+    const now=new Date();
+    forecastDays=Array.from({length:10},(_,i)=>{
+      const d=new Date(now);d.setDate(d.getDate()+i);
+      return{date:d,mm:null,windMax:null,tempMax:null};
+    });
+  }
+  const today=new Date().toDateString();
+  const cards=forecastDays.slice(0,10).map(d=>{
+    const sol=getSolunar(-8.5,d.date);
+    const score=dailyForecastScore(d,sol);
+    const isToday=d.date.toDateString()===today;
+    const ri=rainImpact(d.mm);
+    const scoreColor=score>=7?'var(--green)':score>=5?'var(--yellow)':'var(--red)';
+    const barColor=score>=7?'#3a7028':score>=5?'#7a5818':'#3a1010';
+    const dayName=d.date.toLocaleDateString('en-IE',{weekday:'short'});
+    const dayDate=d.date.toLocaleDateString('en-IE',{day:'2-digit',month:'short'});
+    // Icon for conditions
+    const icons=[];
+    if(d.mm>15)icons.push('🌧️');else if(d.mm>5)icons.push('🌦️');else icons.push('☀️');
+    if(sol.strength>=8)icons.push('🌕');else if(sol.strength>=5)icons.push('🌔');
+    const isBest=score>=8;
+    return`<div class="cal-day${isToday?' today':''}${isBest?' best-day':''}">
+      <div class="cal-day-name">${dayName}</div>
+      <div class="cal-day-date">${dayDate}</div>
+      <div class="cal-score-bar" style="background:${barColor};width:${Math.min(100,score*10)}%"></div>
+      <div class="cal-score-num" style="color:${scoreColor}">${score.toFixed(1)}</div>
+      <div class="cal-rain ${ri.cls}">${d.mm!=null?d.mm.toFixed(1)+'mm':'🌙 Solunar only'}</div>
+      <div class="cal-icons">${icons.join('')} 🌙${sol.strength}</div>
+    </div>`;
+  });
+  scroll.innerHTML=cards.join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SHORTLIST
+// ═══════════════════════════════════════════════════════════════════
+function renderShortlist(summaries){
+  if(!summaries.length)return'<div style="padding:10px 14px;color:var(--text-muted);font-family:var(--font-m);font-size:11px">No data</div>';
+  const sorted=[...summaries].sort((a,b)=>b.sSal-a.sSal);
+  const rows=sorted.slice(0,6).map((st,i)=>{
+    const sc=`<span class="${scoreClass(st.sSal)}">${fmt(st.sSal)}</span>/<span class="${scoreClass(st.sST)}">${fmt(st.sST)}</span>/<span class="${scoreClass(st.sBr)}">${fmt(st.sBr)}</span>`;
+    return`<tr><td style="color:var(--text-muted)">${i+1}</td><td><b style="color:var(--text)">${st.name}</b></td><td style="color:var(--text-dim)">${st.system}</td><td>${sc}</td><td style="color:var(--text-dim)">${st.colour}</td><td style="color:var(--text-dim)">${st.phase.substring(0,30)}</td><td style="color:var(--green)">${st.leave?fmtTime(st.leave):'—'}</td><td style="color:var(--blue)">${st.nextTide?fmtTime(st.nextTide):'—'}</td><td style="color:var(--text-muted)">${st.drive}min</td></tr>`;
+  }).join('');
+  return`<table class="shortlist-table"><thead><tr><th>#</th><th>Station</th><th>System</th><th>Sal/ST/Br</th><th>Colour</th><th>Phase</th><th>Leave By</th><th>High Tide</th><th>Drive</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// BLACKWATER FLOW ALERT
+// ═══════════════════════════════════════════════════════════════════
+function renderFlowAlert(snapshots){
+  const k=snapshots['Keale Bridge'],b=snapshots['Ballyduff'];
+  if(!k||!b)return'';
+  const kd=isNaN(k.diff)?0:k.diff;
+  if(Math.abs(kd)<.0005)return'';
+  if(kd>.0005)return`<div class="flow-alert rising">⚠ INBOUND WATER — Keale Bridge RISING (Δ ${kd>0?'+':''}${kd.toFixed(4)} m) — Ballyduff expect rise/colour in ~2–3 hrs. Now: ${fmt(b.wl,3)} m</div>`;
+  return`<div class="flow-alert">↓ CLEARING WATER — Keale Bridge FALLING (Δ ${kd.toFixed(4)} m) — Ballyduff drops/clears ~2–3 hrs. Now: ${fmt(b.wl,3)} m — prime fly water approaching</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MAIN LOOP
+// ═══════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
+// AI FISHING VERDICT  –  calls Claude API with live conditions
+// ═══════════════════════════════════════════════════════════════════
+async function getAIVerdict(uid) {
+  const btn = document.getElementById(`ai-btn-${uid}`);
+  const panel = document.getElementById(`ai-verdict-${uid}`);
+  if(!btn||!panel) return;
+
+  const data = window._cardData?.[uid];
+  if(!data){ panel.innerHTML='<div class="ai-loading">No data loaded yet – refresh first.</div>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Asking Claude...';
+  panel.innerHTML = `<div class="ai-loading"><div class="spinner"></div>Analysing conditions for ${data.name}...</div>`;
+
+  // Build a rich context prompt from live data
+  const now = new Date();
+  const prompt = `You are an expert Irish angling guide. A visiting angler from Crosshaven (${data.drive} min drive) is asking right now:
+
+"Is it worth fishing ${data.name} (${data.system}) today, and if so where and what fly?"
+
+LIVE CONDITIONS (${now.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit'})} today):
+- River level: ${data.wl!=null?data.wl.toFixed(3)+'m (ideal: '+data.ideal+'m, diff from ideal: '+(data.wl-data.ideal).toFixed(3)+'m)':'unknown'}
+- Level change: ${data.diff!=null?(data.diff>0?'Rising +':'Falling ')+data.diff.toFixed(4)+'m':'unknown'}
+- Phase: ${data.spate}
+- Water colour: ${data.colour}
+- Water temp: ${data.wt!=null?data.wt.toFixed(1)+'°C':'unknown'}
+- Salmon score: ${data.sSal}/10 | Sea trout score: ${data.sST}/10 | Brown trout score: ${data.sBr}/10
+- Season: Salmon ${data.season.salmon} | Sea trout ${data.season.st} | Brown ${data.season.brown}
+${data.wx?`- Weather: ${data.wx.pressure}hPa ${data.wx.trend} (Δ${data.wx.delta3h}hPa/3h), wind ${data.wx.windSpeed}km/h gusting ${data.wx.windGust}km/h, air ${data.wx.airTemp}°C, cloud ${data.wx.cloudCover}%, rain today ${data.wx.todayPrecip}mm (yesterday ${data.wx.priorDayPrecip}mm)`:'- Weather: unavailable'}
+${data.nextTide?`- Next high tide: ${data.nextTide.time} (${data.nextTide.height}m) – leave by ${data.leaveBy||'?'}`:'- Tide: no data'}
+
+Respond in this EXACT format (keep each section to 1-2 sentences max):
+
+VERDICT: [GO ✓ / WAIT ⏳ / STAY HOME ✗]
+WHY: [one sentence reason based on conditions above]
+WHERE: [specific beat/pool names on the ${data.name} that suit these conditions]
+FLY: [2-3 specific patterns with sizes for current conditions]
+TIMING: [best window today in clock hours]
+WATCH FOR: [one specific observation or tip]`;
+
+  try {
+    // Call via our server-side proxy (keeps API key secure, avoids CORS)
+    const response = await fetch('/api/verdict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+      cache: 'no-store'
+    });
+
+    if(!response.ok) {
+      const err = await response.json().catch(()=>({error:'Server error'}));
+      throw new Error(err.error || `HTTP ${response.status}`);
+    }
+    const result = await response.json();
+    const text = result.text || '';
+
+    // Parse verdict type for colour coding
+    const isGo   = text.includes('GO ✓') || text.includes('VERDICT: GO');
+    const isWait = text.includes('WAIT ⏳') || text.includes('VERDICT: WAIT');
+    const cls    = isGo ? 'ai-go' : isWait ? 'ai-wait' : 'ai-no';
+
+    // Format the response nicely
+    const formatted = text
+      .replace(/^VERDICT:/m,   '<b style="color:var(--green)">VERDICT:</b>')
+      .replace(/^WHY:/m,       '<b>WHY:</b>')
+      .replace(/^WHERE:/m,     '<b>WHERE:</b>')
+      .replace(/^FLY:/m,       '<b>🪰 FLY:</b>')
+      .replace(/^TIMING:/m,    '<b>⏰ TIMING:</b>')
+      .replace(/^WATCH FOR:/m, '<b>👁 WATCH FOR:</b>')
+      .split('\n').filter(l=>l.trim())
+      .map(l=>`<div style="margin:3px 0">${l}</div>`).join('');
+
+    panel.innerHTML = `<div class="ai-verdict ${cls}">
+      <div class="ai-verdict-hdr">
+        <span>🤖 Claude AI – ${now.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit'})}</span>
+        <span style="cursor:pointer;color:var(--text-muted)" onclick="this.closest('.ai-verdict').remove();document.getElementById('ai-btn-${uid}').disabled=false;document.getElementById('ai-btn-${uid}').textContent='🤖 AI Verdict'">✕</span>
+      </div>
+      <div class="ai-verdict-body">${formatted}</div>
+    </div>`;
+  } catch(e) {
+    panel.innerHTML = `<div class="ai-verdict"><div class="ai-verdict-body" style="color:var(--red)">AI unavailable: ${e.message}</div></div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🤖 AI Verdict';
+}
+
+const REFRESH_SEC=1800;
+let refreshTimer=null,countdownTimer=null,nextRefresh=null;
+
+async function runReport(){
+  clearInterval(countdownTimer);clearTimeout(refreshTimer);
+  const grid=document.getElementById('stations-grid');
+  const alertsEl=document.getElementById('alerts');
+  const activeStations=getActiveStations();
+  grid.innerHTML=activeStations.map(()=>'<div class="loading-card"><div class="spinner"></div>Loading river data...</div>').join('');
+  alertsEl.innerHTML='';
+  document.getElementById('shortlist-body').innerHTML='<div style="padding:10px 14px;color:var(--text-muted);font-family:var(--font-m);font-size:11px">Loading...</div>';
+  const lunar=lunarPhase(),now=new Date(),month=now.getMonth()+1;
+  document.getElementById('hdr-lunar').textContent=lunar.mode;
+  // Regs status chip
+  const chip=document.getElementById('regs-status-chip');
+  if(chip){const m=now.getMonth()+1,d=now.getDate();
+    if((m===5&&d>=12)||(m>=6&&m<=8)){chip.textContent='🟢 HARVEST OPEN';chip.style.background='#0a2010';chip.style.color='var(--green)';chip.style.border='1px solid #204020'}
+    else if(m>=9&&m<=9){chip.textContent='🔴 C&R ONLY (Sep)';chip.style.background='#200a08';chip.style.color='var(--red)';chip.style.border='1px solid #4a1010'}
+    else{chip.textContent='🔴 C&R ONLY';chip.style.background='#200a08';chip.style.color='var(--red)';chip.style.border='1px solid #4a1010'}
+  }
+  document.getElementById('hdr-season').textContent=seasonLabel(month).toUpperCase();
+  const hist=loadHistory();
+  // Pre-fetch tides (unique names)
+  const tideNames=[...new Set(activeStations.map(s=>s.tide))];
+  const tideCache={};
+  await Promise.all(tideNames.map(async tn=>{tideCache[tn]=await fetchTides(tn)}));
+  const snapshots={};const summaries=[];const cardHTMLs=[];
+  const wxCache={};
+  await Promise.all(activeStations.map(async (s,idx)=>{
+    // Stagger weather calls by 300ms per station to avoid Open-Meteo rate limiting
+    if(idx>0) await new Promise(r=>setTimeout(r, idx*300));
+    const [lvl,tmp,wx,riverHist]=await Promise.all([fetchRiver(s.riverId,'0001'),fetchRiver(s.riverId,'0002'),fetchWeather(s.lat,s.lon),fetchRiverHistory(s.riverId,'0001')]);
+    wxCache[s.name]=wx;
+    let wl=lvl?.val??NaN,wt=tmp?.val??NaN;
+    if(!isNaN(wt)&&wt>35)wt=wt/10;
+    // If current OPW fetch failed but history loaded, use most recent history point
+    if(isNaN(wl)&&riverHist&&riverHist.length>0){
+      const lastHist=riverHist[riverHist.length-1];
+      if(!isNaN(lastHist.val)){
+        wl=lastHist.val;
+        console.log(`[OPW] ${s.name}: using history fallback ${wl.toFixed(3)}m`);
+      }
+    }
+    updateHistory(hist,s.name,wl,wt);
+    const diff=levelDiff(hist,s.name,wl);
+    const ttTrend=tempTrend(hist,s.name);
+    snapshots[s.name]={wl,diff};
+    const stHist={_wl:wl,_wt:wt,_diff:diff,_ttTrend:ttTrend};
+    const tideData=tideCache[s.tide];
+    const upcomingEvts=(tideData?.upcoming||[]).map(e=>({...e,dt:new Date(e.time)}));
+    const nextHighEvt=upcomingEvts.find(e=>e.type==='high'&&new Date(e.time)>now)||null;
+    const nextTide=nextHighEvt?nextHighEvt.dt:null;
+    const leaveTime=nextTide?new Date(nextTide.getTime()-(s.drive+40)*60000):null;
+    const todayRain=wx?.todayPrecip||0,priorRain=wx?.priorDayPrecip||0;
+    const col=classifyColour(wl,s.ideal,diff,todayRain,wx?.nowPrecip||0,priorRain);
+    const sp=spatePhase(wl,s.ideal,diff,todayRain,priorRain);
+    summaries[idx]={name:s.name,system:s.system,drive:s.drive,sSal:scoreSalmon(wx,wl,wt,s.ideal,s.bearing),sST:scoreSeaTrout(wx,wl,wt,nextTide,lunar.mult,s.bearing),sBr:scoreBrown(wx,wl,wt,s.bearing),colour:col.label==='Unknown'?'—':col.label,phase:sp.label==='Unknown'?'—':sp.label,leave:leaveTime,nextTide,_wl:wl,_diff:diff};
+    cardHTMLs[idx]=renderCard(s,wx,tideData,stHist,riverHist);
+    if(sp.cls==='spate-prime'){triggerNotification('⚡ PRIME WINDOW',`${s.name}: River dropping from spate – ideal fly conditions!`)}
+  }));
+  saveHistory(hist);
+  // Compute today's overall score
+  const validSummaries=summaries.filter(Boolean);
+  if(validSummaries.length){const avgScore=validSummaries.reduce((s,x)=>s+x.sSal,0)/validSummaries.length;const badge=document.getElementById('today-score-badge');badge.textContent=`TODAY: ${avgScore.toFixed(1)}/10`;badge.className='';badge.classList.add('today-score-badge',avgScore>=7?'score-badge-good':avgScore>=5?'score-badge-mid':'score-badge-low')}
+  // Flow alert
+  alertsEl.innerHTML=renderFlowAlert(snapshots);
+  summaries.forEach(st=>{if(st&&st.phase&&st.phase.includes('PRIME'))alertsEl.innerHTML+=`<div class="prime-alert">⚡ PRIME WINDOW: ${st.name} – ${st.phase}</div>`});
+  // Night planner
+  renderNightPlanner(summaries,wxCache,tideCache);
+  document.getElementById('night-body').classList.add('open');
+  document.getElementById('night-arrow')?.classList.add('open');
+  // Render stations grid with system group headers
+  let gridHTML='';let lastSystem='';
+  cardHTMLs.forEach((html,i)=>{
+    const sys=activeStations[i].system;
+    if(sys!==lastSystem){
+      const sysColor=sys==='Blackwater'?'var(--blue)':sys==='Cork Harbour'?'var(--cyan)':'var(--green)';
+      const sysNote=sys==='Blackwater'?'Keale Bridge → Mallow → Killavullen → Ballyduff  (West → East)':sys==='Owennabue'?'Ballea / Owennabue & Lee area':' Innishannon → Bandon → Dunmanway';
+      gridHTML+=`<div style="grid-column:1/-1;padding:8px 4px 4px;font-family:var(--font-h);font-size:16px;letter-spacing:2px;color:${sysColor};border-bottom:1px solid var(--border);margin-bottom:4px">${sys} <span style="font-family:var(--font-b);font-size:10px;font-weight:300;letter-spacing:0;color:var(--text-muted)">${sysNote}</span></div>`;
+      lastSystem=sys;
+    }
+    gridHTML+=html;
+  });
+  grid.innerHTML=gridHTML;
+  // Shortlist
+  document.getElementById('shortlist-body').innerHTML=renderShortlist(validSummaries);
+  // Calendar – use first station's forecast
+  const firstForecast=Object.values(wxCache).find(w=>w?.forecast?.length)?.forecast;
+  renderCalendar(firstForecast||null); // always render, fallback to solunar-only
+  // Prefill catch form
+  document.getElementById('c-date').value=now.toISOString().slice(0,10);
+  document.getElementById('c-time').value=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  renderCatchGallery();
+  // Auto-fill wl/wt from best station
+  const bandon=summaries.find(s=>s&&s.name==='Bandon');
+  if(bandon){const bh=hist['Bandon']?.slice(-1)[0];if(bh){if(!isNaN(bh.wl))document.getElementById('c-wl').placeholder=bh.wl.toFixed(3)+' (current)';if(bh.wt)document.getElementById('c-wt').placeholder=bh.wt.toFixed(1)+' (current)';}}
+  // Schedule refresh
+  nextRefresh=Date.now()+REFRESH_SEC*1000;
+  refreshTimer=setTimeout(runReport,REFRESH_SEC*1000);
+  countdownTimer=setInterval(()=>{const rem=Math.max(0,Math.round((nextRefresh-Date.now())/1000));const m=Math.floor(rem/60),sec=rem%60;document.getElementById('countdown').textContent=`↻ ${m}:${String(sec).padStart(2,'0')}`;},1000);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════════════════════════════
+function updateClock(){const d=new Date();document.getElementById('clock').textContent=d.toLocaleDateString('en-IE',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
+setInterval(updateClock,1000);updateClock();
+// Read ?river=N from URL and auto-select that river
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const rv=params.get('river');
+  if(rv!==null){
+    const idx=parseInt(rv);
+    if(!isNaN(idx)&&idx>=0&&idx<STATIONS.length){
+      selectedRiverIdx=idx;
+      document.querySelectorAll('.river-btn').forEach(b=>b.classList.remove('active'));
+      const btn=document.getElementById('rbtn-'+idx);
+      if(btn)btn.classList.add('active');
+      document.getElementById('rbtn-all')?.classList.remove('active');
+    }
+  }
+})();
+runReport();
+</script>
+</body>
+</html>
