@@ -13,7 +13,8 @@
   --text:#c5e0d0;--text-muted:#6a9075;--text-dim:#88a890;
   --teal:#4ad8b5;--gold:#b8962a;--amber:#c8780a;--red:#b85040;
   --blue:#4a8fa8;--purple:#8a78c0;--olive:#788a40;
-  --mayfly:#c8a830;--font-h:'Playfair Display',serif;
+  --mayfly:#c8a830;--chocolate:#6b3a18;--soupy:#8a5a28;--tinged:#a88a3a;
+  --font-h:'Playfair Display',serif;
   --font-b:'Barlow',sans-serif;--font-c:'Barlow Condensed',sans-serif;
   --font-m:'Share Tech Mono',monospace;
 }
@@ -50,7 +51,6 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 .hero-title em{color:var(--teal);font-style:italic}
 .hero-desc{font-size:14px;color:var(--text-dim);max-width:640px;margin:0 auto 24px}
 
-/* season badge */
 .season-banner{display:inline-flex;align-items:center;gap:16px;background:var(--surface);
   border:1px solid var(--border);border-radius:4px;padding:8px 20px;margin-bottom:20px;
   flex-wrap:wrap;justify-content:center}
@@ -107,14 +107,56 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 .lp-badge.green{border-color:#254535;background:#0a1810;color:var(--teal)}
 .lp-badge.gold{border-color:#4a3a08;background:#1a1200;color:var(--gold)}
 .lp-badge.amber{border-color:#503008;background:#1a0c00;color:var(--amber)}
+.lp-badge.chocolate{border-color:#5a2a10;background:#1a0a04;color:#c88a4a}
+.lp-badge.soupy{border-color:#604020;background:#1a0e06;color:var(--soupy)}
+.lp-badge.tinged{border-color:#604a18;background:#1a1408;color:var(--tinged)}
 .wind-dir{font-family:var(--font-m);font-size:20px;transition:transform .5s}
+
+/* ── COLOUR STATE PANEL (v2) ── */
+.colour-state-panel{margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:12px}
+.colour-state-title{font-family:var(--font-c);font-size:12px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.colour-state-headline{font-family:var(--font-m);font-size:12px;color:var(--text);margin-bottom:8px;line-height:1.5}
+.colour-state-headline.chocolate{color:#c88a4a}
+.colour-state-headline.soupy{color:var(--soupy)}
+.colour-state-headline.tinged{color:var(--tinged)}
+.colour-state-headline.clear{color:var(--teal)}
+.shelter-warning{background:#1a0a04;border:1px solid #5a2a10;border-left:3px solid #c88a4a;border-radius:3px;padding:8px 12px;margin:8px 0;font-family:var(--font-m);font-size:11px;color:#c88a4a;line-height:1.5}
+.bay-ranking{display:grid;grid-template-columns:1fr;gap:4px;margin-top:6px}
+.bay-row{display:grid;grid-template-columns:24px 1fr 70px 70px;gap:8px;align-items:center;font-family:var(--font-m);font-size:11px;padding:4px 6px;border-radius:3px;background:#0a1208}
+.bay-row.top{background:#0a1810;border-left:2px solid var(--teal)}
+.bay-row.shelter{background:#1a1004;border-left:2px solid var(--gold)}
+.bay-row.bad{background:#1a0a04;opacity:.6}
+.bay-rank{color:var(--text-muted);font-size:10px}
+.bay-name{color:var(--text)}
+.bay-state{font-size:9px;color:var(--text-muted);text-align:right}
+.bay-state.chocolate{color:#c88a4a}
+.bay-state.soupy{color:var(--soupy)}
+.bay-state.tinged{color:var(--tinged)}
+.bay-state.clear{color:var(--teal)}
+.bay-score{font-family:var(--font-h);font-size:14px;text-align:right}
+.bay-score.high{color:var(--teal)}
+.bay-score.mid{color:var(--gold)}
+.bay-score.low{color:var(--text-muted)}
+.colour-forecast{margin-top:8px;font-family:var(--font-m);font-size:10px;color:var(--text-dim);line-height:1.5;padding:6px 8px;background:#0a1208;border-radius:3px;border-left:2px solid var(--border-light)}
+
+/* ── WATER TEMP / MAYFLY GATE (v2) ── */
+.water-temp-row{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.water-temp-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:8px 10px}
+.water-temp-label{font-family:var(--font-c);font-size:10px;letter-spacing:.5px;color:var(--text-muted);text-transform:uppercase;margin-bottom:3px}
+.water-temp-value{font-family:var(--font-h);font-size:20px;color:var(--text);line-height:1}
+.water-temp-sub{font-family:var(--font-m);font-size:9px;color:var(--text-muted);margin-top:2px}
+.mayfly-gate{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:8px 10px}
+.mayfly-gate.ready{border-color:#4a3a08;background:#1a1200}
+.mayfly-gate.building{border-color:#3a3008}
+.mayfly-gate-bar{height:4px;background:#1a1a0a;border-radius:2px;overflow:hidden;margin-top:4px}
+.mayfly-gate-fill{height:100%;background:linear-gradient(90deg,#4a3a08,var(--mayfly));transition:width .6s}
 
 /* lough body */
 .lough-body{padding:0 16px 16px;display:none}
 .lough-panel.expanded .lough-body{display:block}
 .lough-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 @media(max-width:700px){.lough-grid{grid-template-columns:1fr}}
-/* ── COMPREHENSIVE MOBILE CSS ── */
+
 @media(max-width:640px){
   nav{height:auto;padding:8px 12px;flex-wrap:wrap;gap:6px}
   .nav-logo{font-size:15px}
@@ -152,6 +194,8 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
   .sec-toggle-title{font-size:11px}
   .fly-tag{font-size:9px;padding:2px 5px}
   .wind-warning{font-size:10px}
+  .bay-row{grid-template-columns:20px 1fr 60px 50px;font-size:10px}
+  .water-temp-row{grid-template-columns:1fr}
 }
 @media(max-width:380px){
   .hero-title{font-size:20px}
@@ -271,7 +315,7 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 .toggle-arrow{font-size:9px;color:var(--text-muted);transition:transform .2s}
 .toggle-arrow.open{transform:rotate(90deg)}
 .collapsible{overflow:hidden;max-height:0;transition:max-height .3s ease-out}
-.collapsible.open{max-height:2000px;transition:max-height .5s ease-in}
+.collapsible.open{max-height:3000px;transition:max-height .5s ease-in}
 
 /* ── SCORE BAR ── */
 .score-bar{display:flex;align-items:center;gap:6px;margin:3px 0}
@@ -289,7 +333,8 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
   border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-msg{text-align:center;color:var(--text-muted);font-family:var(--font-m);font-size:11px;padding:20px}
-/* ── HOURLY TIMELINE ───────────────────────────────────────────── */
+
+/* ── HOURLY TIMELINE ── */
 .day-plan-wrap{margin-top:10px}
 .day-plan-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px}
 .day-plan-title{font-family:var(--font-c);font-size:12px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
@@ -325,7 +370,8 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 .h-switch{font-size:8px;color:var(--amber);margin-top:4px;line-height:1.3;font-style:italic}
 .switch-advice{background:linear-gradient(90deg,#0a1400,#1a1000);border:1px solid var(--mayfly);border-radius:3px;padding:8px 12px;margin:8px 0;font-size:11px;color:var(--gold)}
 .switch-advice b{color:var(--mayfly);font-family:var(--font-m)}
-/* ── MOSS ADVICE ────────────────────────────────────────────────── */
+
+/* ── MOSS ADVICE ── */
 .moss-wrap{margin-top:14px}
 .moss-card{background:linear-gradient(135deg,#060e08,#080c0a);border:1px solid #1a3a20;border-left:3px solid var(--teal);border-radius:4px;padding:12px 14px;margin-bottom:8px}
 .moss-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -337,11 +383,14 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 .moss-principle.amber{background:#180e00;border-left:3px solid var(--amber);color:var(--text-dim)}
 .moss-icon{flex-shrink:0;width:16px;font-size:13px}
 .moss-principle b{color:var(--text)}
+
+/* ── v2 BUILD MARKER (so Tadhg can confirm deploy worked) ── */
+.v2-badge{display:inline-block;background:#0a1208;border:1px solid #254535;color:var(--teal);font-family:var(--font-m);font-size:9px;padding:2px 6px;border-radius:2px;margin-left:8px;letter-spacing:.5px}
 </style>
 </head>
 <body>
 <nav>
-  <div class="nav-logo"><span>🎣</span> Irish Loughs – Brown Trout Planner</div>
+  <div class="nav-logo"><span>🎣</span> Irish Loughs – Brown Trout Planner <span class="v2-badge">v2 calibrated</span></div>
   <div class="nav-links">
     <a class="nav-link" href="/">← Rivers</a>
     <button class="nav-link" onclick="toggleShareL()">↑ Share</button>
@@ -354,7 +403,7 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 <div class="hero">
   <div class="hero-sub">Trip Planner from Crosshaven, Cork</div>
   <h1 class="hero-title">Ireland's Great <em>Limestone Loughs</em></h1>
-  <p class="hero-desc">Wild brown trout on the finest drift fisheries in Europe. Live weather, hatch intelligence, fly recommendations and drift advisories for Conn, Corrib, Melvin and Sheelin.</p>
+  <p class="hero-desc">Wild brown trout on the finest drift fisheries in Europe. Live weather, hatch intelligence, fly recommendations and drift advisories for Conn, Corrib, Melvin and Sheelin — now with wind-driven water colour state, shelter-bay routing, and mayfly temperature gating.</p>
   <div class="season-banner">
     <div class="season-item">🎣 Season: <b>15 Feb – 12 Oct</b></div>
     <div class="season-item">📋 Licence: <b>No state licence required for brown trout</b></div>
@@ -363,12 +412,10 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
   </div>
 </div>
 
-<!-- TRIP OVERVIEW CARDS -->
 <div class="trip-strip" id="trip-strip">
   <div class="loading-msg"><div class="spinner"></div>Loading conditions...</div>
 </div>
 
-<!-- CONDITIONS BANNER -->
 <div class="cond-banner" id="global-conditions" style="display:none">
   <div class="cond-title">📡 General Conditions
     <span id="cond-source" style="font-family:var(--font-m);font-size:10px;color:var(--teal);margin-left:6px"></span>
@@ -378,12 +425,10 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
   <div class="cond-grid" id="cond-grid"></div>
 </div>
 
-<!-- LOUGH PANELS -->
 <div class="lough-panels" id="lough-panels">
   <div class="loading-msg"><div class="spinner"></div>Fetching lake data...</div>
 </div>
 
-<!-- SHARE PANEL -->
 <div id="share-panel-l">
   <div style="font-family:var(--font-h);font-size:13px;color:var(--text-dim);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">SHARE REPORT</div>
   <div class="share-opt" onclick="shareEmailL()"><span style="width:24px">📧</span>Send by Email</div>
@@ -392,7 +437,6 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
   <div class="share-opt" onclick="window.print()"><span style="width:24px">🖨️</span>Print / Save PDF</div>
 </div>
 
-<!-- BOTTOM BAR -->
 <div id="bot">
   <button class="bot-btn" onclick="document.getElementById('trip-strip').scrollIntoView({behavior:'smooth'})">🗺 Overview</button>
   <button class="bot-btn" onclick="scrollToLough('conn')">Conn</button>
@@ -402,370 +446,19 @@ nav{background:rgba(6,12,10,.96);backdrop-filter:blur(8px);border-bottom:1px sol
 </div>
 <script>
 'use strict';
-// ── Error trap – shows any JS crash on the page itself ──────────
 // ════════════════════════════════════════════════════════════════
-// SOLAR CALCULATOR – accurate to ~5min for Ireland lat 51–55°N
+// v2 BUILD: 14 May 2026 — wind-driven colour state, shelter routing,
+// water-temp estimate, mayfly gate. Calibrated against the Sat-Sun
+// chocolate event on Conn (N wind gusting 60kph for 36h).
 // ════════════════════════════════════════════════════════════════
-function calcSunTimes(date, lat, lon) {
-  const doy = Math.round((date - new Date(date.getFullYear(),0,0)) / 86400000);
-  const B   = (360/365)*(doy-81)*Math.PI/180;
-  const eot = 9.87*Math.sin(2*B) - 7.53*Math.cos(B) - 1.5*Math.sin(B); // minutes
-  const latR = lat*Math.PI/180;
-  const decl = 23.45*Math.sin(B)*Math.PI/180;
-  const cosHA = -Math.tan(latR)*Math.tan(decl);
-  if(cosHA<-1) return{sunrise:0,sunset:24};   // midnight sun
-  if(cosHA>1)  return{sunrise:12,sunset:12};  // polar night
-  const ha = Math.acos(cosHA)*180/Math.PI;
-  const isDST = date.getMonth()>=2 && date.getMonth()<=9; // Ireland BST Mar–Oct
-  const tz = isDST ? 1 : 0;
-  const solarNoon = 12 - lon/15 - eot/60 + tz;
-  return { sunrise: solarNoon - ha/15, sunset: solarNoon + ha/15 };
-}
+console.log('%c[Angler\'s Tactical Report] v2 calibration loaded', 'color:#4ad8b5;font-weight:bold');
 
-// ════════════════════════════════════════════════════════════════
-// HOURLY HATCH TIMING  (absolute clock hours per month, Irish loughs)
-// Sources: fishinginireland.info, flies of Ireland, Melview Lodge guide,
-//          Lough Sheelin/Conn/Corrib specific data, traditional knowledge
-// ════════════════════════════════════════════════════════════════
-const HOUR_HATCHES = {
-  // March: still cold, feeding restricted 11–14:00 early in month
-  3:[
-    { h1:10, h2:15, name:'Duckfly (Chironomid)',     type:'duckfly',
-      wet:["Blae & Black sz 12","Black Pennell sz 12","Black & Peacock Spider sz 12","Sooty Olive sz 12"],
-      dry:null,
-      note:'Early duckfly on mild afternoons – dark midges dancing above the water signal feeding fish. Best on calm bays.' },
-    { h1:11, h2:14, name:'Shrimp / Louse (sub-surface)',type:'shrimp',
-      wet:["Fiery Brown sz 10","Sooty Olive sz 12","Golden Olive sz 10","March Brown sz 10"],
-      dry:null,
-      note:'Trout working the shallows for hoglouse and freshwater shrimp. Fish slow, near bottom.' }
-  ],
-  4:[
-    { h1:10, h2:16, name:'Duckfly – PEAK',            type:'duckfly',
-      wet:["Blae & Black sz 12","Black & Peacock Spider sz 12","Black Pennell sz 12","Claret Dabbler sz 12","Golden Dabbler sz 12"],
-      dry:["CDC Midge sz 14","Black Klinkhammer sz 14"],
-      note:'Peak duckfly season. Buzzer pupa dead-drift in the surface film during calm spells. Trout porpoising in bays.' },
-    { h1:13, h2:17, name:'Lake Olives',                type:'olive',
-      wet:["Sooty Olive sz 12","Green Olive sz 12","Golden Olive sz 10","Cock Robin sz 12","Invicta sz 12"],
-      dry:["LDO Comparadun sz 14","Greenwell's Glory sz 14","Olive Klinkhammer sz 14"],
-      note:'Olives appear as afternoon warms. Watch for head-and-tail rises – these are olive feeders. Switch to dry if consistent.' }
-  ],
-  5:[
-    { h1:10, h2:13, name:'Olives & early Mayfly',      type:'olive',
-      wet:["Sooty Olive sz 12","Golden Olive sz 10","French Partridge Mayfly sz 10","Gosling sz 10"],
-      dry:["Green Wulff sz 10","Grey Wulff sz 10","LDO Comparadun sz 14"],
-      note:'Morning: olives leading into mayfly. Fish are coming up – watch for first Green Drakes appearing on the water.' },
-    { h1:11, h2:19, name:'🦋 MAYFLY – Green Drake',    type:'mayfly',
-      wet:["French Partridge Mayfly sz 10","Gosling sz 10","Claret Bumble sz 10","Wet Mayfly sz 10","Cock Robin sz 10"],
-      dry:["Green Wulff sz 10","Grey Wulff sz 10","Dry Mayfly sz 10","Green Drake imitation sz 10"],
-      note:'Mayfly! Fish wet in the morning, switch to dry when fish are boiling confidently on the surface (not just porpoising). On Conn & Corrib this is the peak window of the day.' },
-    { h1:19, h2:24, name:'Spent Gnat (spinner fall)',   type:'mayfly',
-      wet:["Golden Olive sz 10"],
-      dry:["Spent Gnat sz 10","Grey Wulff (spent wing) sz 10","CDC Mayfly sz 10"],
-      note:'Spinner fall begins around sunset. Fish the slicks and wind lanes in calmer conditions. Single fly, fine leader, minimal disturbance. The cream of the mayfly season.' }
-  ],
-  6:[
-    { h1: 5, h2: 8, name:'Caenis (dawn)',               type:'caenis',
-      wet:["Black Pennell sz 16"],
-      dry:["CDC Caenis sz 20","F-Fly sz 20","White Emerger sz 18"],
-      note:'Very early morning Caenis. Tiny flies – fish are sipping confidently but extremely spooky. Ultra-fine tippet, single fly, long leader. Experienced anglers only.' },
-    { h1:10, h2:15, name:'Late Mayfly & Olives',        type:'mayfly',
-      wet:["Claret Bumble sz 10","Gosling sz 10","Sooty Olive sz 12","Invicta sz 10"],
-      dry:["Green Wulff sz 10","Spent Gnat sz 10"],
-      note:'Mayfly winding down, especially on Sheelin. Corrib/Conn may still have good hatches early June. Olives continuing.' },
-    { h1:19, h2:24, name:'Green Peter Sedge',           type:'sedge',
-      wet:["Green Peter sz 10","Murrough sz 8","Invicta sz 10","Elk Hair Caddis sz 10"],
-      dry:["Green Peter Dry sz 10","Elk Hair Caddis sz 10","Murrough Dry sz 8","Goddard Sedge sz 10"],
-      note:'Green Peter season begins. Wet flies until ~21:00, then switch to dry when adults are skating on the surface. Fish until dark – some of the best fishing of the year.' }
-  ],
-  7:[
-    { h1:14, h2:20, name:'Daddy Long Legs',             type:'daddy',
-      wet:["Daddy Wet sz 10","Bibio sz 10","Watson's Fancy sz 10"],
-      dry:["Daddy (dapped) sz 8","Daddy Dry sz 10","Coch-y-bondhu sz 10"],
-      note:'Daddy appears on warm breezy afternoons – terrestrial fly blown onto the water. Dap or fish wet-and-dibbled on the surface. Best on days with moderate SW wind.' },
-    { h1:18, h2:24, name:'Sedge (evening–night)',       type:'sedge',
-      wet:["Green Peter sz 10","Invicta sz 10","Elk Hair Caddis sz 12"],
-      dry:["Green Peter Dry sz 10","Elk Hair Caddis sz 10","Goddard Sedge sz 10","Murrough sz 8"],
-      note:'Evening into night sedge. On Sheelin the big Murrough starts last week of May/early June – fish till midnight or beyond.' }
-  ],
-  8:[
-    { h1:14, h2:22, name:'Daddy Long Legs (peak)',      type:'daddy',
-      wet:["Daddy Wet sz 10","Watson's Fancy sz 10","Bibio sz 10"],
-      dry:["Daddy (dapped/dry) sz 8","Grasshopper (dapped) sz 8"],
-      note:'August daddy is the classic Corrib/Conn dapping month. Warm afternoons with good ripple. Dapped grasshopper also excellent on Corrib (ask locally for grasshoppers).' },
-    { h1:17, h2:23, name:'Sedge (evening)',             type:'sedge',
-      wet:["Green Peter sz 10","Invicta sz 10"],
-      dry:["Elk Hair Caddis sz 10","Green Peter Dry sz 10","Goddard Sedge sz 10"],
-      note:'Reliable evening sedge. Fish confidently in the last 90 min of light. Switch to dry when you see adults on the water surface.' },
-    { h1: 9, h2:17, name:'Daphnia (mid-water pulling)', type:'shrimp',
-      wet:["Bibio sz 12 (pulled)","Peter Ross sz 10","Mallard & Claret sz 10","Black & Peacock Spider sz 12"],
-      dry:null,
-      note:'Trout following daphnia clouds in open deep water – pull wet flies quickly through mid-water on intermediate or slow-sink line. Melvin Sonaghan especially targeted this way.' }
-  ],
-  9:[
-    { h1:10, h2:15, name:'LDO / Autumn Olives',         type:'olive',
-      wet:["Sooty Olive sz 12","Green Olive sz 12","Mallard & Claret sz 12","Bibio sz 10"],
-      dry:["LDO Comparadun sz 14","Klinkhammer sz 14","CDC Olive sz 14"],
-      note:'Autumn olive hatches on mild afternoons. Fish are in prime condition. Traditional wet fly team works well. Watch for sporadic rises.' },
-    { h1:16, h2:22, name:'Late Sedge & Daddy',          type:'sedge',
-      wet:["Green Peter sz 10","Invicta sz 10","Watson's Fancy sz 10"],
-      dry:["Elk Hair Caddis sz 12","CDC Sedge sz 12","Daddy Dry sz 10"],
-      note:'Back-end sedge and daddy. Large trout feeding hard before winter. Some of the biggest fish of the year are caught in September.' }
-  ],
-  10:[
-    { h1:10, h2:14, name:'LDO & Midge (late season)',   type:'olive',
-      wet:["Sooty Olive sz 12","Black Pennell sz 12","Blae & Black sz 12"],
-      dry:["LDO Comparadun sz 14","CDC Midge sz 16"],
-      note:'End of season. Trout active in short windows on mild days. Fish hard and fast between weather systems.' }
-  ]
-};
-
-// ════════════════════════════════════════════════════════════════
-// HOURLY PLAN BUILDER
-// For each hour sunrise→sunset+1, determine phase, technique,
-// flies, and switch signals from current conditions + month
-// ════════════════════════════════════════════════════════════════
-function buildHourlyPlan(lough, month, sr, ss, airTemp, cloudCover, windSpeed, pressure, trend) {
-  const hatches   = HOUR_HATCHES[month] || HOUR_HATCHES[9];
-  const temp      = airTemp || 12;
-  const cloud     = cloudCover || 60;
-  const wind      = windSpeed || 10;
-  const startHour = Math.floor(sr);
-  const endHour   = Math.ceil(ss + 1);
-  const slots     = [];
-
-  for (let h = startHour; h <= endHour; h++) {
-    const phase =
-      h < sr + 1.5     ? 'dawn'
-      : h < 12          ? 'morning'
-      : h < 14          ? 'midday'
-      : h < ss - 1.5    ? 'afternoon'
-      : h < ss + 0.5    ? 'evening'
-      : 'dusk';
-
-    const active = hatches.filter(ht => h >= ht.h1 && h < ht.h2);
-    const mayfly = active.find(ht => ht.type==='mayfly');
-    const sedge  = active.find(ht => ht.type==='sedge' || ht.type==='daddy');
-    const duckfly= active.find(ht => ht.type==='duckfly');
-    const olive  = active.find(ht => ht.type==='olive');
-    const daphnia= active.find(ht => ht.type==='shrimp' && ht.name.includes('Daphnia'));
-
-    let method, wets=[], drys=[], note='', switchSignal='', isDry=false;
-
-    // Decision engine
-    if (phase === 'dawn') {
-      method = 'Deep wet – subsurface 🌑';
-      wets   = (hatches[0]?.wet || ['Sooty Olive sz 12','Fiery Brown sz 10']).slice(0,2);
-      note   = 'Fish are rising from cold depths at first light. Team of 3 wets on slow-sinking or intermediate line. No surface activity expected yet.';
-      switchSignal = 'Watch for first swirls near weed beds or sheltered bays.';
-    } else if (phase==='dusk') {
-      isDry  = true;
-      method = '🌅 DRY FLY / DAPPING – prime surface window';
-      const evH = hatches.filter(ht => ht.h2 >= ss || ht.h1 >= ss-2);
-      drys   = evH.length && evH[0].dry ? evH[0].dry.slice(0,3) : ['Elk Hair Caddis sz 10','Goddard Sedge sz 10'];
-      wets   = evH.length ? evH[0].wet.slice(0,1) : [];
-      note   = evH.length ? evH[0].note : 'Dusk surface feeding. Single dry fly, fine tippet, silent approach. Fish until too dark to see – listen for splashy takes.';
-      switchSignal = 'Stay with dry fly. If sedge have been replaced by spent or caenis, switch to smaller fly.';
-    } else if (mayfly && (phase==='morning'||phase==='midday'||phase==='afternoon'||phase==='evening')) {
-      const inFullHatch = h >= 12 && h <= ss-1;
-      isDry  = inFullHatch && (cloud > 40 || temp > 12);
-      method = inFullHatch
-        ? (isDry ? '🌿 DRY MAYFLY / DAPPING – fish are boiling' : 'Wet mayfly – building to surface')
-        : 'Wet mayfly – fish rising in mid-water';
-      wets   = mayfly.wet.slice(0,3);
-      drys   = mayfly.dry ? mayfly.dry.slice(0,3) : [];
-      note   = mayfly.note;
-      switchSignal = inFullHatch
-        ? '⭐ SWITCH SIGNAL: Already on dry. Stay dry until fish stop showing on surface or hatch ends.'
-        : '⭐ SWITCH TO DRY when you see 3+ fish boiling (not just porpoising) within casting range. Count to 2 before striking.';
-    } else if (sedge && (phase==='evening'||phase==='dusk')) {
-      isDry  = true;
-      method = '🌿 DRY SEDGE – evening hatch on';
-      wets   = sedge.wet.slice(0,2);
-      drys   = sedge.dry ? sedge.dry.slice(0,3) : [];
-      note   = sedge.note;
-      switchSignal = '⭐ Switch fully to single dry fly when you see adults skating on the surface. Wet fly with dibbled bob until that moment.';
-    } else if (sedge && phase==='afternoon') {
-      method = 'Bob fly + wet team – sedge pupae rising';
-      wets   = sedge.wet.slice(0,3);
-      drys   = sedge.dry ? sedge.dry.slice(0,2) : [];
-      note   = 'Sedge pupae beginning ascent in afternoon. Dibble the bob aggressively. Be ready to switch to dry at first sign of surface activity.';
-      switchSignal = 'Switch to dry when sedge adults visible on surface or trout slashing at surface.';
-    } else if (duckfly && cloud > 50) {
-      method = 'Wet + buzzer – duckfly hatch';
-      wets   = duckfly.wet.slice(0,3);
-      drys   = duckfly.dry ? duckfly.dry.slice(0,2) : [];
-      note   = duckfly.note;
-      switchSignal = 'Switch to dry CDC Midge/Buzzer if trout are sipping quietly in flat calm conditions.';
-    } else if (olive) {
-      method = cloud > 55 ? 'Wet fly → watching for dry' : 'Wet fly – olives hatching';
-      wets   = olive.wet.slice(0,3);
-      drys   = olive.dry ? olive.dry.slice(0,2) : [];
-      note   = olive.note;
-      switchSignal = 'Switch to dry LDO or Klinkhammer when fish show consistent head-and-tail rises.';
-    } else if (daphnia) {
-      method = 'Intermediate/sink – pulling for daphnia';
-      wets   = daphnia.wet.slice(0,3);
-      drys   = [];
-      note   = daphnia.note;
-      switchSignal = 'No dry fly option – fish are deep on daphnia. Try evening for surface activity.';
-    } else if (phase==='morning' && temp < 10) {
-      method = 'Deep wet – cold water, fish sub-surface';
-      const early = hatches[0];
-      wets   = early?.wet?.slice(0,3) || ['Fiery Brown sz 10','Sooty Olive sz 12','Bibio sz 10'];
-      note   = `${temp.toFixed(0)}°C – below 10°C, trout unlikely to surface feed. Fish slow, near bottom on intermediate or slow sink.`;
-      switchSignal = 'If temperature rises through 10°C and cloud covers the sun, watch for first rises.';
-    } else if (phase==='afternoon') {
-      method = 'Wet fly – searching, change every 20 min';
-      const af = hatches.find(ht => ht.h1 <= h && h < ht.h2) || hatches[0];
-      wets   = af?.wet?.slice(0,3) || ['Sooty Olive sz 12','Black Pennell sz 12','Invicta sz 10'];
-      note   = 'Quiet period on most days. Change fly regularly. Try slightly deeper drift with intermediate. Look for wind lanes – food concentrates at the edges.';
-      switchSignal = 'Unlikely surface action unless overcast + good ripple. Watch for early evening sedge approaching.';
-    } else {
-      method = 'Wet fly team – traditional drift';
-      const any = hatches.find(ht => ht.h1 <= h && h < ht.h2) || hatches[0];
-      wets   = any?.wet?.slice(0,3) || ['Sooty Olive sz 12','Fiery Brown sz 10','Bibio sz 10'];
-      note   = 'Standard wet fly team on the drift. Watch water carefully for signs of activity.';
-      switchSignal = 'Switch to dry if consistent rises appear within casting range.';
-    }
-
-    // Pressure override – rapid fall suppresses activity
-    if(trend === 'Falling' && (pressure||1013) < 1008 && !isDry) {
-      note   = `⚠ Pressure falling sharply – trout may be dour. ${note}`;
-      method = method.replace('🌿','').replace('🌑','') + ' (pressure falling)';
-    }
-
-    slots.push({ h, label:`${String(h).padStart(2,'0')}:00`, phase, method, wets, drys, note, switchSignal, isDry, hasHatch:active.length>0, hatchName:active[0]?.name||'' });
-  }
-  return slots;
-}
-
-// ════════════════════════════════════════════════════════════════
-// RENDER HOURLY TIMELINE  (horizontal scroll, clickable detail)
-// ════════════════════════════════════════════════════════════════
-function renderHourlyTimeline(lough, wx, month, targetDate) {
-  const date    = targetDate || new Date();
-  const solar   = calcSunTimes(date, lough.lat, lough.lon);
-  // Use live wx for today, use solar calc for forecast days
-  const sr  = wx?.sunrise ? (wx.sunrise.getHours()+wx.sunrise.getMinutes()/60) : solar.sunrise;
-  const ss  = wx?.sunset  ? (wx.sunset.getHours()+wx.sunset.getMinutes()/60)   : solar.sunset;
-  const slots = buildHourlyPlan(lough, month, sr, ss,
-    wx?.airTemp, wx?.cloudCover, wx?.windSpeed, wx?.pressure, wx?.trend);
-
-  // Work out the switch moment (first dry slot)
-  const firstDry = slots.find(s=>s.isDry);
-  const switchHour = firstDry ? firstDry.label : null;
-
-  const cols = slots.map(s => {
-    const headStyle = s.isDry ? 'is-dry' : s.hasHatch ? 'has-hatch' : '';
-    const wetsHtml  = s.wets.slice(0,2).map(f=>`<span class="h-fly wet" title="${f}">${f.replace(' sz',' ').substring(0,18)}</span>`).join('');
-    const drysHtml  = s.drys.slice(0,2).map(f=>`<span class="h-fly dry" title="${f}">${f.replace(' sz',' ').substring(0,18)}</span>`).join('');
-    const hatchHtml = s.hasHatch ? `<div class="h-hatch">🦋 ${s.hatchName.replace('🦋 ','').substring(0,20)}</div>` : '';
-    const sw = s.switchSignal && s.switchSignal.includes('⭐') ? `<div class="h-switch">⭐ switch</div>` : '';
-    return `<div class="hour-col phase-${s.phase} ${headStyle}" title="${s.note}\n${s.switchSignal}">
-      <div class="hour-col-head">${s.label}<br><span style="font-size:8px;opacity:.7">${s.phase}</span></div>
-      <div class="hour-col-body">
-        <div class="h-method">${s.method.replace(/[🌑🌿🌅]/g,'').trim().substring(0,40)}</div>
-        ${hatchHtml}
-        ${wetsHtml}
-        ${drysHtml}
-        ${sw}
-      </div>
-    </div>`;
-  }).join('');
-
-  const switchBanner = switchHour
-    ? `<div class="switch-advice"><b>⭐ ESTIMATED DRY FLY SWITCH: ~${switchHour}</b> — watch for surface activity building from this point. Carry dry flies tied on from ${(parseInt(switchHour)-1).toString().padStart(2,'0')}:00.</div>`
-    : '';
-
-  return `<div class="day-plan-wrap">
-    <div style="font-family:var(--font-m);font-size:10px;color:var(--text-muted);margin-bottom:6px">
-      🌅 Sunrise: ${fmtHour(sr)} &nbsp;|&nbsp; 🌇 Sunset: ${fmtHour(ss)} &nbsp;|&nbsp;
-      ${wx?.airTemp!=null?'🌡 '+wx.airTemp.toFixed(1)+'°C':'—'} &nbsp;|&nbsp;
-      ☁ ${wx?.cloudCover!=null?wx.cloudCover+'%':'—'} &nbsp;|&nbsp;
-      💨 ${wx?.windSpeed!=null?wx.windSpeed+'km/h':'—'}
-      &nbsp;<span style="color:var(--border-light)">– hover/tap each column for full details</span>
-    </div>
-    ${switchBanner}
-    <div class="hour-scroll"><div class="hour-table">${cols}</div></div>
-    <div style="display:flex;gap:16px;margin-top:6px;font-size:9px;font-family:var(--font-m);color:var(--text-muted);flex-wrap:wrap">
-      <span style="color:var(--teal)">■ Wet fly</span>
-      <span style="color:var(--gold)">■ Dry fly</span>
-      <span style="border-bottom:2px solid var(--mayfly);padding-bottom:1px">── Active hatch</span>
-      <span style="border-bottom:2px solid var(--gold);padding-bottom:1px">── Dry fly time</span>
-      <span>⭐ = switch signal</span>
-    </div>
-  </div>`;
-}
-
-// ════════════════════════════════════════════════════════════════
-// DENNIS MOSS  "Trout from a Boat" – lough fishing principles
-// Dennis Moss lives on Lough Corrib; his book is the definitive
-// guide to Irish lough-style boat fishing. These are the core
-// principles drawn from his approach and those of traditional
-// Irish lough anglers (Jackie Mahon, Kingsmill Moore, etc.)
-// ════════════════════════════════════════════════════════════════
-const MOSS_PRINCIPLES = [
-  { icon:'🎣', cls:'gold', title:'The three-fly team',
-    text:'Classic Conn setup: <b>Point</b> – Sooty Olive sz 10 (Moss calls it "the most effective single pattern on Conn"); <b>Middle dropper</b> – Fiery Brown or Invicta sz 10; <b>Bob</b> – Bibio or Soldier Palmer sz 10. The bob is the key – it must be bushy enough to create a wake and dibble convincingly in the wave.' },
-  { icon:'🌊', cls:'teal', title:'The bob fly lift',
-    text:'At the end of each swing, raise the rod tip to bring the bob to the surface. Hold it there for 2–3 seconds – dibble it, let it drag a small wake. Many takes come in this last foot. Many experienced Conn anglers believe <b>more than half of all fish come to the bob</b> at this moment.' },
-  { icon:'🌡', cls:'amber', title:'Temperature is the master trigger',
-    text:'<b>Below 10°C</b>: fish near bottom, slow presentation, heavy sinking or intermediate line. <b>10–12°C</b>: fish can rise – watch carefully. <b>Above 12°C</b>: evening surface feeding reliable. <b>Above 14°C</b>: dry fly and dapping very likely to produce. Water temperature below the thermocline is often 2–3°C colder than surface.' },
-  { icon:'💨', cls:'teal', title:'Wind lanes are your greatest friend',
-    text:'Food concentrates at the edges of wind lanes, not through them. <b>Fish the margin of a lane</b>, not the centre. Boat positioning: drift parallel to the lane edge with the lane on your casting side. A broken, textured wave (not glassy, not whitecrested) is ideal.' },
-  { icon:'⏱', cls:'gold', title:'The strike – never rush',
-    text:'On a wet fly take, feel the weight of the fish first before lifting. <b>Count to two</b> before the strike. On a dry fly take, wait until the fish turns down – a 1-second delay prevents pulling the fly from the fish\'s mouth. Moss considers premature striking the most common mistake of visiting anglers.' },
-  { icon:'📏', cls:'amber', title:'Leader & line choice',
-    text:'Moss was an early champion of the <b>intermediate line</b> for Irish loughs. In flat or near-calm conditions it keeps flies in the feeding zone. Use a longer leader (14–18ft) in calm/bright conditions; shorten to 9–12ft in a good wave. Fluorocarbon from middle dropper to point; monofilament for the cast. Fine wire hooks (Partridge, Kamasan) give better presentation and penetration.' },
-  { icon:'🔍', cls:'teal', title:'Read the water before you fish it',
-    text:'Spend 5 minutes studying the water before the first cast. Look for: visible rises, birds (terns/seagulls indicate fry or hatching fly), wind lanes, colour changes. A good ghillie is worth more than any book – <b>on Conn, book a local boatman</b> for your first visit. They know which drift to fish in which wind.' },
-  { icon:'🔄', cls:'gold', title:'The intermediate line breakthrough',
-    text:'Moss championed the intermediate (and slow-intermediate) line when the full floater was not working in flat or bright conditions. The intermediate keeps the flies <b>just subsurface</b> rather than being blown in a belly by the wind. Change to it when the floater produces refusals or no interest despite visible fish.' }
-];
-
-const CONN_SPECIFIC = [
-  { icon:'🗺', cls:'teal', title:'The prime Conn drift (SW/W wind)',
-    text:'The most productive area is <b>north of the Castlehill–Rinmore line</b>: Cloghans Bay, Bog Bay, Castlehill Bay. These shallows produce the most prolific mayfly hatches. Set the drogue for a broad drift across the shallows at about 1.5 knots. Mark the bars with local charts – they are iron-bar marked.' },
-  { icon:'🦋', cls:'gold', title:'Conn mayfly: wet before dry',
-    text:'Unlike Corrib where dapping is king, on Conn <b>wet mayfly fished in a team works well even during full hatch</b>. Start with French Partridge Mayfly or Gosling on the point, Claret Bumble middle, Cock Robin bob. Switch to dry only when fish are clearly boiling on surface – wait for 3 consistent risers within range before changing.' },
-  { icon:'🌅', cls:'amber', title:'The evening switch on Conn',
-    text:'On Conn, the Green Peter evening rise begins approximately <b>90 minutes before sunset</b> in summer. Strategy: wet fly team until first adults seen dancing on surface (usually sunset −75 min), then switch to single Green Peter dry on a 14ft leader. Fish confidently – takes to the dry are confident and fast.' }
-];
-
-function renderMossSection(lough) {
-  const isConn = lough.id === 'conn';
-  const title  = isConn
-    ? 'Lough Conn – Tactics from "Trout from a Boat" by Dennis Moss'
-    : 'Irish Lough Boat Fishing – Principles (Dennis Moss & traditional)';
-
-  const principles = isConn
-    ? [...MOSS_PRINCIPLES, ...CONN_SPECIFIC]
-    : MOSS_PRINCIPLES;
-
-  return `<div class="moss-wrap">
-    <div class="moss-card">
-      <div class="moss-hdr">
-        <span style="font-size:20px">🎣</span>
-        <div>
-          <div class="moss-title">${title}</div>
-          <div class="moss-source">Dennis Moss – "Trout from a Boat" (Merlin Unwin Books, 2007)${isConn?' · Conn-specific tactics included':''}</div>
-        </div>
-      </div>
-      ${principles.map(p=>`<div class="moss-principle ${p.cls}">
-        <span class="moss-icon">${p.icon}</span>
-        <div><b>${p.title}:</b> ${p.text}</div>
-      </div>`).join('')}
-    </div>
-  </div>`;
-}
-
+// Error trap
 window.onerror = function(msg, src, line, col, err) {
   const el = document.getElementById('lough-panels') || document.body;
   el.innerHTML = `<div style="margin:20px;background:#200808;border:1px solid #601010;border-radius:5px;padding:20px;font-family:monospace;color:#e07060">
-    <b style="font-size:14px">⚠ JavaScript Error – please report this</b><br><br>
-    <b>Message:</b> ${msg}<br>
-    <b>Location:</b> line ${line}, col ${col}<br>
-    <b>Source:</b> ${src}<br>
+    <b style="font-size:14px">⚠ JavaScript Error</b><br><br>
+    <b>Message:</b> ${msg}<br><b>Location:</b> line ${line}, col ${col}<br><b>Source:</b> ${src}<br>
     ${err ? '<b>Stack:</b><pre style="font-size:10px;color:#c04040;overflow:auto">' + err.stack + '</pre>' : ''}
   </div>`;
   return false;
@@ -773,36 +466,199 @@ window.onerror = function(msg, src, line, col, err) {
 window.addEventListener('unhandledrejection', function(e) {
   const el = document.getElementById('lough-panels') || document.body;
   el.innerHTML += `<div style="margin:10px 20px;background:#200808;border:1px solid #601010;border-radius:5px;padding:12px;font-family:monospace;color:#e07060">
-    <b>⚠ Unhandled Promise Rejection:</b> ${e.reason}
-  </div>`;
+    <b>⚠ Unhandled Promise Rejection:</b> ${e.reason}</div>`;
 });
 
 // ════════════════════════════════════════════════════════════════
-// LOUGH DATABASE  (research-backed, source: IFI / fishinginireland.info)
+// SOLAR CALCULATOR
 // ════════════════════════════════════════════════════════════════
+function calcSunTimes(date, lat, lon) {
+  const doy = Math.round((date - new Date(date.getFullYear(),0,0)) / 86400000);
+  const B   = (360/365)*(doy-81)*Math.PI/180;
+  const eot = 9.87*Math.sin(2*B) - 7.53*Math.cos(B) - 1.5*Math.sin(B);
+  const latR = lat*Math.PI/180;
+  const decl = 23.45*Math.sin(B)*Math.PI/180;
+  const cosHA = -Math.tan(latR)*Math.tan(decl);
+  if(cosHA<-1) return{sunrise:0,sunset:24};
+  if(cosHA>1)  return{sunrise:12,sunset:12};
+  const ha = Math.acos(cosHA)*180/Math.PI;
+  const isDST = date.getMonth()>=2 && date.getMonth()<=9;
+  const tz = isDST ? 1 : 0;
+  const solarNoon = 12 - lon/15 - eot/60 + tz;
+  return { sunrise: solarNoon - ha/15, sunset: solarNoon + ha/15 };
+}
+
+// ════════════════════════════════════════════════════════════════
+// HOURLY HATCH TIMING
+// ════════════════════════════════════════════════════════════════
+const HOUR_HATCHES = {
+  3:[
+    { h1:10, h2:15, name:'Duckfly (Chironomid)',     type:'duckfly',
+      wet:["Blae & Black sz 12","Black Pennell sz 12","Black & Peacock Spider sz 12","Sooty Olive sz 12"], dry:null,
+      note:'Early duckfly on mild afternoons – dark midges dancing above the water signal feeding fish.' },
+    { h1:11, h2:14, name:'Shrimp / Louse (sub-surface)',type:'shrimp',
+      wet:["Fiery Brown sz 10","Sooty Olive sz 12","Golden Olive sz 10","March Brown sz 10"], dry:null,
+      note:'Trout working the shallows for hoglouse and freshwater shrimp. Fish slow, near bottom.' }
+  ],
+  4:[
+    { h1:10, h2:16, name:'Duckfly – PEAK',            type:'duckfly',
+      wet:["Blae & Black sz 12","Black & Peacock Spider sz 12","Black Pennell sz 12","Claret Dabbler sz 12","Golden Dabbler sz 12"],
+      dry:["CDC Midge sz 14","Black Klinkhammer sz 14"],
+      note:'Peak duckfly season. Buzzer pupa dead-drift in the surface film during calm spells.' },
+    { h1:13, h2:17, name:'Lake Olives', type:'olive',
+      wet:["Sooty Olive sz 12","Green Olive sz 12","Golden Olive sz 10","Cock Robin sz 12","Invicta sz 12"],
+      dry:["LDO Comparadun sz 14","Greenwell's Glory sz 14","Olive Klinkhammer sz 14"],
+      note:'Olives appear as afternoon warms. Watch for head-and-tail rises.' }
+  ],
+  5:[
+    { h1:10, h2:13, name:'Olives & early Mayfly', type:'olive',
+      wet:["Sooty Olive sz 12","Golden Olive sz 10","French Partridge Mayfly sz 10","Gosling sz 10"],
+      dry:["Green Wulff sz 10","Grey Wulff sz 10","LDO Comparadun sz 14"],
+      note:'Morning: olives leading into mayfly.' },
+    { h1:11, h2:19, name:'🦋 MAYFLY – Green Drake', type:'mayfly',
+      wet:["French Partridge Mayfly sz 10","Gosling sz 10","Claret Bumble sz 10","Wet Mayfly sz 10","Cock Robin sz 10"],
+      dry:["Green Wulff sz 10","Grey Wulff sz 10","Dry Mayfly sz 10","Green Drake imitation sz 10"],
+      note:'Mayfly! Fish wet in the morning, switch to dry when fish are boiling confidently on the surface.' },
+    { h1:19, h2:24, name:'Spent Gnat (spinner fall)', type:'mayfly',
+      wet:["Golden Olive sz 10"],
+      dry:["Spent Gnat sz 10","Grey Wulff (spent wing) sz 10","CDC Mayfly sz 10"],
+      note:'Spinner fall begins around sunset. Single fly, fine leader, minimal disturbance.' }
+  ],
+  6:[
+    { h1: 5, h2: 8, name:'Caenis (dawn)', type:'caenis',
+      wet:["Black Pennell sz 16"], dry:["CDC Caenis sz 20","F-Fly sz 20","White Emerger sz 18"],
+      note:'Very early morning Caenis. Tiny flies – fish are sipping confidently.' },
+    { h1:10, h2:15, name:'Late Mayfly & Olives', type:'mayfly',
+      wet:["Claret Bumble sz 10","Gosling sz 10","Sooty Olive sz 12","Invicta sz 10"],
+      dry:["Green Wulff sz 10","Spent Gnat sz 10"],
+      note:'Mayfly winding down. Olives continuing.' },
+    { h1:19, h2:24, name:'Green Peter Sedge', type:'sedge',
+      wet:["Green Peter sz 10","Murrough sz 8","Invicta sz 10","Elk Hair Caddis sz 10"],
+      dry:["Green Peter Dry sz 10","Elk Hair Caddis sz 10","Murrough Dry sz 8","Goddard Sedge sz 10"],
+      note:'Green Peter season begins. Wet flies until ~21:00, then switch to dry.' }
+  ],
+  7:[
+    { h1:14, h2:20, name:'Daddy Long Legs', type:'daddy',
+      wet:["Daddy Wet sz 10","Bibio sz 10","Watson's Fancy sz 10"],
+      dry:["Daddy (dapped) sz 8","Daddy Dry sz 10","Coch-y-bondhu sz 10"],
+      note:'Daddy appears on warm breezy afternoons. Dap or fish wet-and-dibbled.' },
+    { h1:18, h2:24, name:'Sedge (evening–night)', type:'sedge',
+      wet:["Green Peter sz 10","Invicta sz 10","Elk Hair Caddis sz 12"],
+      dry:["Green Peter Dry sz 10","Elk Hair Caddis sz 10","Goddard Sedge sz 10","Murrough sz 8"],
+      note:'Evening into night sedge.' }
+  ],
+  8:[
+    { h1:14, h2:22, name:'Daddy Long Legs (peak)', type:'daddy',
+      wet:["Daddy Wet sz 10","Watson's Fancy sz 10","Bibio sz 10"],
+      dry:["Daddy (dapped/dry) sz 8","Grasshopper (dapped) sz 8"],
+      note:'August daddy is the classic Corrib/Conn dapping month.' },
+    { h1:17, h2:23, name:'Sedge (evening)', type:'sedge',
+      wet:["Green Peter sz 10","Invicta sz 10"],
+      dry:["Elk Hair Caddis sz 10","Green Peter Dry sz 10","Goddard Sedge sz 10"],
+      note:'Reliable evening sedge.' },
+    { h1: 9, h2:17, name:'Daphnia (mid-water pulling)', type:'shrimp',
+      wet:["Bibio sz 12 (pulled)","Peter Ross sz 10","Mallard & Claret sz 10","Black & Peacock Spider sz 12"], dry:null,
+      note:'Trout following daphnia clouds – pull wet flies through mid-water.' }
+  ],
+  9:[
+    { h1:10, h2:15, name:'LDO / Autumn Olives', type:'olive',
+      wet:["Sooty Olive sz 12","Green Olive sz 12","Mallard & Claret sz 12","Bibio sz 10"],
+      dry:["LDO Comparadun sz 14","Klinkhammer sz 14","CDC Olive sz 14"],
+      note:'Autumn olive hatches on mild afternoons. Fish are in prime condition.' },
+    { h1:16, h2:22, name:'Late Sedge & Daddy', type:'sedge',
+      wet:["Green Peter sz 10","Invicta sz 10","Watson's Fancy sz 10"],
+      dry:["Elk Hair Caddis sz 12","CDC Sedge sz 12","Daddy Dry sz 10"],
+      note:'Back-end sedge and daddy. Large trout feeding hard before winter.' }
+  ],
+  10:[
+    { h1:10, h2:14, name:'LDO & Midge (late season)', type:'olive',
+      wet:["Sooty Olive sz 12","Black Pennell sz 12","Blae & Black sz 12"],
+      dry:["LDO Comparadun sz 14","CDC Midge sz 16"],
+      note:'End of season. Trout active in short windows on mild days.' }
+  ]
+};
+
+// ════════════════════════════════════════════════════════════════
+// DENNIS MOSS PRINCIPLES (unchanged from v1)
+// ════════════════════════════════════════════════════════════════
+const MOSS_PRINCIPLES = [
+  { icon:'🎣', cls:'gold', title:'The three-fly team',
+    text:'Classic Conn setup: <b>Point</b> – Sooty Olive sz 10; <b>Middle dropper</b> – Fiery Brown or Invicta sz 10; <b>Bob</b> – Bibio or Soldier Palmer sz 10. The bob must be bushy enough to create a wake.' },
+  { icon:'🌊', cls:'teal', title:'The bob fly lift',
+    text:'At the end of each swing, raise the rod tip to bring the bob to the surface. Hold it there 2–3 seconds. <b>More than half of all fish come to the bob</b> at this moment.' },
+  { icon:'🌡', cls:'amber', title:'Temperature is the master trigger',
+    text:'<b>Below 10°C</b>: fish near bottom. <b>10–12°C</b>: fish can rise. <b>Above 12°C</b>: evening surface feeding. <b>Above 14°C</b>: dry fly and dapping likely to produce.' },
+  { icon:'💨', cls:'teal', title:'Wind lanes are your greatest friend',
+    text:'Food concentrates at the edges of wind lanes. <b>Fish the margin of a lane</b>, not the centre. A broken, textured wave is ideal.' },
+  { icon:'⏱', cls:'gold', title:'The strike – never rush',
+    text:'On a wet fly take, feel the weight first before lifting. <b>Count to two</b> before the strike. On a dry fly take, wait until the fish turns down.' },
+  { icon:'📏', cls:'amber', title:'Leader & line choice',
+    text:'Moss was an early champion of the <b>intermediate line</b>. Longer leader (14–18ft) in calm/bright; shorten to 9–12ft in a good wave.' },
+  { icon:'🔍', cls:'teal', title:'Read the water before you fish it',
+    text:'Spend 5 minutes studying the water before the first cast. Look for visible rises, birds, wind lanes, colour changes.' },
+  { icon:'🔄', cls:'gold', title:'The intermediate line breakthrough',
+    text:'Moss championed the intermediate line when the full floater was not working. Change when the floater produces refusals despite visible fish.' }
+];
+
+const CONN_SPECIFIC = [
+  { icon:'🗺', cls:'teal', title:'The prime Conn drift (SW/W wind)',
+    text:'Most productive area is <b>north of the Castlehill–Rinmore line</b>: Cloghans Bay, Bog Bay, Castlehill Bay. Drogue for a broad drift at about 1.5 knots.' },
+  { icon:'🦋', cls:'gold', title:'Conn mayfly: wet before dry',
+    text:'On Conn <b>wet mayfly fished in a team works well even during full hatch</b>. Switch to dry only when fish are clearly boiling on surface.' },
+  { icon:'🌅', cls:'amber', title:'The evening switch on Conn',
+    text:'Green Peter evening rise begins approximately <b>90 minutes before sunset</b> in summer. Wet team until first adults seen, then switch to single Green Peter dry on 14ft leader.' }
+];
+
+function renderMossSection(lough) {
+  const isConn = lough.id === 'conn';
+  const title  = isConn ? 'Lough Conn – Tactics from "Trout from a Boat" by Dennis Moss' : 'Irish Lough Boat Fishing – Principles';
+  const principles = isConn ? [...MOSS_PRINCIPLES, ...CONN_SPECIFIC] : MOSS_PRINCIPLES;
+  return `<div class="moss-wrap"><div class="moss-card">
+      <div class="moss-hdr"><span style="font-size:20px">🎣</span>
+        <div><div class="moss-title">${title}</div>
+          <div class="moss-source">Dennis Moss – "Trout from a Boat"${isConn?' · Conn-specific included':''}</div></div></div>
+      ${principles.map(p=>`<div class="moss-principle ${p.cls}"><span class="moss-icon">${p.icon}</span>
+        <div><b>${p.title}:</b> ${p.text}</div></div>`).join('')}
+    </div></div>`;
+}
+
+// ════════════════════════════════════════════════════════════════
+// LOUGH DATABASE — extended with bay-level wind exposure
+// ════════════════════════════════════════════════════════════════
+// v2 ADDITION: each bestAreas entry now has an `exposureBearing` (the compass
+// bearing the wind comes FROM to stir that shore) and a `bayDepth` (rough
+// average bay-margin depth in metres). Used by computeLakeColourState().
+// Convention: south-shore bay → exposureBearing 0 (N wind stirs it).
 const LOUGHS = [
   {
     id:'conn', name:'Lough Conn', county:'Mayo', area:'14,000 acres',
     lat:54.015, lon:-9.282, driveH:3.75,
-    desc:'One of the longest mayfly seasons in Ireland – nearly 6 weeks. Exceptional early-season duckfly fishing. The northern shallows (Castlehill Bay, Bog Bay, Cloghans Bay) hold the most fish.',
+    desc:'One of the longest mayfly seasons in Ireland – nearly 6 weeks.',
     seasons:{ open:'15 Feb', close:'30 Sep', troutOpen:'15 Feb', troutClose:'30 Sep' },
     permit:'No permit required – free fishing',
     boatHire:'Pontoon & Foxford area – local contacts via IFI Mayo office',
     ghillie:'Padraig Forde, Foxford (0094 925 7777). Jackie Mahon (Sligo) also guides.',
-    tackleShop:'Pontoon Bridge Hotel tackle counter; Foxford Woollen Mills area shops',
-    accommodation:'Pontoon Bridge Hotel (on the water). Enniscoe House (heritage house, Crossmolina).',
-    minSize:'30cm (12in)', bagLimit:'4 trout/day (catch & release encouraged)',
+    tackleShop:'Pontoon Bridge Hotel; Foxford Woollen Mills area shops',
+    accommodation:'Pontoon Bridge Hotel. Enniscoe House, Crossmolina.',
+    minSize:'30cm (12in)', bagLimit:'4 trout/day (C&R encouraged)',
     species:['Brown Trout','Atlantic Salmon (trolling)'],
-    unique:'One of the longest mayfly seasons in Ireland – hatch starts ~20 May and runs to late June. Prolific Duckfly (Chironomid) in March–April.',
-    // Ideal wind: SW–W for main drifts on north/central shallows
+    unique:'One of the longest mayfly seasons in Ireland – hatch ~20 May to late June. Prolific Duckfly Mar–Apr.',
     windRose:{ ideal:['SW','W','WSW'], good:['S','NW','SSW'], difficult:['E','NE','SE'], dangerous:['N','NNE','NNW'] },
     bestAreas:[
-      { name:'Castlehill Bay & Cloghans Bay', wind:'SW/W', note:'Big shallow bar – most prolific mayfly area north of Castlebill–Rinmore line' },
-      { name:'Pontoon narrows', wind:'Any', note:'Sheltered fishing in the narrows between Conn & Cullin – good early season' },
-      { name:'Massbrook Bay', wind:'W/NW', note:'Productive drift towards Massbrook. Good for dapping.' },
-      { name:'Cornakillew shores', wind:'SW', note:'Noted salmon and trout lies close to shore' },
+      { name:'Castlehill Bay & Cloghans Bay', wind:'SW/W', exposureBearing:250, bayDepth:2.5, kind:'open',
+        note:'Big shallow bar – most prolific mayfly area north of Castlehill–Rinmore line' },
+      { name:'Pontoon narrows', wind:'Any', exposureBearing:0, bayDepth:6, kind:'narrows',
+        note:'Sheltered fishing in the narrows between Conn & Cullin' },
+      { name:'Massbrook Bay', wind:'W/NW', exposureBearing:280, bayDepth:5, kind:'open',
+        note:'Productive drift towards Massbrook. Good for dapping.' },
+      { name:'Cornakillew shores', wind:'SW', exposureBearing:230, bayDepth:4, kind:'open',
+        note:'Noted salmon and trout lies close to shore' },
+      // v2 ADDITIONS: south-shore bays (these are what went chocolate Sat-Sun)
+      { name:'South-shore shallows', wind:'N/NE', exposureBearing:0, bayDepth:2.5, kind:'open',
+        note:'Shallow south end – takes the full N-S fetch in a N wind. First to colour up.' },
+      { name:'Deel mouth / Crossmolina inflow', wind:'Any', exposureBearing:135, bayDepth:3, kind:'inflow',
+        note:'Clean inflow water cuts a lane through coloured lake – fish 200m off the mouth' },
     ],
-    // Per-month hatch data
     hatches:[
       { months:[2,3], name:'Duckfly (early Chironomid)', type:'duckfly', flies:['Blae & Black','Black Pennell','Sooty Olive','Bibio','Mallard & Claret'] },
       { months:[3,4], name:'Duckfly (peak)', type:'duckfly', flies:['Blae & Black','Black & Peacock Spider','Fiery Brown','Claret Dabbler','Golden Dabbler'] },
@@ -813,111 +669,126 @@ const LOUGHS = [
     ],
     wetFlies:{ earlyseason:['Fiery Brown sz 10','March Brown sz 10','Connemara Black sz 10','Bibio sz 10','Sooty Olive sz 10 (★)','Black Pennell sz 12','Peacock Spider sz 12','Golden Olive sz 10','Mallard & Claret sz 10','Blae & Black sz 12'], mayfly:['French Partridge Mayfly sz 10','Gosling sz 10','Claret Bumble sz 10','Cock Robin sz 10','Invicta sz 10','Watson\'s Fancy sz 10','Green Peter sz 10'], sedge:['Green Peter sz 10','Murrough sz 8','Sooty Olive sz 10','Bibio sz 10','Peacock Spider sz 12','Coch-y-bondhu sz 10','Connemara Black sz 10'] },
     dryFlies:{ mayfly:['Green Wulff sz 10','Royal Wulff sz 10','Grey Wulff sz 10','Spent Gnat sz 10','Yellow Fan-Winged May sz 10'], sedge:['Green Peter Dry sz 10','Elk Hair Caddis sz 10','Goddard Sedge sz 10','Daddy (dapped) sz 8'], general:['Klinkhammer sz 14','CDC Olive sz 14','Comparadun sz 14'] },
-    dapping:'Natural mayfly (May–June) and grasshopper/daddy (Aug–Sep). Ask locally for natural mayfly – schoolchildren and local shops sell them during the hatch.',
+    dapping:'Natural mayfly (May–June) and grasshopper/daddy (Aug–Sep). Ask locally for natural mayfly during the hatch.',
   },
   {
     id:'corrib', name:'Lough Corrib', county:'Galway / Mayo', area:'44,000 acres',
     lat:53.550, lon:-9.200, driveH:2.75,
-    desc:'Ireland\'s largest trout lake and the epicentre of the mayfly world. 176km² of limestone-enriched water stretching 44km from Galway to Maam Bridge. Duckfly and lake olives precede one of the world\'s greatest mayfly hatches.',
+    desc:'Ireland\'s largest trout lake – 176km² stretching 44km. Epicentre of the mayfly world.',
     seasons:{ open:'15 Feb', close:'30 Sep' },
-    permit:'No permit required – free fishing for trout. Boat and guide strongly recommended given size.',
-    boatHire:'Oughterard: multiple hirers. Galway: Corrib Catchment. Cong/Cross: local boats.',
-    ghillie:'Many guides based in Oughterard and Galway – IFI Galway office (091 563118) for referrals',
-    tackleShop:'Duffy\'s, Oughterard (★ essential stop). Freeney\'s Sport, Galway. Corrib Tackle, Headford.',
-    accommodation:'Currarevagh House, Oughterard (legendary fishing lodge). Ross Lake House Hotel. Ashford Castle, Cong.',
+    permit:'No permit required – free fishing for trout. Boat and guide strongly recommended.',
+    boatHire:'Oughterard: multiple hirers. Galway: Corrib Catchment.',
+    ghillie:'Many guides in Oughterard and Galway – IFI Galway (091 563118)',
+    tackleShop:'Duffy\'s, Oughterard (★). Freeney\'s Sport, Galway.',
+    accommodation:'Currarevagh House, Oughterard. Ross Lake House Hotel.',
     minSize:'25cm (10in)', bagLimit:'8 trout/day',
     species:['Brown Trout','Gillaroo Trout','Atlantic Salmon'],
-    unique:'Dapping natural mayfly is THE method from mid-May. Cornamona area (upper Corrib) gets mayfly first. Fish over 5,000 trout taken in mayfly season annually. June–July can be slow (fish on perch fry) – return in August for grasshopper dapping.',
+    unique:'Dapping natural mayfly is THE method from mid-May. Cornamona gets mayfly first.',
     windRose:{ ideal:['SW','W','WSW','S'], good:['SE','NW'], difficult:['NE','E'], dangerous:['N','NNE'] },
     bestAreas:[
-      { name:'Greenfields Bay & Birchall Shore', wind:'SW', note:'The classic drift in a SW wind – epicentre of the mayfly. Watch the wind lanes.' },
-      { name:'Cornamona & Maam River area', wind:'S/SW', note:'Upper Corrib – first to get mayfly each year, a week before the main lake' },
-      { name:'Doorus Peninsula & Carrick Bay', wind:'W/NW', note:'Good wet-fly drifts; Connemara Black, Peter Ross, Watson\'s Fancy' },
-      { name:'Rabbit Island to Cong (east shore)', wind:'W', note:'Prolific lake olive and mayfly area; fish to 500 yards offshore' },
+      { name:'Greenfields Bay & Birchall Shore', wind:'SW', exposureBearing:220, bayDepth:3, kind:'open',
+        note:'Classic SW-wind drift – mayfly epicentre' },
+      { name:'Cornamona & Maam River area', wind:'S/SW', exposureBearing:200, bayDepth:4, kind:'inflow',
+        note:'Upper Corrib – first to get mayfly each year' },
+      { name:'Doorus Peninsula & Carrick Bay', wind:'W/NW', exposureBearing:290, bayDepth:5, kind:'open',
+        note:'Good wet-fly drifts' },
+      { name:'Rabbit Island to Cong (east shore)', wind:'W', exposureBearing:270, bayDepth:4, kind:'open',
+        note:'Prolific lake olive and mayfly area' },
+      { name:'Cong river mouth', wind:'Any', exposureBearing:90, bayDepth:3, kind:'inflow',
+        note:'Clean inflow water – holds fish during coloured-water events' },
     ],
     hatches:[
       { months:[2,3,4], name:'Duckfly (large Chironomid)', type:'duckfly', flies:['Sooty Olive','Olive Bumble','Cock Robin','Invicta','Green Olive','Claret Olive','Blae & Black'] },
       { months:[4,5], name:'Lake Olives', type:'olive', flies:['Greenwell\'s Glory','Blae Sooty Olive','Olive Bumble','Sooty Olive','Green Olive','Claret & Olive'] },
       { months:[5,6], name:'🦋 MAYFLY (Epic)', type:'mayfly', flies:['Natural Dapped Mayfly (★★)','Green Peter','Teal & Yellow','Invicta','Cock Robin','Watson\'s Fancy','Claret Bumble','Sooty Olive'] },
       { months:[6,7], name:'Green Peter & Sedges', type:'sedge', flies:['Green Peter','Murrough','Invicta','Black Pennell','Bibio'] },
-      { months:[7,8], name:'Perch Fry (difficult)', type:'shrimp', flies:['Strip large streamers near weed beds – fish hard to tempt'] },
+      { months:[7,8], name:'Perch Fry (difficult)', type:'shrimp', flies:['Strip large streamers near weed beds'] },
       { months:[8,9], name:'Daddy / Grasshopper (dap)', type:'daddy', flies:['Dapped Grasshopper (★)','Daddy Long Legs (dap)','Watson\'s Fancy','Green Peter','Sooty Olive','Raymond'] },
     ],
     wetFlies:{ general:['Blae Sooty Olive sz 12 (★)','Red Arrow sz 12','Fiery Brown sz 10','Mallard & Claret sz 10','Connemara Black sz 10','Peter Ross sz 10','Bibio sz 10','Watson\'s Fancy sz 10','Coachman sz 12'], mayfly:['Green Peter sz 10','Cock Robin sz 10','Claret Bumble sz 10','Invicta sz 10','Watson\'s Fancy sz 10'], autumn:['Green Peter sz 10','Invicta sz 10','Black Pennell sz 12','Murrough sz 8','Bibio sz 10','Sooty Olive sz 12','Raymond sz 10'] },
-    dryFlies:{ mayfly:['Natural dapped mayfly (★★★ – buy locally)','Green Drake Wulff sz 10','Spent Gnat sz 10','Yellow May Dun sz 10'], evening:['Green Peter Dry sz 10','Elk Hair Caddis sz 12','CDC Sedge sz 12','Klinkhammer sz 14'], daddy:['Dapped Grasshopper (Aug)','Daddy Long Legs sz 10'] },
-    dapping:'THE technique on Corrib. Natural mayfly collected and sold locally (ask in Oughterard/Cong). A light 14–15ft dapping rod, floss silk line, and natural fly on a size 8 hook is the most productive method during the hatch. Grasshopper and daddy from mid-August.',
+    dryFlies:{ mayfly:['Natural dapped mayfly (★★★)','Green Drake Wulff sz 10','Spent Gnat sz 10','Yellow May Dun sz 10'], evening:['Green Peter Dry sz 10','Elk Hair Caddis sz 12','CDC Sedge sz 12','Klinkhammer sz 14'], daddy:['Dapped Grasshopper (Aug)','Daddy Long Legs sz 10'] },
+    dapping:'THE technique on Corrib. Natural mayfly collected and sold locally.',
   },
   {
     id:'melvin', name:'Lough Melvin', county:'Leitrim / Fermanagh', area:'9,000 acres',
     lat:54.393, lon:-8.145, driveH:4.5,
-    desc:'The most scientifically fascinating trout lake in the world. Home to five salmonid species including the unique Sonaghan and Gillaroo. Straddles the Irish/Northern Irish border – check which jurisdiction you\'re fishing in.',
-    seasons:{ open:'15 Feb', close:'30 Sep', note:'NE corner in NI – requires DAERA licence AND Garrison Anglers permit' },
-    permit:'Republic waters: No state licence for trout. Rossinver Fishery requires a permit (Paul Bradley 0044 773 574 0241). NI waters (Garrison area): £10/day + DAERA licence.',
-    boatHire:'Rossinver Fishery (David Stinson, 07793 559640). Melvin Tackle, Garrison (028 6865 8194).',
-    ghillie:'Jackie Mahon – world-class guide specialising in Melvin Treble (mahonjackie@gmail.com)',
-    tackleShop:'Melvin Tackle, Garrison. Kinlough post office / local shops.',
-    accommodation:'Kinlough: several B&Bs. Lough Melvin Holiday Centre. Rossinver Fishery (self-catering).',
-    minSize:'28cm (11in). Gillaroo & Sonaghan: catch & release strongly encouraged.',
-    bagLimit:'6 trout/day. Gillaroo/Sonaghan: C&R only recommended.',
-    species:['Brown Trout','Sonaghan Trout (★ unique to Melvin)','Gillaroo Trout (★)','Atlantic Salmon','Arctic Char','Ferox Trout'],
-    unique:'The "Melvin Treble" – targeting Brown Trout, Sonaghan, and Gillaroo in a single day. Sonaghan follow daphnia clouds in deep open water. Gillaroo hug rocky shores and shoal areas. Catch a Ferox by accident on a trolled Rapala.',
+    desc:'Five salmonid species including the unique Sonaghan and Gillaroo.',
+    seasons:{ open:'15 Feb', close:'30 Sep', note:'NE corner in NI – requires DAERA licence' },
+    permit:'Republic: no licence. Rossinver: Paul Bradley (0044 773 574 0241). NI: £10/day + DAERA.',
+    boatHire:'Rossinver Fishery (David Stinson, 07793 559640). Melvin Tackle, Garrison.',
+    ghillie:'Jackie Mahon – world-class guide for Melvin Treble',
+    tackleShop:'Melvin Tackle, Garrison.',
+    accommodation:'Kinlough B&Bs. Lough Melvin Holiday Centre.',
+    minSize:'28cm (11in)', bagLimit:'6 trout/day. Gillaroo/Sonaghan C&R recommended.',
+    species:['Brown Trout','Sonaghan Trout (★)','Gillaroo Trout (★)','Atlantic Salmon','Arctic Char','Ferox Trout'],
+    unique:'The "Melvin Treble" – Brown, Sonaghan and Gillaroo in a single day.',
     windRose:{ ideal:['SW','W','S'], good:['SE','NW','WSW'], difficult:['N','NE'], dangerous:['NNE','ENE'] },
     bestAreas:[
-      { name:'Kinlough Bay (top of lough)', wind:'SW/S', note:'Sonaghan concentrated here early season (March–April). Classic area.' },
-      { name:'Sunken Islands & Farell\'s Bay', wind:'W/SW', note:'Good drifts for both species. Gillaroo close to island shorelines.' },
-      { name:'Inishmean Island shores', wind:'S/SE', note:'Both species. Church Island area also productive.' },
-      { name:'Rossinver Bay', wind:'W/NW', note:'Best salmon area. Gillaroo along rocky shores. Long drifts towards Garrison.' },
+      { name:'Kinlough Bay (top of lough)', wind:'SW/S', exposureBearing:220, bayDepth:3, kind:'open',
+        note:'Sonaghan concentrated here early season' },
+      { name:'Sunken Islands & Farell\'s Bay', wind:'W/SW', exposureBearing:240, bayDepth:4, kind:'open',
+        note:'Good drifts for both species' },
+      { name:'Inishmean Island shores', wind:'S/SE', exposureBearing:160, bayDepth:4, kind:'headland-sheltered',
+        note:'Both species. Church Island also productive.' },
+      { name:'Rossinver Bay', wind:'W/NW', exposureBearing:290, bayDepth:5, kind:'open',
+        note:'Best salmon area. Long drifts towards Garrison.' },
     ],
     hatches:[
       { months:[2,3,4], name:'Duckfly & Olives', type:'duckfly', flies:['Doobry','Teal & Black','Coachman','Bibio','Black Pennell','Connemara Black','Sooty Olive'] },
       { months:[4,5], name:'Olives & Early May', type:'olive', flies:['Sooty Olive','Golden Olive','Mallard & Claret','Black Pennell','Invicta'] },
-      { months:[5,6], name:'🦋 MAYFLY (Grey Drake)', type:'mayfly', flies:['Gosling (★ for Melvin)','Claret Bumble','French Partridge Mayfly','Green Peter','Invicta','Black Pennell'] },
-      { months:[6], name:'Caenis (delicate fishing)', type:'caenis', flies:['CDC Caenis sz 20','Tiny Black Spider sz 20','White Emerger sz 18'] },
-      { months:[6,7,8,9], name:'Daphnia (Sonaghan)  – open water', type:'shrimp', flies:['Small wet flies pulled fast in open deep water','Bibio sz 12','Black & Peacock Spider sz 12'] },
+      { months:[5,6], name:'🦋 MAYFLY (Grey Drake)', type:'mayfly', flies:['Gosling (★ Melvin)','Claret Bumble','French Partridge Mayfly','Green Peter','Invicta','Black Pennell'] },
+      { months:[6], name:'Caenis (delicate)', type:'caenis', flies:['CDC Caenis sz 20','Tiny Black Spider sz 20','White Emerger sz 18'] },
+      { months:[6,7,8,9], name:'Daphnia (Sonaghan)', type:'shrimp', flies:['Small wet flies pulled fast','Bibio sz 12','Black & Peacock Spider sz 12'] },
       { months:[7,8,9], name:'Sedge & Daddy', type:'daddy', flies:['Daddy Long Legs','Green Peter','Murrough','Gosling'] },
     ],
-    wetFlies:{ earlyseason:['Doobry sz 12 (★ Melvin)','Teal & Black sz 12','Coachman sz 12','Bibio sz 10','Black Pennell sz 12','Connemara Black sz 10','Hot Orange Bibio sz 10'], mayfly:['Gosling sz 10 (★ Melvin)','Claret Bumble sz 10','French Partridge Mayfly sz 10','Invicta sz 10','Green Peter sz 10'], general:['Sooty Olive sz 12','Golden Olive sz 10','Peter Ross sz 10','Mallard & Claret sz 10'] },
-    dryFlies:{ mayfly:['Gosling (dry) sz 10','Green Drake Wulff sz 10','Spent Gnat sz 10'], caenis:['CDC Caenis sz 20','F-Fly sz 20','Tiny White Emerger sz 18 (dawn only)'], evening:['Elk Hair Caddis sz 12','Black Murrough sz 10','Daddy (dry) sz 10'] },
-    dapping:'Mayfly dapping productive in June on Melvin but less prominent than Corrib. Daddy and grasshopper dapping excellent August–September.',
+    wetFlies:{ earlyseason:['Doobry sz 12 (★)','Teal & Black sz 12','Coachman sz 12','Bibio sz 10','Black Pennell sz 12','Connemara Black sz 10','Hot Orange Bibio sz 10'], mayfly:['Gosling sz 10 (★)','Claret Bumble sz 10','French Partridge Mayfly sz 10','Invicta sz 10','Green Peter sz 10'], general:['Sooty Olive sz 12','Golden Olive sz 10','Peter Ross sz 10','Mallard & Claret sz 10'] },
+    dryFlies:{ mayfly:['Gosling (dry) sz 10','Green Drake Wulff sz 10','Spent Gnat sz 10'], caenis:['CDC Caenis sz 20','F-Fly sz 20','Tiny White Emerger sz 18'], evening:['Elk Hair Caddis sz 12','Black Murrough sz 10','Daddy (dry) sz 10'] },
+    dapping:'Mayfly dapping productive in June. Daddy and grasshopper dapping Aug–Sep.',
   },
   {
     id:'sheelin', name:'Lough Sheelin', county:'Cavan / Westmeath / Meath', area:'4,500 acres',
     lat:53.807, lon:-7.348, driveH:3.25,
-    desc:'Pound for pound the greatest wild brown trout lough in Ireland – possibly the world. Average fish: 3lbs. Fish up to 10lbs+ taken every season. 100,000+ trout over 8 inches. Small enough to fish intimately, big enough to get lost in.',
+    desc:'Pound for pound the greatest wild brown trout lough in Ireland. Average fish: 3lbs.',
     seasons:{ open:'1 Mar', close:'12 Oct', note:'Longer season than most loughs' },
-    permit:'IFI Midland Fisheries permit required (~€10/day or season ticket). Available from Crover House Hotel, Finea village shop (Geraldine Clarke 043 6681158), IFI Sheelin office (049 433 6144).',
-    boatHire:'Crover House Hotel pier (049 854 0206). Gary Sherlock Ghillie Service.',
-    ghillie:'Gary Sherlock and team – www.loughsheelinguidingservices.com (★ highly recommended)',
-    tackleShop:'Limited local options – stock up in Cavan town (Brian Conlon, Wild Total Outdoors, 049 430 1133) or Mullingar (O\'Malley\'s Tackle).',
-    accommodation:'Crover House Hotel (on the water – ★★★★). Lough Sheelin B&Bs near Finea. Mount Nugent village pubs/accommodation.',
-    minSize:'Trout 25cm. Bag limit: 2 trout/day (strict). C&R strongly encouraged for large fish.',
-    bagLimit:'2 trout/day. Electric engines encouraged – petrol engines create disturbance for spent gnat fishing.',
-    species:['Wild Brown Trout (★★★ – average 3lbs)','Pike (coarse season)'],
-    unique:'Largest mayfly hatch in Ireland (fishinginireland.info). Spent Gnat fishing at dusk/dark is world-class – fish to midnight during peak. Last week May: MURROUGH sedge brings the very biggest fish. Patience and stealth essential.',
+    permit:'IFI Midland Fisheries permit (~€10/day). Crover House Hotel, Finea shop (049 6681158).',
+    boatHire:'Crover House Hotel pier (049 854 0206). Gary Sherlock.',
+    ghillie:'Gary Sherlock – loughsheelinguidingservices.com',
+    tackleShop:'Limited locally – Cavan town (049 430 1133) or Mullingar.',
+    accommodation:'Crover House Hotel (★★★★). Mount Nugent village.',
+    minSize:'25cm. Bag: 2/day. Electric engines encouraged.',
+    bagLimit:'2 trout/day. Strict C&R for large fish.',
+    species:['Wild Brown Trout (★★★ – avg 3lbs)','Pike'],
+    unique:'Largest mayfly hatch in Ireland. Spent Gnat at dusk world-class. Murrough in last week of May.',
     windRose:{ ideal:['SW','W','WSW'], good:['S','NW','SE'], difficult:['N','NE'], dangerous:['E','ENE'] },
     bestAreas:[
-      { name:'Sailor\'s Garden & Ross Bay', wind:'SW/W', note:'Best early season area (March). Rocky shore with shrimp and louse.' },
-      { name:'Holywell Bay (north shore)', wind:'SW', note:'Famous for mayfly; Chambers Bay nearby also good.' },
-      { name:'Inchacup Island area', wind:'W/NW', note:'Centre of the lough. Largest duckfly hatches east of Merry Point–Inchicup line.' },
-      { name:'Curry Point to Wilson\'s Point', wind:'SW', note:'Prime mayfly & spent gnat zone. SW of this line holds the best fish during hatch.' },
+      { name:'Sailor\'s Garden & Ross Bay', wind:'SW/W', exposureBearing:240, bayDepth:2.5, kind:'open',
+        note:'Best early season area' },
+      { name:'Holywell Bay (north shore)', wind:'SW', exposureBearing:220, bayDepth:3, kind:'open',
+        note:'Famous for mayfly. Chambers Bay nearby.' },
+      { name:'Inchacup Island area', wind:'W/NW', exposureBearing:280, bayDepth:4, kind:'headland-sheltered',
+        note:'Centre of lough. Largest duckfly hatches east of Merry Point–Inchicup line.' },
+      { name:'Curry Point to Wilson\'s Point', wind:'SW', exposureBearing:220, bayDepth:3, kind:'open',
+        note:'Prime mayfly & spent gnat zone' },
+      { name:'Inny inflow', wind:'Any', exposureBearing:90, bayDepth:2.5, kind:'inflow',
+        note:'Clean inflow water – fishable when lake colours up' },
     ],
     hatches:[
-      { months:[3,4], name:'Shrimp / Louse (searching)', type:'shrimp', flies:['Hare\'s Ear sz 12','Claret & Mallard sz 12','Sooty Olive sz 12','Sweeney Todd sz 6 (lure, sink tip)'] },
-      { months:[4,5], name:'Duckfly (Chironomid – peak Apr 15–May 5)', type:'duckfly', flies:['Blae & Black sz 12','Black Spider sz 14','Olive Nymph sz 14','Apple Green Midge sz 14 (★ local pattern)'] },
+      { months:[3,4], name:'Shrimp / Louse (searching)', type:'shrimp', flies:['Hare\'s Ear sz 12','Claret & Mallard sz 12','Sooty Olive sz 12','Sweeney Todd sz 6'] },
+      { months:[4,5], name:'Duckfly (peak Apr 15–May 5)', type:'duckfly', flies:['Blae & Black sz 12','Black Spider sz 14','Olive Nymph sz 14','Apple Green Midge sz 14 (★)'] },
       { months:[4,5], name:'Lake Olives', type:'olive', flies:['Sooty Olive sz 12','Green Olive sz 14','Greenwell\'s Glory sz 12','Olive Bumble sz 12'] },
-      { months:[5,6], name:'🦋 MAYFLY (Ireland\'s largest hatch)', type:'mayfly', flies:['Grey Wulff sz 10 (★)','Royal Wulff sz 10','Green Wulff sz 10','Dry Melvin Green sz 10','Ginger Mayfly dry sz 10','Spent Gnat sz 10 (evening ★★★)','Golden Olive wet sz 10','Wet Mayfly sz 10'] },
-      { months:[5], name:'MURROUGH SEDGE (last week May)', type:'sedge', flies:['Murrough sz 8 (★★★ dusk/dark)','Large dry sedge sz 8','Elk Hair Caddis sz 8'] },
+      { months:[5,6], name:'🦋 MAYFLY (Ireland\'s largest)', type:'mayfly', flies:['Grey Wulff sz 10 (★)','Royal Wulff sz 10','Green Wulff sz 10','Dry Melvin Green sz 10','Ginger Mayfly dry sz 10','Spent Gnat sz 10 (★★★)','Golden Olive wet sz 10','Wet Mayfly sz 10'] },
+      { months:[5], name:'MURROUGH (last week May)', type:'sedge', flies:['Murrough sz 8 (★★★)','Large dry sedge sz 8','Elk Hair Caddis sz 8'] },
       { months:[6,7,8,9,10], name:'Sedges (Green Peter, Elk Hair)', type:'sedge', flies:['Green Peter sz 10','Elk Hair Caddis sz 12','CDC Sedge sz 12','Goddard Sedge sz 10'] },
       { months:[8,9], name:'Daphnia (deep pulling)', type:'shrimp', flies:['Wet flies pulled fast mid-water','Bibio sz 12','Peter Ross sz 10','Mallard & Claret sz 10'] },
     ],
     wetFlies:{ early:['Hare\'s Ear sz 12','Claret & Mallard sz 12','Sooty Olive sz 12'], duckfly:['Blae & Black sz 12','Black Spider sz 14','Olive Nymph sz 14'], mayfly:['Golden Olive sz 10','Wet Mayfly sz 10','Claret Dabbler sz 10'], sedge:['Green Peter sz 10','Invicta sz 10','Bibio sz 10','Black Pennell sz 12'], daphnia:['Peter Ross sz 10','Mallard & Claret sz 10','Bibio sz 12 (pulled)'] },
-    dryFlies:{ mayfly:['Grey Wulff sz 10 (★★★)','Royal Wulff sz 10','Spent Gnat sz 10 (evening ★★★)','Ginger May sz 10','Dry Melvin Green sz 10'], murrough:['Murrough sz 8 (after midnight ★★★)','Large dry sedge sz 8'], sedge:['Green Peter dry sz 10','Elk Hair Caddis sz 12','Goddard Sedge sz 10'] },
-    dapping:'Not as commonly practised on Sheelin as on western loughs but daddy and grasshopper can be deadly Aug–Sep when trout are feeding near surface edges.',
+    dryFlies:{ mayfly:['Grey Wulff sz 10 (★★★)','Royal Wulff sz 10','Spent Gnat sz 10 (★★★)','Ginger May sz 10','Dry Melvin Green sz 10'], murrough:['Murrough sz 8 (★★★)','Large dry sedge sz 8'], sedge:['Green Peter dry sz 10','Elk Hair Caddis sz 12','Goddard Sedge sz 10'] },
+    dapping:'Daddy and grasshopper deadly Aug–Sep.',
   }
 ];
 
 // ════════════════════════════════════════════════════════════════
-// MATHS / UTILITIES
+// UTILITIES
 // ════════════════════════════════════════════════════════════════
 const DEG=Math.PI/180;
 const clamp=(x,mn,mx)=>Math.max(mn,Math.min(mx,x));
@@ -926,9 +797,10 @@ function compassDir(deg){const d=['N','NNE','NE','ENE','E','ESE','SE','SSE','S',
 function fmt(v,d=1){return isNaN(v)||v==null?'—':v.toFixed(d)}
 function fmtTime(dt){if(!dt)return'—';const d=dt instanceof Date?dt:new Date(dt);return isNaN(d)?'—':d.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',hour12:false})}
 function fmtHour(h){const hh=Math.floor(h),mm=Math.round((h-hh)*60);return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`}
+function circDiff(a,b){return Math.abs(((a-b+540)%360)-180)} // 0..180
 
 // ════════════════════════════════════════════════════════════════
-// SOLUNAR ENGINE
+// SOLUNAR ENGINE (unchanged)
 // ════════════════════════════════════════════════════════════════
 const REF_NEW_MOON=Date.UTC(2000,0,6,18,14,0);
 const LUNAR_CYCLE_MS=29.530589*24*3600*1000;
@@ -956,27 +828,153 @@ function isSolunarActive(sol,h){const check=(c,d)=>{let df=(h-c+24)%24;if(df>12)
 // MAYFLY COUNTDOWN
 // ════════════════════════════════════════════════════════════════
 function mayflyStatus(){
-  const now=new Date(),m=now.getMonth()+1,d=now.getDate();
-  // Approximate mayfly dates (varies by lake and year)
-  const mayStart=new Date(now.getFullYear(),4,7);   // ~May 7 (Sheelin earliest)
-  const corribStart=new Date(now.getFullYear(),4,12); // ~May 12–15 (Corrib/Conn)
-  const mayEnd=new Date(now.getFullYear(),5,30);    // ~end June
+  const now=new Date();
+  const mayStart=new Date(now.getFullYear(),4,7);
+  const mayEnd=new Date(now.getFullYear(),5,30);
   if(now<mayStart){const days=Math.round((mayStart-now)/86400000);return{text:`🦋 Mayfly ~${days} days away (est. ${mayStart.toLocaleDateString('en-IE',{day:'numeric',month:'short'})})`,active:false}}
   if(now<=mayEnd){
     const weekIn=Math.round((now-mayStart)/604800000);
-    const notes=['First hatches on Sheelin – early Cornamona/Conn beginning','Corrib & Conn building – head west NOW','PEAK HATCH – all loughs fishing. Book NOW.','Peak continues – Spent Gnat evenings spectacular','Waning – Green Peter sedge taking over','Murrough sedge time on Sheelin','Sedge season in full swing – Daddy dapping soon'];
+    const notes=['First hatches on Sheelin','Corrib & Conn building – head west NOW','PEAK HATCH – book NOW','Peak continues – Spent Gnat evenings spectacular','Waning – Green Peter sedge taking over','Murrough sedge time on Sheelin','Sedge season in full swing'];
     return{text:`🦋 MAYFLY IS UP – Week ${weekIn+1} (${now.toLocaleDateString('en-IE',{month:'short',day:'numeric'})})`,active:true,note:notes[Math.min(weekIn,notes.length-1)]}
   }
+  const m=now.getMonth()+1;
   if(m>=7&&m<=9){const days=Math.round((new Date(now.getFullYear()+1,4,7)-now)/86400000);return{text:`🦋 Post-mayfly – Sedge/Daddy season (next hatch ~${days} days)`,active:false}}
   return{text:`🦋 Season opens 1 Mar (Sheelin) / 15 Feb (others)`,active:false};
 }
 
 // ════════════════════════════════════════════════════════════════
-// WIND SCORING FOR LOUGHS
+// v2 — WIND-DRIVEN COLOUR STATE MODEL
+// ════════════════════════════════════════════════════════════════
+// Calibrated against the Sat-Sun event on Conn (N wind gusting 60kph, 36h):
+// south-shore bays went chocolate brown. Linear stir model with bay-depth
+// multiplier. Thresholds shifted to be more pessimistic than v1.
+// ════════════════════════════════════════════════════════════════
+const STIR_THRESHOLDS = { faintlyTinged:100, tinged:200, soupy:350, chocolate:500 };
+const DECAY_HOURS = { chocolate:60, soupy:42, tinged:21, faintlyTinged:12 };
+const COLOUR_RANK = { clear:0, faintlyTinged:1, tinged:2, soupy:3, chocolate:4 };
+const COLOUR_LABEL = { clear:'clear', faintlyTinged:'faintly tinged', tinged:'tinged', soupy:'soupy', chocolate:'chocolate brown' };
+
+function bayDepthMultiplier(bay){
+  // 2m bay → 1.8x; 4m → 1.0x; 8m → 0.5x
+  return Math.max(0.6, Math.min(1.8, 4.0 / Math.max(2, bay.bayDepth||4)));
+}
+function bucketStir(stir){
+  if(stir>=STIR_THRESHOLDS.chocolate)return'chocolate';
+  if(stir>=STIR_THRESHOLDS.soupy)return'soupy';
+  if(stir>=STIR_THRESHOLDS.tinged)return'tinged';
+  if(stir>=STIR_THRESHOLDS.faintlyTinged)return'faintlyTinged';
+  return'clear';
+}
+function isWindStirringBay(bay,windDirDeg){
+  if(!Number.isFinite(windDirDeg))return false;
+  // Inflows and narrows are partially sheltered regardless of bearing
+  const arc = bay.kind==='narrows' ? 90 : 60;
+  return circDiff(bay.exposureBearing, windDirDeg) <= arc;
+}
+
+// Compute lake colour state from wind history + current conditions
+// windHistory36h: array of {speedKt, directionDeg} for past 36h (hourly)
+function computeLakeColourState(lough, wx){
+  if(!wx) return null;
+  // Build effective wind history. If no real history available, project
+  // current wind backwards over 24h (conservative — gives some stir).
+  const hist = wx.windHistory36h && wx.windHistory36h.length>=12
+    ? wx.windHistory36h
+    : Array.from({length:24},()=>({ speedKt:(wx.windSpeed||0)*0.54, directionDeg:wx.windDir||0 }));
+  let totalStir=0, dirX=0, dirY=0, weight=0;
+  for(const w of hist){
+    if(w.speedKt>12){
+      const c=w.speedKt-12;
+      totalStir+=c;
+      const rad=w.directionDeg*DEG;
+      dirX+=Math.cos(rad)*c; dirY+=Math.sin(rad)*c; weight+=c;
+    }
+  }
+  const dominantDir = weight>0 ? ((Math.atan2(dirY,dirX)*180/Math.PI)+360)%360 : null;
+
+  // Per-bay colour
+  const perBay = {};
+  for(const bay of lough.bestAreas){
+    let effStir = 0;
+    if(isWindStirringBay(bay, dominantDir)){
+      effStir = totalStir * bayDepthMultiplier(bay);
+      if(bay.kind==='inflow') effStir *= 0.4;
+      if(bay.kind==='narrows') effStir *= 0.7;
+      if(bay.kind==='headland-sheltered') effStir *= 0.5;
+    } else {
+      effStir = Math.min(60, totalStir*0.1);
+      if(bay.kind==='inflow') effStir *= 0.3;
+    }
+    perBay[bay.name] = { stir: Math.round(effStir), colour: bucketStir(effStir) };
+  }
+
+  // Overall state = worst bay
+  const overall = Object.values(perBay).reduce((worst,b)=>
+    COLOUR_RANK[b.colour]>COLOUR_RANK[worst] ? b.colour : worst, 'clear');
+
+  // Clearing time
+  const tempMult = (wx.waterTempC||12) < 10 ? 1.5 : 1.0;
+  const rainHalt = (wx.todayPrecip||0) > 1;
+  const tiers = ['chocolate','soupy','tinged','faintlyTinged'];
+  let hoursToTinged=0, hoursToClear=0, started=false;
+  for(const tier of tiers){
+    if(tier===overall) started=true;
+    if(started){
+      const base = DECAY_HOURS[tier]*tempMult;
+      hoursToClear += base;
+      if(tier==='chocolate'||tier==='soupy') hoursToTinged += base;
+    }
+  }
+  if(rainHalt){ hoursToClear+=12; hoursToTinged+=12; }
+
+  return {
+    stirEnergyKtH: Math.round(totalStir),
+    dominantWindDirDeg: dominantDir==null?null:Math.round(dominantDir),
+    perBayColour: perBay,
+    overallColourState: overall,
+    hoursToClear: { tinged: Math.round(hoursToTinged), clear: Math.round(hoursToClear) },
+  };
+}
+
+// ════════════════════════════════════════════════════════════════
+// v2 — WATER TEMP ESTIMATE FROM 7-DAY AIR TEMP
+// ════════════════════════════════════════════════════════════════
+function estimateWaterTemp(airTemp7d, month, rainfall24hMm){
+  if(!airTemp7d || airTemp7d.length<3) return { tempC: null, confidence:'low', note:'No 7d history' };
+  const mean = airTemp7d.reduce((s,t)=>s+t,0)/airTemp7d.length;
+  let slope, offset, season;
+  if(month>=3 && month<=5){ slope=0.75; offset=2.5; season='spring'; }
+  else if(month>=6 && month<=8){ slope=0.85; offset=1.5; season='summer'; }
+  else if(month>=9 && month<=11){ slope=0.80; offset=1.0; season='autumn'; }
+  else { slope=0.70; offset=2.0; season='winter'; }
+  let temp = slope*mean + offset;
+  // Heavy rain cools toward catchment runoff (~6-7°C)
+  if(rainfall24hMm>20) temp = temp*0.7 + 6.5*0.3;
+  else if(rainfall24hMm>10) temp = temp*0.85 + 7.0*0.15;
+  return {
+    tempC: Math.round(temp*10)/10,
+    confidence: rainfall24hMm>20?'low':(rainfall24hMm>5?'medium':'high'),
+    season,
+    note: `7d air mean ${mean.toFixed(1)}°C, ${season}${rainfall24hMm>10?', cooled by rain':''}`
+  };
+}
+
+// ════════════════════════════════════════════════════════════════
+// v2 — MAYFLY GATE: requires 3 consecutive days ≥12°C water
+// ════════════════════════════════════════════════════════════════
+function mayflyReadiness(waterTemp7d){
+  if(!waterTemp7d || waterTemp7d.length<3) return { readiness:0, consecutive:0 };
+  let consec=0;
+  for(let i=waterTemp7d.length-1;i>=0;i--){
+    if(waterTemp7d[i]>=12) consec++; else break;
+  }
+  return { readiness: Math.min(1, consec/3), consecutive: consec };
+}
+
+// ════════════════════════════════════════════════════════════════
+// WIND SCORING (unchanged)
 // ════════════════════════════════════════════════════════════════
 function windScoreForLough(windSpeed, windDir, windGust, lough){
-  // Lough-style fishing requires ripple but not dangerous conditions
-  // Ideal: 10–22 km/h. Below 6 = flat calm (no surface, fish deep). Above 30 = rough.
   const speedScore=hump01(windSpeed,0,10,22,45);
   const gustPenalty=windGust>35?Math.min(.5,(windGust-35)/40):0;
   const s=Math.max(0,speedScore-gustPenalty);
@@ -992,50 +990,52 @@ function windScoreForLough(windSpeed, windDir, windGust, lough){
 function windCondLabel(speed,gust,windDir,lough){
   const compassD=compassDir(windDir);
   const dangerous=lough.windRose.dangerous.includes(compassD);
-  if(speed<5)return{cls:'wind-fair',label:'Calm – flat water. Fish with nymphs/buzzers. Poor surface action.'};
+  if(speed<5)return{cls:'wind-fair',label:'Calm – flat water. Fish with nymphs/buzzers.'};
   if(speed>=5&&speed<=22&&gust<35){
-    if(dangerous)return{cls:'wind-rough',label:`${compassD} wind – unfavourable direction for main drifts. Try sheltered bays.`};
-    if(lough.windRose.ideal.includes(compassD))return{cls:'wind-ideal',label:`✓ Ideal conditions – ${compassD} wind at ${speed}km/h. Classic drifts possible.`};
-    return{cls:'wind-fair',label:`${compassD} wind ${speed}km/h – fishable. Check drift areas for this direction.`};
+    if(dangerous)return{cls:'wind-rough',label:`${compassD} wind – unfavourable for main drifts. Try sheltered bays.`};
+    if(lough.windRose.ideal.includes(compassD))return{cls:'wind-ideal',label:`✓ Ideal – ${compassD} wind at ${speed}km/h.`};
+    return{cls:'wind-fair',label:`${compassD} wind ${speed}km/h – fishable.`};
   }
-  if(speed>22&&speed<=32)return{cls:'wind-rough',label:`Fresh wind – rough in exposed areas. Fish sheltered bays and narrows.`};
-  return{cls:'wind-dangerous',label:`⚠ DANGEROUS – ${speed}km/h gusting ${gust}km/h. Do not launch. Fish from shore only.`};
+  if(speed>22&&speed<=32)return{cls:'wind-rough',label:`Fresh wind – rough in exposed areas.`};
+  return{cls:'wind-dangerous',label:`⚠ DANGEROUS – ${speed}km/h gusting ${gust}km/h.`};
 }
 
 // ════════════════════════════════════════════════════════════════
-// OVERALL FISHING SCORE
+// v2 — FISHING SCORE WITH COLOUR-STATE PENALTY
 // ════════════════════════════════════════════════════════════════
 function loughScore(wx,lough,month){
   if(!wx)return 5;
   const windS=windScoreForLough(wx.windSpeed,wx.windDir,wx.windGust,lough);
   const pressS=hump01(wx.pressure,1002,1012,1024,1032)*10;
   const trendMod=wx.trend==='Rising'?1.1:wx.trend==='Falling'?.85:1;
-  const cloudS=(wx.cloudCover||50)>20&&(wx.cloudCover||50)<85?9:5; // overcast best
+  const cloudS=(wx.cloudCover||50)>20&&(wx.cloudCover||50)<85?9:5;
   const tempS=wx.airTemp!=null?hump01(wx.airTemp,5,10,18,26)*10:6;
   const mayflyM=(month>=5&&month<=6)?1.3:1;
-  const raw=(windS*.35+pressS*.25+cloudS*.20+tempS*.20)*trendMod*mayflyM;
+  let raw=(windS*.35+pressS*.25+cloudS*.20+tempS*.20)*trendMod*mayflyM;
+
+  // v2: COLOUR STATE PENALTY
+  const colour = wx._colourState;
+  if(colour){
+    if(colour.overallColourState==='chocolate') raw *= 0.45;
+    else if(colour.overallColourState==='soupy') raw *= 0.65;
+    else if(colour.overallColourState==='tinged') raw *= 0.88;
+    else if(colour.overallColourState==='faintlyTinged') raw *= 0.95;
+  }
+  // v2: MAYFLY GATE — if mayfly month but lake hasn't triggered, cap the mayfly bonus
+  const mfReady = wx._mayflyReadiness?.readiness ?? 1;
+  if(mayflyM>1 && mfReady<1){
+    raw /= mayflyM;             // remove mayfly bonus
+    raw *= (1 + 0.3*mfReady);   // partial credit for partial readiness
+  }
+
   return Math.round(clamp(raw,0,10)*10)/10;
 }
 
-// ════════════════════════════════════════════════════════════════
-// CURRENT HATCH RECOMMENDATIONS
-// ════════════════════════════════════════════════════════════════
-function currentHatches(lough,month,hour){
-  const active=lough.hatches.filter(h=>h.months.includes(month));
-  return active;
-}
-
-// ════════════════════════════════════════════════════════════════
-// COMPASS SVG
-// ════════════════════════════════════════════════════════════════
 function compassHTML(windDir, lough){
   const compass=compassDir(windDir);
-  const ideal=lough.windRose.ideal;
-  const good=lough.windRose.good;
-  const dangerous=lough.windRose.dangerous;
+  const ideal=lough.windRose.ideal, good=lough.windRose.good, dangerous=lough.windRose.dangerous;
   const DIRS=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-  const cx=50,cy=50,r=38,rInner=26,rText=46;
-  // Draw compass points as small arcs, colour by suitability
+  const cx=50,cy=50,r=38,rInner=26;
   let arcs='';
   DIRS.forEach((d,i)=>{
     const ang=(i/16)*360-90;
@@ -1045,15 +1045,13 @@ function compassHTML(windDir, lough){
     const color=dangerous.includes(d)?'#b85040':ideal.includes(d)?'#3ab899':good.includes(d)?'#b8962a':'#2a3d32';
     arcs+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>`;
   });
-  // Wind arrow
   const windRad=(windDir-90)*DEG;
   const ax=cx+20*Math.cos(windRad),ay=cy+20*Math.sin(windRad);
-  const arrow=`<line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#c8780a" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="${ax.toFixed(1)}" cy="${ay.toFixed(1)}" r="3" fill="#c8780a"/>`;
   return`<svg class="compass-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="none" stroke="#1a2d22" stroke-width="1"/>
     ${arcs}
-    ${arrow}
+    <line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#c8780a" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${ax.toFixed(1)}" cy="${ay.toFixed(1)}" r="3" fill="#c8780a"/>
     <text x="${cx}" y="${cy+4}" fill="#5a8a6a" font-size="8" text-anchor="middle" font-family="Share Tech Mono">${compass}</text>
     <text x="${cx}" y="8" fill="#3a6048" font-size="7" text-anchor="middle">N</text>
     <text x="${cx}" y="96" fill="#3a6048" font-size="7" text-anchor="middle">S</text>
@@ -1062,9 +1060,7 @@ function compassHTML(windDir, lough){
   </svg>`;
 }
 
-// ════════════════════════════════════════════════════════════════
-// HATCH TIMELINE HTML
-// ════════════════════════════════════════════════════════════════
+// Hatch timeline
 function hatchTimelineHTML(lough){
   const now=new Date(),currM=now.getMonth()+1;
   const months=[{n:'Mar',m:3},{n:'Apr',m:4},{n:'May',m:5},{n:'Jun',m:6},{n:'Jul',m:7},{n:'Aug',m:8},{n:'Sep',m:9},{n:'Oct',m:10}];
@@ -1078,50 +1074,34 @@ function hatchTimelineHTML(lough){
   }).join('');
 }
 
-// ════════════════════════════════════════════════════════════════
-// FLY BOX HTML
-// ════════════════════════════════════════════════════════════════
+// Fly box HTML
 function flyBoxHTML(lough,month){
   const activeHatches=lough.hatches.filter(h=>h.months.includes(month));
-  const prevMonth=month>2?month-1:2;
-  const prevHatches=lough.hatches.filter(h=>h.months.includes(prevMonth)&&!h.months.includes(month));
   const topWetKey=month<=4?'earlyseason':month<=5?'mayfly':month<=7?'mayfly':'sedge';
   const wetBox=lough.wetFlies[topWetKey]||lough.wetFlies[Object.keys(lough.wetFlies)[0]]||[];
   const dryBox=month<=4?lough.dryFlies.general||[]:month<=6?lough.dryFlies.mayfly||[]:lough.dryFlies.sedge||lough.dryFlies.evening||[];
-
-  // Highlight flies from active hatches
   const activeFlyNames=activeHatches.flatMap(h=>h.flies);
-
   const makeTag=(f)=>{
     const isTop=f.includes('★');
     const isActive=activeFlyNames.some(af=>af.toLowerCase().includes(f.toLowerCase().replace(' (★)','').replace(' sz','').substring(0,12)));
     return`<span class="fly-tag${isTop?' top':''}${isActive&&!isTop?' recommended':''}">${f}</span>`;
   };
-
   return`<div class="fly-box-grid">
     <div class="fly-box">
       <div class="fly-box-title">🪰 WET FLIES NOW <span style="font-size:9px;color:var(--text-muted)">(team of 3)</span></div>
-      <div style="font-size:9px;font-family:var(--font-m);margin-bottom:5px;display:flex;gap:10px;flex-wrap:wrap">
-        <span style="color:var(--teal)">★ green = top pick</span>
-        <span style="color:var(--gold)">● amber = matches active hatch this month</span>
-        <span style="color:var(--text-muted)">plain = general pattern</span>
-      </div>
       ${wetBox.map(makeTag).join('')}
     </div>
     <div class="fly-box">
       <div class="fly-box-title">🌿 DRY FLIES / DAPPING NOW</div>
-      ${dryBox.length?dryBox.map(makeTag).join(''):'<span style="color:var(--text-muted);font-size:10px;font-family:var(--font-m)">Dry fly limited this month – focus on wet</span>'}
+      ${dryBox.length?dryBox.map(makeTag).join(''):'<span style="color:var(--text-muted);font-size:10px;font-family:var(--font-m)">Limited dry – focus on wet</span>'}
     </div>
     ${activeHatches.length?`<div class="fly-box" style="grid-column:1/-1">
-      <div class="fly-box-title">✅ ACTIVE HATCHES THIS MONTH</div>
+      <div class="fly-box-title">✅ ACTIVE HATCHES</div>
       ${activeHatches.map(h=>`<div style="margin:4px 0"><span style="color:var(--teal);font-family:var(--font-m);font-size:10px">${h.name}:</span> <span style="font-size:10px;color:var(--text-dim)">${h.flies.slice(0,5).join(', ')}</span></div>`).join('')}
     </div>`:''}
   </div>`;
 }
 
-// ════════════════════════════════════════════════════════════════
-// SOLUNAR HTML (lough version)
-// ════════════════════════════════════════════════════════════════
 function solunarStripHTML(sol,sunrise,sunset){
   const now=new Date(),h=now.getHours()+now.getMinutes()/60;
   const active=isSolunarActive(sol,h);
@@ -1137,7 +1117,6 @@ function solunarStripHTML(sol,sunrise,sunset){
       <div style="font-size:9px;color:var(--text-muted)">${major?'1.5h window':'45min window'}</div>
     </div>`;
   };
-  const dots=Array.from({length:10},(_,i)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;background:${i<sol.strength?'var(--gold)':'var(--border)'}"></span>`).join('');
   return`<div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
       <span style="font-family:var(--font-m);font-size:10px;color:var(--text-muted)">🌙 SOLUNAR – ${sol.phaseName} · Strength ${sol.strength}/10</span>
@@ -1153,34 +1132,351 @@ function solunarStripHTML(sol,sunrise,sunset){
 }
 
 // ════════════════════════════════════════════════════════════════
-// WEATHER FETCH (reuse server.js endpoint)
+// v2 — WEATHER FETCH WITH HOURLY HISTORY
 // ════════════════════════════════════════════════════════════════
 async function fetchWeather(lat,lon){
-  try{const r=await fetch(`/api/weather?lat=${lat}&lon=${lon}&_=${Date.now()}`,{cache:'no-store'});
-  const env=await r.json();if(!r.ok||env.error)return null;
-  if(env.source==='open-meteo'){const d=env.data;
-    const now=Date.now();let idx=0;
-    for(let i=0;i<d.hourly.time.length;i++){const t=new Date(d.hourly.time[i]).getTime();if(!isNaN(t)&&t<=now)idx=i}
+  try{
+    const r=await fetch(`/api/weather?lat=${lat}&lon=${lon}&_=${Date.now()}`,{cache:'no-store'});
+    const env=await r.json();
+    if(!r.ok||env.error)return null;
+    if(env.source!=='open-meteo')return null;
+    const d=env.data;
+    const now=Date.now();
+    let idx=0;
+    for(let i=0;i<d.hourly.time.length;i++){
+      const t=new Date(d.hourly.time[i]).getTime();
+      if(!isNaN(t)&&t<=now)idx=i;
+    }
+    const safe=(arr,i,fb=null)=>(arr&&arr[i]!=null)?+arr[i]:fb;
     const delta3h=idx>=3?+d.hourly.pressure_msl[idx]-+d.hourly.pressure_msl[idx-3]:0;
     const trend=delta3h>1.5?'Rising':delta3h<-1.5?'Falling':'Steady';
     const todayISO=new Date().toISOString().slice(0,10);
     const di=d.daily.time.findIndex(t=>t===todayISO);
-    const safe=(arr,i,fb=null)=>(arr&&arr[i]!=null)?+arr[i]:fb;
-    return{source:'Open-Meteo',pressure:Math.round(safe(d.hourly.pressure_msl,idx,NaN)),trend,delta3h:Math.round(delta3h*10)/10,windSpeed:Math.round(safe(d.hourly.wind_speed_10m,idx,NaN)),windGust:Math.round(safe(d.hourly.wind_gusts_10m,idx,NaN)),windDir:safe(d.hourly.wind_direction_10m,idx,NaN),airTemp:safe(d.hourly.temperature_2m,idx,null),cloudCover:safe(d.hourly.cloud_cover,idx,null),todayPrecip:di>=0?+(d.daily.precipitation_sum[di])||0:0,nowPrecip:safe(d.hourly.precipitation,idx,0)||0,sunrise:di>=0&&d.daily.sunrise[di]?new Date(d.daily.sunrise[di]):null,sunset:di>=0&&d.daily.sunset[di]?new Date(d.daily.sunset[di]):null};
-  }return null}catch{return null}
+
+    // v2: PULL 36H WIND HISTORY for stir energy calculation
+    // Convert km/h to knots (* 0.54)
+    const windHistory36h = [];
+    for(let i=Math.max(0,idx-36); i<=idx; i++){
+      const spd_kmh = safe(d.hourly.wind_speed_10m,i,0)||0;
+      const dir = safe(d.hourly.wind_direction_10m,i,0)||0;
+      windHistory36h.push({ speedKt: spd_kmh*0.54, directionDeg: dir });
+    }
+
+    // v2: PULL 7-DAY AIR TEMP HISTORY for water temp estimate
+    // Use daily mean temps (Open-Meteo provides temperature_2m_max/min daily)
+    let airTemp7d = [];
+    if(d.daily && d.daily.temperature_2m_max && d.daily.temperature_2m_min){
+      const dayCount = Math.min(7, d.daily.time.length);
+      // Take last 7 days up to today
+      const todayIdx = di>=0 ? di : 0;
+      const startIdx = Math.max(0, todayIdx-6);
+      for(let i=startIdx; i<=todayIdx; i++){
+        const mn = safe(d.daily.temperature_2m_min, i, null);
+        const mx = safe(d.daily.temperature_2m_max, i, null);
+        if(mn!=null && mx!=null) airTemp7d.push((mn+mx)/2);
+      }
+    }
+    // Fallback: synthesise from hourly past 7 days
+    if(airTemp7d.length<3){
+      for(let day=6; day>=0; day--){
+        let sum=0,count=0;
+        for(let h=0;h<24;h++){
+          const j = idx - day*24 - h;
+          if(j>=0){ const t=safe(d.hourly.temperature_2m,j,null); if(t!=null){ sum+=t; count++; } }
+        }
+        if(count>0) airTemp7d.push(sum/count);
+      }
+    }
+
+    return{
+      source:'Open-Meteo',
+      pressure:Math.round(safe(d.hourly.pressure_msl,idx,NaN)),
+      trend, delta3h:Math.round(delta3h*10)/10,
+      windSpeed:Math.round(safe(d.hourly.wind_speed_10m,idx,NaN)),
+      windGust:Math.round(safe(d.hourly.wind_gusts_10m,idx,NaN)),
+      windDir:safe(d.hourly.wind_direction_10m,idx,NaN),
+      airTemp:safe(d.hourly.temperature_2m,idx,null),
+      cloudCover:safe(d.hourly.cloud_cover,idx,null),
+      todayPrecip:di>=0?+(d.daily.precipitation_sum[di])||0:0,
+      nowPrecip:safe(d.hourly.precipitation,idx,0)||0,
+      sunrise:di>=0&&d.daily.sunrise[di]?new Date(d.daily.sunrise[di]):null,
+      sunset:di>=0&&d.daily.sunset[di]?new Date(d.daily.sunset[di]):null,
+      // v2 additions
+      windHistory36h,
+      airTemp7d,
+    };
+  }catch(e){
+    console.error('fetchWeather error:',e);
+    return null;
+  }
 }
 
 // ════════════════════════════════════════════════════════════════
-// RENDER TRIP OVERVIEW CARDS
+// v2 — ENRICH WEATHER WITH COLOUR STATE / WATER TEMP / MAYFLY GATE
+// Called after fetchWeather, before scoring
+// ════════════════════════════════════════════════════════════════
+function enrichWeather(wx, lough){
+  if(!wx) return wx;
+  const now=new Date(), month=now.getMonth()+1;
+  // Water temp estimate
+  const wt = estimateWaterTemp(wx.airTemp7d, month, wx.todayPrecip||0);
+  wx.waterTempC = wt.tempC;
+  wx.waterTempNote = wt.note;
+  wx.waterTempConfidence = wt.confidence;
+  // Synthesise water temp 7-day series for mayfly gate (lag air temp by 1°C cooler)
+  const wt7d = wx.airTemp7d.map(t => 0.75*t + 2.5);
+  wx._mayflyReadiness = mayflyReadiness(wt7d);
+  // Colour state
+  wx._colourState = computeLakeColourState(lough, wx);
+  return wx;
+}
+
+// ════════════════════════════════════════════════════════════════
+// v2 — RECOMMEND BAYS WITH COLOUR-STATE OVERRIDE
+// ════════════════════════════════════════════════════════════════
+function recommendBaysV2(lough, wx){
+  if(!wx) return { ranking:[], shelterMode:false };
+  const colour = wx._colourState;
+  const windD = wx.windDir;
+  // Check if all open windward bays are ≥soupy → shelter mode
+  const openBays = lough.bestAreas.filter(b=>b.kind==='open');
+  const windwardOpen = openBays.filter(b=>isWindStirringBay(b,windD));
+  const allWindwardSoupy = windwardOpen.length>0 && windwardOpen.every(b=>{
+    const c = colour?.perBayColour[b.name]?.colour;
+    return c==='soupy' || c==='chocolate';
+  });
+
+  const scored = lough.bestAreas.map(bay=>{
+    const c = colour?.perBayColour[bay.name]?.colour || 'clear';
+    const stirring = isWindStirringBay(bay, windD);
+    let score=60, reason='';
+    if(c==='chocolate'){
+      score = bay.kind==='inflow'?75:0;
+      reason = bay.kind==='inflow' ? 'Inflow lane clean through chocolate water' : 'Chocolate brown – unfishable';
+    } else if(c==='soupy'){
+      if(bay.kind==='inflow'){ score=80; reason='Inflow stays clean in soupy water'; }
+      else if(bay.kind==='narrows'){ score=70; reason='Narrows flush colour through'; }
+      else if(bay.kind==='headland-sheltered'){ score=75; reason='Headland-sheltered, water still readable'; }
+      else { score=25; reason='Soupy – fish pushed out of margins'; }
+    } else if(c==='tinged'){
+      if(stirring){ score=75; reason='Windward shore, tinged water – food in chop, classic'; }
+      else { score=55; reason='Lee shore, tinged – second-choice'; }
+    } else if(c==='faintlyTinged'){
+      if(stirring){ score=80; reason='Windward shore, just a tinge – prime'; }
+      else { score=60; reason='Lee shore, faintly tinged'; }
+    } else { // clear
+      if(stirring){ score=78; reason='Windward shore, clear water – classic'; }
+      else if(bay.kind==='inflow'){ score=68; reason='Clean inflow water'; }
+      else { score=55; reason='Lee shore, no wind advantage'; }
+    }
+    // Shelter mode escalation
+    if(allWindwardSoupy && (bay.kind==='inflow'||bay.kind==='narrows'||bay.kind==='headland-sheltered')){
+      score = Math.max(score, 75);
+      reason = '(shelter) '+reason;
+    }
+    return { bay: bay.name, kind: bay.kind, colour: COLOUR_LABEL[c], colourKey: c, score, reason, originalNote: bay.note };
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  return { ranking: scored, shelterMode: allWindwardSoupy };
+}
+
+// ════════════════════════════════════════════════════════════════
+// v2 — COLOUR STATE PANEL HTML
+// ════════════════════════════════════════════════════════════════
+function colourStatePanelHTML(lough, wx){
+  if(!wx?._colourState) return '';
+  const cs = wx._colourState;
+  const recs = recommendBaysV2(lough, wx);
+  const overall = cs.overallColourState;
+  const overallLabel = COLOUR_LABEL[overall];
+  const top3 = recs.ranking.slice(0,5);
+
+  let headline;
+  if(overall==='clear') headline = `Lake clear (${cs.stirEnergyKtH} kt-h stir). All bays fishable.`;
+  else if(overall==='faintlyTinged') headline = `Lake faintly tinged (${cs.stirEnergyKtH} kt-h). Windward shores prime.`;
+  else if(overall==='tinged') headline = `Lake tinged (${cs.stirEnergyKtH} kt-h). Fish windward shores in the chop.`;
+  else if(overall==='soupy') headline = `Lake soupy on windward (${cs.stirEnergyKtH} kt-h). Clearing in ~${cs.hoursToClear.tinged}h.`;
+  else headline = `Lake chocolate brown on windward shores (${cs.stirEnergyKtH} kt-h stir). Est. clearing to fishable: ${cs.hoursToClear.tinged}h. To clear: ${cs.hoursToClear.clear}h.`;
+
+  return `<div class="colour-state-panel">
+    <div class="colour-state-title">🌊 Water Colour State <span style="margin-left:auto;font-family:var(--font-m);font-size:9px;color:var(--text-muted)">v2 wind-driven model</span></div>
+    <div class="colour-state-headline ${overall}">${headline}</div>
+    ${recs.shelterMode ? `<div class="shelter-warning">⚠ SHELTER MODE — all windward shores ≥ soupy. Fish inflows, narrows, or headland-sheltered bays only. Avoid open shore margins.</div>` : ''}
+    <div class="bay-ranking">
+      ${top3.map((b,i)=>{
+        const cls = b.score===0?'bad':(recs.shelterMode && b.score>=70)?'shelter':(i===0?'top':'');
+        const scoreCls = b.score>=70?'high':b.score>=50?'mid':'low';
+        return `<div class="bay-row ${cls}">
+          <span class="bay-rank">#${i+1}</span>
+          <span class="bay-name">${b.bay} <span style="color:var(--text-muted);font-size:9px">— ${b.reason}</span></span>
+          <span class="bay-state ${b.colourKey}">${b.colour}</span>
+          <span class="bay-score ${scoreCls}">${b.score}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════════════
+// v2 — WATER TEMP & MAYFLY GATE PANEL HTML
+// ════════════════════════════════════════════════════════════════
+function waterTempPanelHTML(wx){
+  if(!wx) return '';
+  const wt = wx.waterTempC;
+  const mfr = wx._mayflyReadiness;
+  const wtIcon = wt==null?'🌡':wt<10?'❄️':wt<14?'🌡':wt<18?'☀️':'🥵';
+  const mfReady = mfr && mfr.readiness>=1;
+  return `<div class="water-temp-row">
+    <div class="water-temp-card">
+      <div class="water-temp-label">${wtIcon} Estimated Water Temp</div>
+      <div class="water-temp-value">${wt!=null?wt.toFixed(1)+'°C':'—'}</div>
+      <div class="water-temp-sub">${wx.waterTempNote||''} · confidence: ${wx.waterTempConfidence||'—'}</div>
+    </div>
+    <div class="mayfly-gate ${mfReady?'ready':mfr&&mfr.consecutive>0?'building':''}">
+      <div class="water-temp-label">🦋 Mayfly Gate</div>
+      <div class="water-temp-value" style="font-size:16px;color:${mfReady?'var(--mayfly)':'var(--text-dim)'}">
+        ${mfReady?'TRIGGERED':mfr?`${mfr.consecutive}/3 days at ≥12°C`:'—'}
+      </div>
+      <div class="mayfly-gate-bar"><div class="mayfly-gate-fill" style="width:${(mfr?.readiness||0)*100}%"></div></div>
+      <div class="water-temp-sub" style="margin-top:4px">${mfReady?'Fish surface mayfly':'Stay sub-surface until 3 days at ≥12°C'}</div>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════════════
+// HOURLY PLAN (unchanged from v1 - kept for completeness)
+// ════════════════════════════════════════════════════════════════
+function buildHourlyPlan(lough, month, sr, ss, airTemp, cloudCover, windSpeed, pressure, trend) {
+  const hatches = HOUR_HATCHES[month] || HOUR_HATCHES[9];
+  const temp = airTemp || 12, cloud = cloudCover || 60, wind = windSpeed || 10;
+  const startHour = Math.floor(sr), endHour = Math.ceil(ss + 1);
+  const slots = [];
+  for (let h = startHour; h <= endHour; h++) {
+    const phase = h < sr + 1.5 ? 'dawn' : h < 12 ? 'morning' : h < 14 ? 'midday' : h < ss - 1.5 ? 'afternoon' : h < ss + 0.5 ? 'evening' : 'dusk';
+    const active = hatches.filter(ht => h >= ht.h1 && h < ht.h2);
+    const mayfly = active.find(ht => ht.type==='mayfly');
+    const sedge = active.find(ht => ht.type==='sedge' || ht.type==='daddy');
+    const duckfly = active.find(ht => ht.type==='duckfly');
+    const olive = active.find(ht => ht.type==='olive');
+    const daphnia = active.find(ht => ht.type==='shrimp' && ht.name.includes('Daphnia'));
+    let method, wets=[], drys=[], note='', switchSignal='', isDry=false;
+    if (phase === 'dawn') {
+      method = 'Deep wet – subsurface'; wets = (hatches[0]?.wet || ['Sooty Olive sz 12','Fiery Brown sz 10']).slice(0,2);
+      note = 'Fish rising from cold depths at first light. Team of 3 wets on slow-sinking or intermediate.';
+      switchSignal = 'Watch for first swirls near weed beds or sheltered bays.';
+    } else if (phase==='dusk') {
+      isDry = true; method = '🌅 DRY FLY / DAPPING – prime surface window';
+      const evH = hatches.filter(ht => ht.h2 >= ss || ht.h1 >= ss-2);
+      drys = evH.length && evH[0].dry ? evH[0].dry.slice(0,3) : ['Elk Hair Caddis sz 10','Goddard Sedge sz 10'];
+      wets = evH.length ? evH[0].wet.slice(0,1) : [];
+      note = evH.length ? evH[0].note : 'Dusk surface feeding. Single dry fly, fine tippet.';
+      switchSignal = 'Stay with dry. If sedge replaced by spent or caenis, switch to smaller fly.';
+    } else if (mayfly && (phase==='morning'||phase==='midday'||phase==='afternoon'||phase==='evening')) {
+      const inFullHatch = h >= 12 && h <= ss-1;
+      isDry = inFullHatch && (cloud > 40 || temp > 12);
+      method = inFullHatch ? (isDry ? '🌿 DRY MAYFLY – fish boiling' : 'Wet mayfly – building to surface') : 'Wet mayfly – fish rising in mid-water';
+      wets = mayfly.wet.slice(0,3); drys = mayfly.dry ? mayfly.dry.slice(0,3) : [];
+      note = mayfly.note;
+      switchSignal = inFullHatch ? '⭐ Already on dry. Stay dry until fish stop showing.' : '⭐ SWITCH TO DRY when you see 3+ fish boiling within range. Count to 2 before striking.';
+    } else if (sedge && (phase==='evening'||phase==='dusk')) {
+      isDry = true; method = '🌿 DRY SEDGE – evening hatch on';
+      wets = sedge.wet.slice(0,2); drys = sedge.dry ? sedge.dry.slice(0,3) : [];
+      note = sedge.note;
+      switchSignal = '⭐ Switch fully to single dry fly when adults skating on surface.';
+    } else if (sedge && phase==='afternoon') {
+      method = 'Bob fly + wet team – sedge pupae rising';
+      wets = sedge.wet.slice(0,3); drys = sedge.dry ? sedge.dry.slice(0,2) : [];
+      note = 'Sedge pupae beginning ascent. Dibble the bob aggressively.';
+      switchSignal = 'Switch to dry when sedge adults visible on surface.';
+    } else if (duckfly && cloud > 50) {
+      method = 'Wet + buzzer – duckfly hatch';
+      wets = duckfly.wet.slice(0,3); drys = duckfly.dry ? duckfly.dry.slice(0,2) : [];
+      note = duckfly.note;
+      switchSignal = 'Switch to dry CDC Midge if trout sipping quietly in calm.';
+    } else if (olive) {
+      method = cloud > 55 ? 'Wet fly → watching for dry' : 'Wet fly – olives hatching';
+      wets = olive.wet.slice(0,3); drys = olive.dry ? olive.dry.slice(0,2) : [];
+      note = olive.note;
+      switchSignal = 'Switch to dry LDO/Klinkhammer when fish show consistent head-and-tail rises.';
+    } else if (daphnia) {
+      method = 'Intermediate/sink – pulling for daphnia';
+      wets = daphnia.wet.slice(0,3); drys = [];
+      note = daphnia.note;
+      switchSignal = 'No dry fly option – fish deep on daphnia.';
+    } else if (phase==='morning' && temp < 10) {
+      method = 'Deep wet – cold water, fish sub-surface';
+      const early = hatches[0];
+      wets = early?.wet?.slice(0,3) || ['Fiery Brown sz 10','Sooty Olive sz 12','Bibio sz 10'];
+      note = `${temp.toFixed(0)}°C – below 10°C, trout unlikely to surface feed.`;
+      switchSignal = 'If temp rises through 10°C and cloud covers, watch for first rises.';
+    } else if (phase==='afternoon') {
+      method = 'Wet fly – searching, change every 20 min';
+      const af = hatches.find(ht => ht.h1 <= h && h < ht.h2) || hatches[0];
+      wets = af?.wet?.slice(0,3) || ['Sooty Olive sz 12','Black Pennell sz 12','Invicta sz 10'];
+      note = 'Quiet period. Change fly regularly. Try wind lanes.';
+      switchSignal = 'Watch for early evening sedge.';
+    } else {
+      method = 'Wet fly team – traditional drift';
+      const any = hatches.find(ht => ht.h1 <= h && h < ht.h2) || hatches[0];
+      wets = any?.wet?.slice(0,3) || ['Sooty Olive sz 12','Fiery Brown sz 10','Bibio sz 10'];
+      note = 'Standard wet fly team on the drift.';
+      switchSignal = 'Switch to dry if consistent rises appear.';
+    }
+    if(trend === 'Falling' && (pressure||1013) < 1008 && !isDry) {
+      note = `⚠ Pressure falling sharply – trout may be dour. ${note}`;
+      method = method.replace('🌿','').replace('🌑','') + ' (pressure falling)';
+    }
+    slots.push({ h, label:`${String(h).padStart(2,'0')}:00`, phase, method, wets, drys, note, switchSignal, isDry, hasHatch:active.length>0, hatchName:active[0]?.name||'' });
+  }
+  return slots;
+}
+
+function renderHourlyTimeline(lough, wx, month, targetDate) {
+  const date = targetDate || new Date();
+  const solar = calcSunTimes(date, lough.lat, lough.lon);
+  const sr = wx?.sunrise ? (wx.sunrise.getHours()+wx.sunrise.getMinutes()/60) : solar.sunrise;
+  const ss = wx?.sunset ? (wx.sunset.getHours()+wx.sunset.getMinutes()/60) : solar.sunset;
+  const slots = buildHourlyPlan(lough, month, sr, ss, wx?.airTemp, wx?.cloudCover, wx?.windSpeed, wx?.pressure, wx?.trend);
+  const firstDry = slots.find(s=>s.isDry);
+  const switchHour = firstDry ? firstDry.label : null;
+  const cols = slots.map(s => {
+    const headStyle = s.isDry ? 'is-dry' : s.hasHatch ? 'has-hatch' : '';
+    const wetsHtml = s.wets.slice(0,2).map(f=>`<span class="h-fly wet" title="${f}">${f.replace(' sz',' ').substring(0,18)}</span>`).join('');
+    const drysHtml = s.drys.slice(0,2).map(f=>`<span class="h-fly dry" title="${f}">${f.replace(' sz',' ').substring(0,18)}</span>`).join('');
+    const hatchHtml = s.hasHatch ? `<div class="h-hatch">🦋 ${s.hatchName.replace('🦋 ','').substring(0,20)}</div>` : '';
+    const sw = s.switchSignal && s.switchSignal.includes('⭐') ? `<div class="h-switch">⭐ switch</div>` : '';
+    return `<div class="hour-col phase-${s.phase} ${headStyle}" title="${s.note}\n${s.switchSignal}">
+      <div class="hour-col-head">${s.label}<br><span style="font-size:8px;opacity:.7">${s.phase}</span></div>
+      <div class="hour-col-body">
+        <div class="h-method">${s.method.replace(/[🌑🌿🌅]/g,'').trim().substring(0,40)}</div>
+        ${hatchHtml}${wetsHtml}${drysHtml}${sw}
+      </div>
+    </div>`;
+  }).join('');
+  const switchBanner = switchHour ? `<div class="switch-advice"><b>⭐ DRY FLY SWITCH: ~${switchHour}</b> — carry dry flies tied on from ${(parseInt(switchHour)-1).toString().padStart(2,'0')}:00.</div>` : '';
+  return `<div class="day-plan-wrap">
+    <div style="font-family:var(--font-m);font-size:10px;color:var(--text-muted);margin-bottom:6px">
+      🌅 ${fmtHour(sr)} – 🌇 ${fmtHour(ss)} |
+      ${wx?.airTemp!=null?'🌡 '+wx.airTemp.toFixed(1)+'°C':'—'} |
+      ☁ ${wx?.cloudCover!=null?wx.cloudCover+'%':'—'} |
+      💨 ${wx?.windSpeed!=null?wx.windSpeed+'km/h':'—'}
+    </div>
+    ${switchBanner}
+    <div class="hour-scroll"><div class="hour-table">${cols}</div></div>
+    <div style="display:flex;gap:16px;margin-top:6px;font-size:9px;font-family:var(--font-m);color:var(--text-muted);flex-wrap:wrap">
+      <span style="color:var(--teal)">■ Wet fly</span><span style="color:var(--gold)">■ Dry fly</span>
+      <span>⭐ = switch signal</span>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════════════
+// RENDER TRIP CARDS (v2: adds colour-state badge)
 // ════════════════════════════════════════════════════════════════
 function renderTripCards(wxMap){
   const now=new Date(),month=now.getMonth()+1;
   const strip=document.getElementById('trip-strip');
-  const sorted=[...LOUGHS].sort((a,b)=>{
-    const sa=loughScore(wxMap[a.id],a,month);
-    const sb=loughScore(wxMap[b.id],b,month);
-    return sb-sa;
-  });
+  const sorted=[...LOUGHS].sort((a,b)=>loughScore(wxMap[b.id],b,month)-loughScore(wxMap[a.id],a,month));
   strip.innerHTML=sorted.map((l,rank)=>{
     const wx=wxMap[l.id];
     const score=loughScore(wx,l,month);
@@ -1192,6 +1488,10 @@ function renderTripCards(wxMap){
     const activeH=l.hatches.filter(h=>h.months.includes(month));
     const topHatch=activeH.find(h=>h.type==='mayfly')||activeH[0];
     const rankBadge=rank===0?'🥇 Best today':'';
+    // v2: colour state badge
+    const cs = wx?._colourState;
+    const csLabel = cs ? COLOUR_LABEL[cs.overallColourState] : 'unknown';
+    const csBadgeCls = cs?.overallColourState==='chocolate'?'chocolate':cs?.overallColourState==='soupy'?'soupy':cs?.overallColourState==='tinged'?'tinged':'green';
     return`<div class="trip-card${rank===0?' selected':''}" onclick="scrollToLough('${l.id}')">
       <div class="trip-header">
         <div class="trip-name">${l.name}</div>
@@ -1204,14 +1504,14 @@ function renderTripCards(wxMap){
             <div style="font-family:var(--font-h);font-size:28px;color:${scoreColor};line-height:1">${fmt(score)}<span style="font-size:12px;color:var(--text-muted)">/10</span></div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:20px" title="${wind} ${wx?.windSpeed||0}km/h">💨</div>
+            <div style="font-size:20px">💨</div>
             <div style="font-family:var(--font-m);font-size:10px;color:var(--text-dim)">${wind} ${fmt(wx?.windSpeed||0,0)}km/h</div>
           </div>
         </div>
+        <div class="trip-stat"><span class="trip-stat-label">Water colour</span><span class="trip-stat-val"><span class="lp-badge ${csBadgeCls}">${csLabel}</span></span></div>
         <div class="trip-stat"><span class="trip-stat-label">From Crosshaven</span><span class="trip-stat-val">~${driveStr} drive</span></div>
-        <div class="trip-stat"><span class="trip-stat-label">Wind conditions</span><span class="trip-stat-val" style="${wc.cls==='wind-ideal'?'color:var(--teal)':wc.cls==='wind-dangerous'?'color:var(--red)':''}">${wc.cls==='wind-ideal'?'✓ Ideal':wc.cls==='wind-rough'?'⚠ Rough':wc.cls==='wind-dangerous'?'⛔ Dangerous':'Fair'}</span></div>
-        <div class="trip-stat"><span class="trip-stat-label">Hatching now</span><span class="trip-stat-val">${topHatch?topHatch.name.replace('🦋 ','🦋'):'Quiet'}</span></div>
-        <div class="trip-stat"><span class="trip-stat-label">Permit</span><span class="trip-stat-val" style="color:var(--teal)">Free trout</span></div>
+        <div class="trip-stat"><span class="trip-stat-label">Wind</span><span class="trip-stat-val" style="${wc.cls==='wind-ideal'?'color:var(--teal)':wc.cls==='wind-dangerous'?'color:var(--red)':''}">${wc.cls==='wind-ideal'?'✓ Ideal':wc.cls==='wind-rough'?'⚠ Rough':wc.cls==='wind-dangerous'?'⛔ Dangerous':'Fair'}</span></div>
+        <div class="trip-stat"><span class="trip-stat-label">Hatching</span><span class="trip-stat-val">${topHatch?topHatch.name.replace('🦋 ','🦋'):'Quiet'}</span></div>
         ${rankBadge?`<div style="text-align:center;font-family:var(--font-m);font-size:11px;color:var(--teal);margin-top:6px">${rankBadge}</div>`:''}
       </div>
     </div>`;
@@ -1219,25 +1519,25 @@ function renderTripCards(wxMap){
 }
 
 // ════════════════════════════════════════════════════════════════
-// RENDER LOUGH PANEL
+// RENDER LOUGH PANEL (v2: adds colour state panel + water temp + mayfly gate)
 // ════════════════════════════════════════════════════════════════
 function renderLoughPanel(l,wx){
-  const now=new Date(),month=now.getMonth()+1,hour=now.getHours()+now.getMinutes()/60;
+  const now=new Date(),month=now.getMonth()+1;
   const score=loughScore(wx,l,month);
   const scoreColor=score>=7?'var(--teal)':score>=5?'var(--gold)':'var(--text-muted)';
   const windD=compassDir(wx?.windDir||225);
   const wc=windCondLabel(wx?.windSpeed||0,wx?.windGust||0,wx?.windDir||225,l);
   const sol=getSolunar(l.lon,now);
   const activeH=l.hatches.filter(h=>h.months.includes(month));
-  const pressureRead=wx?({Rising:'Pressure rising – good surface action developing',Steady:'Stable – fish to the hatch, standard tactics',Falling:'Falling – fish may be less active. Fish deeper or in ripple.'}[wx.trend]||'—'):'';
-
-  // Cloud / light quality
-  const lightQ=wx?((wx.cloudCover||50)>60&&(wx.cloudCover||50)<90?'✓ Overcast – ideal for loch-style':wx.cloudCover<25?'Bright – fish will be deep or in shade':wx.cloudCover>90?'Very overcast – may be too dark for hatches':'Partly cloudy – variable conditions'):'—';
-
-  // Which drifts to fish based on wind
+  const pressureRead=wx?({Rising:'Pressure rising – good surface action developing',Steady:'Stable – fish to the hatch',Falling:'Falling – fish may be less active'}[wx.trend]||'—'):'';
+  const lightQ=wx?((wx.cloudCover||50)>60&&(wx.cloudCover||50)<90?'✓ Overcast – ideal for loch-style':wx.cloudCover<25?'Bright – fish deep':wx.cloudCover>90?'Very overcast':'Partly cloudy'):'—';
   const bestDrifts=l.bestAreas.filter(a=>{
-    const wds=windD;const dws=a.wind.split('/');
-    return dws.some(dw=>wds.includes(dw))||a.wind==='Any'});
+    const dws=a.wind.split('/'); return dws.some(dw=>windD.includes(dw))||a.wind==='Any'});
+
+  // v2: colour state badge in header
+  const cs = wx?._colourState;
+  const csLabel = cs?COLOUR_LABEL[cs.overallColourState]:'';
+  const csBadgeCls = cs?.overallColourState==='chocolate'?'chocolate':cs?.overallColourState==='soupy'?'soupy':cs?.overallColourState==='tinged'?'tinged':'green';
 
   return`<div class="lough-panel" id="lough-${l.id}">
     <div class="lough-panel-hdr" onclick="toggleLough('${l.id}')">
@@ -1250,9 +1550,9 @@ function renderLoughPanel(l,wx){
         <div style="font-size:9px;font-family:var(--font-m);color:var(--text-muted)">TODAY</div>
       </div>
       <div class="lough-panel-badges">
+        <span class="lp-badge ${csBadgeCls}">🌊 ${csLabel}</span>
         <span class="lp-badge ${wc.cls==='wind-ideal'?'green':wc.cls==='wind-dangerous'?'amber':''}">${windD} ${fmt(wx?.windSpeed||0,0)}km/h</span>
         ${activeH.length?`<span class="lp-badge gold">🦋 ${activeH[0].name.replace('🦋 ','').substring(0,14)}</span>`:''}
-        <span class="lp-badge">${l.seasons.open} – ${l.seasons.troutClose||l.seasons.close}</span>
       </div>
       <span class="toggle-arrow" id="arrow-${l.id}">▶</span>
     </div>
@@ -1260,15 +1560,20 @@ function renderLoughPanel(l,wx){
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;font-style:italic">${l.desc}</p>
       ${l.unique?`<div style="background:#0a1400;border:1px solid #254518;border-left:3px solid var(--teal);padding:8px 12px;border-radius:3px;margin-bottom:10px;font-size:11px;color:var(--teal)">⭐ ${l.unique}</div>`:''}
 
-      <!-- LIVE CONDITIONS -->
+      <!-- v2: WATER COLOUR STATE PANEL -->
+      ${colourStatePanelHTML(l, wx)}
+
+      <!-- v2: WATER TEMP & MAYFLY GATE -->
+      ${waterTempPanelHTML(wx)}
+
       <div class="lough-grid">
         <div>
-          <div style="font-family:var(--font-c);font-size:12px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Live Conditions</div>
+          <div style="font-family:var(--font-c);font-size:12px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;margin-top:10px">Live Conditions</div>
           ${wx?`
           <div class="${wc.cls} wind-warning" style="margin-bottom:8px">${wc.label}</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-family:var(--font-m);font-size:10px">
             <div><span style="color:var(--text-muted)">WIND</span><br><span style="color:var(--text)">${windD} ${fmt(wx.windSpeed,0)} km/h (gust ${fmt(wx.windGust,0)})</span></div>
-            <div><span style="color:var(--text-muted)">PRESSURE</span><br><span style="color:var(--text)">${fmt(wx.pressure,0)} hPa ${wx.trend} ${wx.delta3h>=0?'+':''}${wx.delta3h} hPa/3h</span></div>
+            <div><span style="color:var(--text-muted)">PRESSURE</span><br><span style="color:var(--text)">${fmt(wx.pressure,0)} hPa ${wx.trend}</span></div>
             <div><span style="color:var(--text-muted)">AIR TEMP</span><br><span style="color:var(--text)">${wx.airTemp!=null?wx.airTemp.toFixed(1)+'°C':'—'}</span></div>
             <div><span style="color:var(--text-muted)">CLOUD</span><br><span style="color:var(--text)">${wx.cloudCover!=null?wx.cloudCover+'%':'—'}</span></div>
             <div><span style="color:var(--text-muted)">RAIN TODAY</span><br><span style="color:var(--text)">${fmt(wx.todayPrecip)} mm</span></div>
@@ -1276,7 +1581,7 @@ function renderLoughPanel(l,wx){
           </div>
           <div style="font-family:var(--font-m);font-size:10px;color:var(--gold);margin-top:6px">${pressureRead}</div>
           <div style="font-family:var(--font-m);font-size:10px;color:var(--text-dim);margin-top:3px">${lightQ}</div>`
-          :'<div style="color:var(--text-muted);font-family:var(--font-m);font-size:11px">Weather unavailable</div>'}
+          :'<div style="color:var(--text-muted)">Weather unavailable</div>'}
         </div>
         <div>
           <div class="drift-section">
@@ -1284,74 +1589,59 @@ function renderLoughPanel(l,wx){
             <div class="drift-grid">
               <div>${compassHTML(wx?.windDir||225,l)}</div>
               <div>
-                ${bestDrifts.length?`<div class="drift-best">✓ Best areas for today's wind:</div>${bestDrifts.map(a=>`<div class="drift-area">• <b>${a.name}</b> – ${a.note}</div>`).join('')}`:
-                `<div style="color:var(--amber);font-size:11px">⚠ ${windD} is not ideal – fish sheltered areas only</div>
-                ${l.bestAreas.map(a=>`<div class="drift-area" style="opacity:.6">• ${a.name}</div>`).join('')}`}
+                ${bestDrifts.length?`<div class="drift-best">✓ Best for today's wind:</div>${bestDrifts.map(a=>`<div class="drift-area">• <b>${a.name}</b> – ${a.note}</div>`).join('')}`:
+                `<div style="color:var(--amber);font-size:11px">⚠ ${windD} not ideal</div>${l.bestAreas.map(a=>`<div class="drift-area" style="opacity:.6">• ${a.name}</div>`).join('')}`}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SOLUNAR -->
-      <div style="margin-top:14px">
-        ${solunarStripHTML(sol,wx?.sunrise,wx?.sunset)}
-      </div>
+      <div style="margin-top:14px">${solunarStripHTML(sol,wx?.sunrise,wx?.sunset)}</div>
 
-      <!-- SCORE BARS -->
       <div style="margin-top:14px">
         <div style="font-family:var(--font-c);font-size:12px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px">Condition Scores</div>
         ${[['Overall fishing',score],['Wind quality',windScoreForLough(wx?.windSpeed||0,wx?.windDir||225,wx?.windGust||0,l)],['Solunar strength',sol.strength],['Surface light',wx?((wx.cloudCover||50)>60&&(wx.cloudCover||50)<85?8:(wx.cloudCover||50)<25?4:6):5]].map(([label,s])=>{const cls=s>=7?'high':s>=5?'mid':'low';return`<div class="score-bar"><span style="font-family:var(--font-m);font-size:10px;color:var(--text-muted);width:120px;flex-shrink:0">${label}</span><div class="score-bar-outer"><div class="score-bar-inner ${cls}" style="width:${Math.min(100,s*10)}%"></div></div><span class="score-num ${cls}">${fmt(s)}</span></div>`}).join('')}
       </div>
 
-      <!-- HOUR-BY-HOUR DAY PLANNER -->
       <div class="sec-toggle" data-toggle="plan-${l.id}" onclick="toggleSec('plan-${l.id}')">
         <span class="toggle-arrow open">▶</span>
         <span class="sec-toggle-title">📅 Hour-by-Hour Day Planner</span>
-        <span style="font-family:var(--font-m);font-size:9px;color:var(--text-muted);margin-left:8px">sunrise → sunset+1h · wet/dry · switch signals</span>
       </div>
       <div id="plan-${l.id}" class="collapsible open">
-        <!-- Day selector – today + 9 forecast days -->
         <div class="day-plan-header" style="margin-top:8px">
-          <span class="day-plan-title">Select day to plan:</span>
+          <span class="day-plan-title">Select day:</span>
           <div class="day-nav" id="daynav-${l.id}"></div>
         </div>
         <div id="plan-body-${l.id}">${renderHourlyTimeline(l,wx,month)}</div>
       </div>
 
-      <!-- HATCH TIMELINE -->\n      <div class="hatch-section">\n        <div class="hatch-title">Annual Hatch Calendar <span style="font-size:9px;font-family:var(--font-m)">– gold border = current month</span></div>\n        <div class="hatch-timeline">${hatchTimelineHTML(l)}</div>\n      </div>
+      <div class="hatch-section">
+        <div class="hatch-title">Annual Hatch Calendar</div>
+        <div class="hatch-timeline">${hatchTimelineHTML(l)}</div>
+      </div>
 
-      <!-- FLY BOXES -->
       <div class="fly-section">
         <div class="hatch-title">Fly Recommendations – ${['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'][month]}</div>
         ${flyBoxHTML(l,month)}
       </div>
 
-      <!-- DENNIS MOSS / TACTICS -->
       <div class="sec-toggle" data-toggle="moss-${l.id}" onclick="toggleSec('moss-${l.id}')">
         <span class="toggle-arrow">▶</span>
-        <span class="sec-toggle-title">🎣 Tactics${l.id==='conn'?' – Dennis Moss "Trout from a Boat"':' – Traditional Lough Approach'}</span>
+        <span class="sec-toggle-title">🎣 Tactics${l.id==='conn'?' – Dennis Moss':' – Traditional'}</span>
       </div>
       <div id="moss-${l.id}" class="collapsible">
         ${renderMossSection(l)}
         <div class="tactic-grid" style="margin-top:10px">
-          <div class="tactic-card"><div class="tactic-name">Drifting</div><div class="tactic-text">Drift broadside to the wind in 3–6 knots using a drogue. Cast to the front/side. Team of 3 wet flies: point, middle dropper, bob fly. Dibble the bob in the ripple at the end of each swing.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Bob Fly</div><div class="tactic-text">The bob (top dropper) should be bushy – Bibio, Soldier Palmer, Sooty Olive Bumble. Dibble it in the surface as you lift off. Many takes come as the fly dances in the wave.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Dapping</div><div class="tactic-text">Use a 14–16ft dapping rod with floss silk blowline. Let the wind carry the natural or imitation fly to the surface. Count to 3 before striking. Natural mayfly locally sourced.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Buzzer / Nymph</div><div class="tactic-text">In calm conditions or early season, fish 2–3 buzzers on a slow-sinking or intermediate line. Static or very slow figure-of-8 retrieve. Look for subtle takes in the surface film.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Spent Gnat (evening)</div><div class="tactic-text">At dusk/dark during mayfly. Kill the engine. Stalk rising fish. Single fly on a light leader. Cast ahead of the fish's line. Do NOT strike immediately – wait for the fish to turn down.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Safety</div><div class="tactic-text">Always wear a lifejacket. Check forecast before launching. Rule: if in doubt, don't go out. Always tell someone your plan and expected return. Carry a phone in a waterproof case.</div></div>
-        </div>
-      </div>
-          <div class="tactic-card"><div class="tactic-name">Bob Fly</div><div class="tactic-text">The bob (top dropper) should be bushy – Bibio, Soldier Palmer, Sooty Olive Bumble. Dibble it in the surface as you lift off. Many takes come as the fly dances in the wave.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Dapping</div><div class="tactic-text">Use a 14–16ft dapping rod with floss silk blowline. Let the wind carry the natural or imitation fly to the surface. Count to 3 before striking. Natural mayfly locally sourced.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Buzzer / Nymph</div><div class="tactic-text">In calm conditions or early season, fish 2–3 buzzers on a slow-sinking or intermediate line. Static or very slow figure-of-8 retrieve. Look for subtle takes in the surface film.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Spent Gnat (evening)</div><div class="tactic-text">At dusk/dark during mayfly. Kill the engine. Stalk rising fish. Single fly on a light leader. Cast ahead of the fish's line. Do NOT strike immediately – wait for the fish to turn down.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Safety</div><div class="tactic-text">Always wear a lifejacket. Check forecast before launching. Rule: if in doubt, don't go out. Always tell someone your plan and expected return. Carry a phone in a waterproof case.</div></div>
+          <div class="tactic-card"><div class="tactic-name">Drifting</div><div class="tactic-text">Drift broadside in 3–6 knots using a drogue. Team of 3 wets. Dibble the bob at end of each swing.</div></div>
+          <div class="tactic-card"><div class="tactic-name">Bob Fly</div><div class="tactic-text">Bob = top dropper, must be bushy. Bibio, Soldier Palmer. Dibble in surface as you lift off.</div></div>
+          <div class="tactic-card"><div class="tactic-name">Dapping</div><div class="tactic-text">14–16ft dapping rod, floss silk blowline. Natural mayfly or imitation. Count to 3 before striking.</div></div>
+          <div class="tactic-card"><div class="tactic-name">Buzzer / Nymph</div><div class="tactic-text">In calm/early season, 2–3 buzzers on intermediate. Slow figure-of-8.</div></div>
+          <div class="tactic-card"><div class="tactic-name">Spent Gnat</div><div class="tactic-text">Dusk during mayfly. Kill engine. Single fly, light leader. Wait for fish to turn down before striking.</div></div>
+          <div class="tactic-card"><div class="tactic-name">Safety</div><div class="tactic-text">Always wear a lifejacket. If in doubt, don't go out. Tell someone your plan.</div></div>
         </div>
       </div>
 
-      <!-- PRACTICAL INFO -->
       <div class="sec-toggle" data-toggle="info-${l.id}" onclick="toggleSec('info-${l.id}')">
         <span class="toggle-arrow">▶</span><span class="sec-toggle-title">Permits, Boats, Accommodation & Contacts</span>
       </div>
@@ -1378,9 +1668,7 @@ function renderLoughPanel(l,wx){
           <div class="info-card">
             <div class="info-card-title">🚗 From Crosshaven</div>
             <div class="info-row"><span class="info-icon">⏱️</span><span>~${l.driveH}h drive (approx ${Math.round(l.driveH*95)} km)</span></div>
-            <div class="info-row"><span class="info-icon">⛽</span><span>Plan fuel stops at major towns en route</span></div>
-            <div class="info-row"><span class="info-icon">🌄</span><span>Recommend 2–3 nights for a proper trip</span></div>
-            <div class="info-row"><span class="info-icon">🔗</span><a class="info-link" href="https://fishinginireland.info" target="_blank">fishinginireland.info</a>&nbsp;·&nbsp;<a class="info-link" href="https://www.fisheriesireland.ie" target="_blank">fisheriesireland.ie</a></div>
+            <div class="info-row"><span class="info-icon">🔗</span><a class="info-link" href="https://fishinginireland.info" target="_blank">fishinginireland.info</a> · <a class="info-link" href="https://www.fisheriesireland.ie" target="_blank">fisheriesireland.ie</a></div>
           </div>
         </div>
         ${l.dapping?`<div style="background:#0a1400;border:1px solid #1a3010;border-radius:3px;padding:10px;margin-top:8px">
@@ -1393,7 +1681,7 @@ function renderLoughPanel(l,wx){
 }
 
 // ════════════════════════════════════════════════════════════════
-// TOGGLE HELPERS
+// TOGGLES & DAY NAV
 // ════════════════════════════════════════════════════════════════
 function toggleLough(id){
   const panel=document.getElementById(`lough-${id}`);
@@ -1402,10 +1690,8 @@ function toggleLough(id){
   const expanded=panel.classList.toggle('expanded');
   if(body)body.style.display=expanded?'block':'none';
   if(arrow)arrow.classList.toggle('open',expanded);
-  // Build day-nav buttons once on first expand
   if(expanded) buildDayNav(id);
 }
-
 function buildDayNav(loughId) {
   const nav=document.getElementById(`daynav-${loughId}`);
   if(!nav||nav.dataset.built) return;
@@ -1422,12 +1708,9 @@ function buildDayNav(loughId) {
     const label=i===0?'Today':i===1?'Tomorrow':d.toLocaleDateString('en-IE',{weekday:'short',day:'numeric',month:'short'});
     return`<button class="day-nav-btn${i===0?' active':''}" onclick="selectDay('${loughId}',${i},this)">${label}</button>`;
   }).join('');
-  // Store days on nav for later access
   nav._days=days;
 }
-
 function selectDay(loughId, idx, btn) {
-  // Update active state
   btn.closest('.day-nav').querySelectorAll('.day-nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const lough=LOUGHS.find(l=>l.id===loughId);
@@ -1435,7 +1718,6 @@ function selectDay(loughId, idx, btn) {
   const nav=document.getElementById(`daynav-${loughId}`);
   const targetDate = nav._days ? nav._days[idx] : new Date();
   const month = targetDate.getMonth()+1;
-  // Use cached weather for today; for future days, pass null wx (uses solar calc)
   const wx = idx===0 ? (_wxMapCache[loughId]||null) : null;
   const body=document.getElementById(`plan-body-${loughId}`);
   if(body) body.innerHTML=renderHourlyTimeline(lough,wx,month,targetDate);
@@ -1453,19 +1735,22 @@ function scrollToLough(id){
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ════════════════════════════════════════════════════════════════
 // SHARE
-// ════════════════════════════════════════════════════════════════
 let _wxMapCache={};
-function toggleShareL(){const p=document.getElementById('share-panel-l');p.classList.toggle('open')}
+function toggleShareL(){document.getElementById('share-panel-l').classList.toggle('open')}
 function buildShareTextL(){
   const now=new Date();
-  let txt=`🎣 IRISH LOUGHS TROUT REPORT\n${now.toLocaleDateString('en-IE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}\nFrom: Crosshaven, Cork\n\n`;
-  LOUGHS.forEach(l=>{const wx=_wxMapCache[l.id];const score=loughScore(wx,l,now.getMonth()+1);const wc=windCondLabel(wx?.windSpeed||0,wx?.windGust||0,wx?.windDir||225,l);txt+=`${l.name} (${l.county}) – Score: ${score}/10\n  Wind: ${compassDir(wx?.windDir||0)} ${wx?.windSpeed||0}km/h – ${wc.label.substring(0,50)}\n  Drive: ~${l.driveH}h from Crosshaven\n\n`});
+  let txt=`🎣 IRISH LOUGHS TROUT REPORT (v2 calibrated)\n${now.toLocaleDateString('en-IE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}\nFrom: Crosshaven, Cork\n\n`;
+  LOUGHS.forEach(l=>{
+    const wx=_wxMapCache[l.id];
+    const score=loughScore(wx,l,now.getMonth()+1);
+    const cs=wx?._colourState?.overallColourState||'unknown';
+    txt+=`${l.name} (${l.county}) – Score: ${score}/10 · Water: ${cs}\n  Wind: ${compassDir(wx?.windDir||0)} ${wx?.windSpeed||0}km/h · Water temp: ${wx?.waterTempC?wx.waterTempC.toFixed(1)+'°C':'—'}\n  Drive: ~${l.driveH}h from Crosshaven\n\n`;
+  });
   txt+=`fishinginireland.info | fisheriesireland.ie`;
   return txt;
 }
-function shareEmailL(){const now=new Date();const sub=encodeURIComponent(`Irish Loughs Trout Report – ${now.toLocaleDateString('en-IE',{day:'2-digit',month:'short'})}`);window.location.href=`mailto:?subject=${sub}&body=${encodeURIComponent(buildShareTextL())}`;document.getElementById('share-panel-l').classList.remove('open')}
+function shareEmailL(){const now=new Date();const sub=encodeURIComponent(`Irish Loughs Report – ${now.toLocaleDateString('en-IE',{day:'2-digit',month:'short'})}`);window.location.href=`mailto:?subject=${sub}&body=${encodeURIComponent(buildShareTextL())}`;document.getElementById('share-panel-l').classList.remove('open')}
 function shareWhatsAppL(){window.open(`https://wa.me/?text=${encodeURIComponent(buildShareTextL().substring(0,1000))}...`,'_blank');document.getElementById('share-panel-l').classList.remove('open')}
 async function copySummaryL(){try{await navigator.clipboard.writeText(buildShareTextL());const btn=document.querySelector('#share-panel-l .share-opt:nth-child(3)');const o=btn.innerHTML;btn.innerHTML='<span style="width:24px">✓</span>Copied!';setTimeout(()=>btn.innerHTML=o,2000)}catch{prompt('Copy:',buildShareTextL())}document.getElementById('share-panel-l').classList.remove('open')}
 
@@ -1473,25 +1758,24 @@ async function copySummaryL(){try{await navigator.clipboard.writeText(buildShare
 // MAIN
 // ════════════════════════════════════════════════════════════════
 let refreshTimer=null,countdownTimer=null;
-
 async function runLoughReport(){
   clearTimeout(refreshTimer);clearInterval(countdownTimer);
-  document.getElementById('trip-strip').innerHTML='<div class="loading-msg"><div class="spinner"></div>Fetching conditions for all loughs...</div>';
+  document.getElementById('trip-strip').innerHTML='<div class="loading-msg"><div class="spinner"></div>Fetching conditions...</div>';
   document.getElementById('lough-panels').innerHTML='<div class="loading-msg"><div class="spinner"></div>Loading lake data...</div>';
   const mayS=mayflyStatus();
   const pill=document.getElementById('mayfly-countdown');
   pill.textContent=mayS.text;
   pill.style.background=mayS.active?'#2a1a00':'#0a110e';
   pill.style.color=mayS.active?'var(--mayfly)':'var(--text-dim)';
-  if(mayS.note){const nd=document.createElement('div');nd.style.cssText='margin:0 20px 8px;font-family:var(--font-m);font-size:11px;color:var(--mayfly);text-align:center;opacity:.9';nd.textContent='🦋 '+mayS.note;pill.parentElement.after?pill.closest('.hero').appendChild(nd):null}
-  // Fetch weather for all loughs in parallel
+
   const wxMap={};
   await Promise.all(LOUGHS.map(async (l,i)=>{
     if(i>0) await new Promise(r=>setTimeout(r,i*400));
-    wxMap[l.id]=await fetchWeather(l.lat,l.lon);
+    const wx = await fetchWeather(l.lat,l.lon);
+    wxMap[l.id] = enrichWeather(wx, l);   // v2: enrich with colour state + water temp + mayfly gate
   }));
   _wxMapCache={...wxMap};
-  // Global conditions banner (use Corrib as representative)
+
   const repWx=wxMap['corrib']||Object.values(wxMap).find(w=>w);
   const repLough=wxMap['corrib']?'Lough Corrib':LOUGHS.find(l=>wxMap[l.id])?.name||'unknown';
   if(repWx){
@@ -1502,25 +1786,21 @@ async function runLoughReport(){
     document.getElementById('cond-grid').innerHTML=`
       <div class="cond-item"><div class="cond-label">Pressure</div><div class="cond-val">${fmt(repWx.pressure,0)} hPa · ${repWx.trend}</div></div>
       <div class="cond-item"><div class="cond-label">Air Temp</div><div class="cond-val">${repWx.airTemp!=null?repWx.airTemp.toFixed(1)+'°C':'—'}</div></div>
-      <div class="cond-item"><div class="cond-label">Cloud Cover</div><div class="cond-val">${repWx.cloudCover!=null?repWx.cloudCover+'%':'—'} ${(repWx.cloudCover||50)>60&&(repWx.cloudCover||50)<85?'✓ ideal':''}</div></div>
+      <div class="cond-item"><div class="cond-label">Water Temp (est.)</div><div class="cond-val">${repWx.waterTempC!=null?repWx.waterTempC.toFixed(1)+'°C':'—'}</div></div>
+      <div class="cond-item"><div class="cond-label">Cloud Cover</div><div class="cond-val">${repWx.cloudCover!=null?repWx.cloudCover+'%':'—'}</div></div>
       <div class="cond-item"><div class="cond-label">Solunar</div><div class="cond-val">${sol.phaseName} · ${sol.strength}/10</div></div>
       <div class="cond-item"><div class="cond-label">Sunrise/Set</div><div class="cond-val">${repWx.sunrise?fmtTime(repWx.sunrise)+' – '+fmtTime(repWx.sunset):'—'}</div></div>
       <div class="cond-item"><div class="cond-label">Rain Today</div><div class="cond-val">${fmt(repWx.todayPrecip)} mm</div></div>`;
   }
   renderTripCards(wxMap);
-  // Render all panels
   document.getElementById('lough-panels').innerHTML=LOUGHS.map(l=>renderLoughPanel(l,wxMap[l.id])).join('');
-  // Auto-expand best lough
   const month=new Date().getMonth()+1;
   const best=LOUGHS.reduce((a,b)=>loughScore(wxMap[a.id],a,month)>=loughScore(wxMap[b.id],b,month)?a:b);
   toggleLough(best.id);
-  // Refresh in 30 min
   refreshTimer=setTimeout(runLoughReport,1800000);
   let rem=1800;
   countdownTimer=setInterval(()=>{rem--;const m=Math.floor(rem/60),s=rem%60;document.getElementById('refresh-btn-l').textContent=`↻ ${m}:${String(s).padStart(2,'0')}`;if(rem<=0){clearInterval(countdownTimer);document.getElementById('refresh-btn-l').textContent='↻ Refresh'}},1000);
 }
-
-// CLOCK
 function updateClock(){document.getElementById('clock-sm').textContent=new Date().toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
 setInterval(updateClock,1000);updateClock();
 window.addEventListener('load',runLoughReport);
