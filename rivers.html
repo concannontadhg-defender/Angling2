@@ -6,6 +6,7 @@
 <title>Angler's Tactical Report v8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/styles/scores.css">
 <style>
 :root{
   --bg:#0d1a10;--surface:#111f14;--card:#152218;--card-hi:#1a2e1e;
@@ -141,20 +142,6 @@ header{background:linear-gradient(180deg,#0b120a,#0d1a10);border-bottom:1px soli
 .sol-time{color:var(--text);font-size:11px}
 .sol-dur{color:var(--text-muted);font-size:9px}
 
-/* SCORES */
-.scores-section{margin:10px 0 6px;padding:8px 0 0;border-top:1px solid var(--border)}
-.scores-title{font-family:var(--font-h);font-size:12px;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px}
-.score-row{display:flex;align-items:center;gap:8px;margin:4px 0}
-.score-label{font-family:var(--font-m);font-size:10px;color:var(--text-muted);width:68px;flex-shrink:0;text-transform:uppercase}
-.score-bar-outer{flex:1;height:8px;background:#151e14;border:1px solid var(--border);border-radius:2px;overflow:hidden}
-.score-bar-inner{height:100%;border-radius:1px;transition:width .6s}
-.score-bar-inner.high{background:linear-gradient(90deg,#3a7028,var(--green))}
-.score-bar-inner.mid{background:linear-gradient(90deg,#7a5818,var(--yellow))}
-.score-bar-inner.low{background:linear-gradient(90deg,#252525,#383838)}
-.score-num{font-family:var(--font-m);font-size:10px;width:28px;text-align:right;flex-shrink:0}
-.score-num.high{color:var(--green)}.score-num.mid{color:var(--yellow)}.score-num.low{color:var(--text-muted)}
-.score-season{font-size:9px;color:var(--text-muted);width:40px;text-align:right;flex-shrink:0}
-.season-open{color:var(--green)}.season-closed{color:var(--red)}
 
 /* SECTION TOGGLE */
 .section-toggle{cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;padding:6px 0 4px;border-top:1px solid var(--border);margin-top:8px}
