@@ -1,6 +1,6 @@
 'use strict';
-const { fetchJSON, fetchText, IS_CLOUD } = require('./_shared');
-module.exports = async (req, res) => {
+import { fetchJSON, fetchText, IS_CLOUD } from './_shared.js';
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const s = { server:'running', time:new Date().toISOString(), cloud:IS_CLOUD, node:process.version };
   try { await fetchJSON('https://api.open-meteo.com/v1/forecast?latitude=51.74&longitude=-8.73&hourly=pressure_msl&timezone=Europe%2FDublin&past_days=0&forecast_days=1'); s.openMeteo='OK'; }

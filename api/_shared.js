@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Shared utilities – native fetch only (Node 18+, built-in on Vercel).
  * Zero npm dependencies.
@@ -61,4 +60,4 @@ function tideEvents(k, startMs, hours = 56) {
   return ev;
 }
 
-module.exports = { fetchJSON, fetchText, IS_CLOUD, PORTS, tideAt, tideEvents };
+export { fetchJSON, fetchText, IS_CLOUD, PORTS, tideAt, tideEvents };

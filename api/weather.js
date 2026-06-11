@@ -1,7 +1,7 @@
 'use strict';
-const { fetchJSON } = require('./_shared');
+import { fetchJSON } from './_shared.js';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const { lat, lon } = req.query;
   if (!lat || !lon) return res.status(400).json({ error: 'lat/lon required' });

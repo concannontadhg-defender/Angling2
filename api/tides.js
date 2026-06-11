@@ -1,6 +1,6 @@
 'use strict';
-const { PORTS, tideEvents } = require('./_shared');
-module.exports = async (req, res) => {
+import { PORTS, tideEvents } from './_shared.js';
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const loc = (req.query.loc || '').toLowerCase();
   if (!PORTS[loc]) return res.status(404).json({ error: `Unknown port: ${loc}` });
