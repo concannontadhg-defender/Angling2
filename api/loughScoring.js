@@ -26,6 +26,9 @@
 //   - Shelter routing — when ALL exposed shores grade ≥soupy, headlands,
 //     river mouths and lee narrows are surfaced as the recommended waters
 //     rather than just demoting all bays uniformly.
+//
+// v2.1 (Tadhg, Jun 2026): added substrate (bottom-type) → food → fly layer,
+//   crossed with feeding mode to produce high-confidence fly picks.
 // =============================================================================
 
 
@@ -121,6 +124,75 @@ const LAKES = {
     ],
   },
 };
+
+
+// ---------------------------------------------------------------------------
+// SUBSTRATE → FOOD → FLY
+// ---------------------------------------------------------------------------
+// Bottom type = what food is physically present, independent of feeding mode
+// (which is temperature/season driven). Cross the two: where the season says
+// "fish are on X stage" AND the bottom says "X's food is actually here", that's
+// the high-confidence pick.
+// Keys: 'marl' | 'stony' | 'silt' | 'weed' | 'sand' | 'gravel'. Multiple allowed.
+const SUBSTRATE_FLIES = {
+  marl:   { food: 'mayfly nymph, shrimp, snail',   flies: ['Mayfly Nymph','Green Drake','Spent Gnat','Golden Olive Bumble','Gosling'] },
+  stony:  { food: 'caddis, snail, stonefly',       flies: ['Green Peter','Murrough','Sedge','Bibio','Silver Invicta'] },
+  silt:   { food: 'chironomid, bloodworm',         flies: ['Black Buzzer','Olive Buzzer','Diawl Bach','Black Pennell'] },
+  weed:   { food: 'shrimp, corixa, damsel, snail', flies: ['Shrimp','Corixa','Damsel Nymph','Soldier Palmer'] },
+  sand:   { food: 'sparse',                        flies: [] },
+  gravel: { food: 'caddis, upwing nymph',          flies: ['Sedge','Silver Invicta','Sooty Olive'] },
+};
+
+// ⚠ SUBSTRATE NEEDS FIELD VERIFICATION FROM TADHG ⚠ — placeholders, correct from
+// your own knowledge of each bay's bottom.
+const BAY_SUBSTRATE = {
+  conn: {
+    'Cloghans Bay': ['marl','weed'], 'Sandy Bay': ['sand','marl'],
+    'Massbrook': ['stony'], 'Cornakillew': ['stony','marl'],
+    'Brackwansha': ['marl','weed'], 'Drummin Bay (S)': ['marl','weed'],
+    'South End shallows': ['marl','weed'], 'Pontoon channel': ['stony'],
+    'Victoria Bay': ['marl'], 'Deel River mouth': ['gravel','silt'],
+    'Addergoole inflow': ['gravel','marl'],
+  },
+  corrib: {
+    'Greenfields': ['marl','weed'], 'Maam Bay': ['stony'],
+    'Inchiquin shore': ['stony','marl'], 'Oughterard area': ['marl','weed'],
+    'Cong canal/narrows': ['stony'], 'Cong river mouth': ['gravel'],
+  },
+  sheelin: {
+    'Goreport': ['marl','weed'], 'Crover': ['marl','silt'],
+    'Chambers Bay': ['weed','marl'], 'Stoney Island': ['stony'],
+    'Inny inflow': ['gravel','silt'],
+  },
+  melvin: {
+    'Garrison Bay': ['stony','gravel'], 'Rossinver Bay': ['stony','marl'],
+    'Kinlough end': ['stony','sand'],
+  },
+};
+
+function getBaySubstrate(lakeKey, bayName) {
+  const s = BAY_SUBSTRATE[lakeKey]?.[bayName];
+  return Array.isArray(s) ? s : (s ? [s] : []);
+}
+
+// Cross feeding-mode flies with substrate flies.
+function combineFliesWithSubstrate(feedingFlies, lakeKey, bayName) {
+  const substrates = getBaySubstrate(lakeKey, bayName);
+  const substrateFlies = [], foodPresent = [];
+  for (const s of substrates) {
+    const entry = SUBSTRATE_FLIES[s];
+    if (!entry) continue;
+    foodPresent.push(entry.food);
+    for (const f of entry.flies) if (!substrateFlies.includes(f)) substrateFlies.push(f);
+  }
+  const norm = x => x.toLowerCase().replace(/[^a-z]/g, '');
+  const feedNorm = feedingFlies.map(norm);
+  const confidentPicks = substrateFlies.filter(f => {
+    const sf = norm(f);
+    return feedNorm.some(ff => ff.includes(sf) || sf.includes(ff));
+  });
+  return { substrates, substrateFlies, foodPresent, confidentPicks };
+}
 
 
 // ---------------------------------------------------------------------------
@@ -531,6 +603,10 @@ function applyLoughAdjustments(baseScore, inputs) {
     feedingMode: feeding.mode,
   });
 
+  // Substrate × feeding-mode fly cross for the recommended top bay
+  const topBayName = bays.ranking[0].bay;
+  const substrateMatch = combineFliesWithSubstrate(feeding.recommendedFlies, inputs.lakeKey, topBayName);
+
   // Score adjustment — multiplicative penalties
   let multiplier = 1.0;
   if (colour.overallColourState === 'chocolate') multiplier *= 0.25;
@@ -574,6 +650,11 @@ function applyLoughAdjustments(baseScore, inputs) {
     `Feeding mode: ${feeding.label}`,
     `Recommended depth: ${feeding.depth} · Retrieve: ${feeding.retrieve}`,
     `Flies: ${feeding.recommendedFlies.join(', ')}`,
+    substrateMatch.substrates.length
+      ? `Bottom at ${topBayName}: ${substrateMatch.substrates.join('/')} (${substrateMatch.foodPresent.join('; ')}).` : '',
+    substrateMatch.confidentPicks.length
+      ? `High-confidence flies (season × bottom agree): ${substrateMatch.confidentPicks.join(', ')}.`
+      : (substrateMatch.substrateFlies.length ? `Bottom suggests: ${substrateMatch.substrateFlies.join(', ')}.` : ''),
     feeding.mayflyReadiness < 1 ? `Mayfly NOT yet triggered (${feeding.consecutiveDaysAtThreshold}/3 days at ≥12°C). Stay sub-surface.` : '',
     forecast.narrative ? `Forecast: ${forecast.narrative}` : '',
   ].filter(Boolean).join('\n');
@@ -586,6 +667,7 @@ function applyLoughAdjustments(baseScore, inputs) {
       colour,
       feeding,
       bays,
+      substrate: substrateMatch,
       headline: bays.headline,
     },
     forecast,
@@ -747,9 +829,12 @@ function computeForecast({
 export {
   LAKES,
   STIR_THRESHOLDS,
+  SUBSTRATE_FLIES,
+  BAY_SUBSTRATE,
   computeLakeColourState,
   recommendBays,
   inferFeedingMode,
+  combineFliesWithSubstrate,
   applyLoughAdjustments,
 };
 
