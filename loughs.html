@@ -874,10 +874,10 @@ const LOUGHS = [
       { months:[5,6], name:'🦋 MAYFLY (Grey Drake)', type:'mayfly', flies:['Gosling (★ for Melvin)','Claret Bumble','French Partridge Mayfly','Green Peter','Invicta','Black Pennell'] },
       { months:[6], name:'Caenis (delicate fishing)', type:'caenis', flies:['CDC Caenis sz 20','Tiny Black Spider sz 20','White Emerger sz 18'] },
       { months:[6,7,8,9], name:'Daphnia (Sonaghan)  – open water', type:'shrimp', flies:['Small wet flies pulled fast in open deep water','Bibio sz 12','Black & Peacock Spider sz 12'] },
-      { months:[7,8,9], name:'Sedge & Daddy', type:'daddy', flies:['Daddy Long Legs','Green Peter','Murrough','Gosling'] },
+      { months:[7,8,9], name:'Sedge & Daddy', type:'daddy', flies:['Green Peter','Daddy Long Legs (wet & dry)','Claret Dabbler','Bibio','Fiery Brown','Invicta'] },
     ],
-    wetFlies:{ earlyseason:['Doobry sz 12 (★ Melvin)','Teal & Black sz 12','Coachman sz 12','Bibio sz 10','Black Pennell sz 12','Connemara Black sz 10','Hot Orange Bibio sz 10'], mayfly:['Gosling sz 10 (★ Melvin)','Claret Bumble sz 10','French Partridge Mayfly sz 10','Invicta sz 10','Green Peter sz 10'], general:['Sooty Olive sz 12','Golden Olive sz 10','Peter Ross sz 10','Mallard & Claret sz 10'] },
-    dryFlies:{ mayfly:['Gosling (dry) sz 10','Green Drake Wulff sz 10','Spent Gnat sz 10'], caenis:['CDC Caenis sz 20','F-Fly sz 20','Tiny White Emerger sz 18 (dawn only)'], evening:['Elk Hair Caddis sz 12','Black Murrough sz 10','Daddy (dry) sz 10'] },
+    wetFlies:{ earlyseason:['Doobry sz 12 (★ Melvin)','Teal & Black sz 12','Coachman sz 12','Bibio sz 10','Black Pennell sz 12','Connemara Black sz 10','Hot Orange Bibio sz 10'], mayfly:['Gosling sz 10 (★ Melvin)','Claret Bumble sz 10','French Partridge Mayfly sz 10','Invicta sz 10','Green Peter sz 10'], sedge:['Green Peter sz 10 (★ Jul onwards)','Claret Dabbler sz 10 (★)','Claret Bumble sz 10','Bibio sz 10','Fiery Brown sz 10','Invicta sz 10','Golden Olive Bumble sz 10','Wet Daddy sz 10','Sooty Olive sz 12','Booby orange/claret (count-down)','Booby green/green (count-down)'], general:['Sooty Olive sz 12','Golden Olive sz 10','Peter Ross sz 10','Mallard & Claret sz 10'] },
+    dryFlies:{ mayfly:['Gosling (dry) sz 10','Green Drake Wulff sz 10','Spent Gnat sz 10'], caenis:['CDC Caenis sz 20','F-Fly sz 20','Tiny White Emerger sz 18 (dawn only)'], sedge:['Green Peter Dry sz 10 (★ gillaroo on top)','Dry Daddy sz 10 (★ late Aug)','Elk Hair Caddis sz 10','Goddard Sedge sz 10','Black Murrough sz 10'], evening:['Elk Hair Caddis sz 12','Black Murrough sz 10','Daddy (dry) sz 10'] },
     dapping:'Mayfly dapping productive in June on Melvin but less prominent than Corrib. Daddy and grasshopper dapping excellent August–September.',
   },
   {
@@ -1692,6 +1692,151 @@ window.addEventListener('load',runLoughReport);
   }
 
   window.DepthChart = { buildUrl: buildUrl, refresh: decorateAll };
+})();
+</script>
+<!-- ══════════════════════════════════════════════════════════════════
+     COMPETITION DRAW BRIEFING (Melvin) — added 20 Jul 2026
+     Two-branch plan for the GLMAA draw: you don't pick the water, your
+     boat partner might. Deep draw = open basin / sonaghan. Shallow draw
+     = shoals and rocky margins / gillaroo.
+
+     Self-contained: injects its own CSS, touches no existing code.
+     Delete this block to remove the feature.
+     ══════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  var ROD_A = '7wt Sage - wets & sinking lines';
+  var ROD_B = '5wt - dries only';
+
+  var BRANCHES = {
+    deep: {
+      label: 'Deep draw',
+      sub: 'Open basin, long drifts to Garrison',
+      species: 'Sonaghan (numerous, spread everywhere)',
+      rows: [
+        ['Water', 'Open basin over 12-45 m. Long drifts down towards Garrison. Fish are near the SURFACE over deep water - you are not fishing the bottom.'],
+        ['Plan A - top', ROD_A + ' + floater. Team of 3, short snappy casts, beam-on drift, hard dibble on the bob.'],
+        ['Plan A cast', 'Bob: Green Peter sz 10 | Mid: Claret Dabbler sz 10 | Point: Bibio or Invicta sz 10'],
+        ['Plan B - the band', ROD_A + ' + fast sink. Count-down off the drop-off shoulder. Two pulls, 3-7 sec pause, then long slow pulls. Takes come ON THE PAUSE.'],
+        ['Plan B cast', 'Booby orange/claret or green/green on the point, Claret Bumble above.'],
+        ['Depth', 'Ladder the count-down in fives. Late Aug the band sits DEEPER and sharper than June. Once you find the number, it holds all day - write it down.'],
+        ['Stop going deeper', 'Below the thermocline there is no oxygen and no trout. If 30+ produces nothing you have gone past them, not short.'],
+        ['Switch signal', 'Fleet catching nothing on top in bright light = go to Plan B. This is the June lesson.']
+      ],
+      warn: 'Risk: dour open water on a bright flat day. Wind and cloud are worth more here than anywhere else on the lough.'
+    },
+    shallow: {
+      label: 'Shallow draw',
+      sub: 'Sunken islands, island fringes, rocky margins',
+      species: 'Gillaroo (fewer, bigger, confident takes)',
+      rows: [
+        ['Water', 'Sunken islands, Inishmean and Church Island shores, rocky margins. 0-4 m. Fish the SHOULDER where it drops away, not the crown.'],
+        ['Wave gate', 'Gillaroo need a good wave before they come to the fly. Flat calm on the rocks is close to a blank - if it goes glassy, push for deeper water.'],
+        ['Plan A - wet', ROD_A + ' + floater. Cast to the edge of the shallow, draw the flies OFF it into deeper water.'],
+        ['Plan A cast', 'Bob: Green Peter sz 10 | Mid: Claret Dabbler sz 10 | Point: Fiery Brown or Sooty Olive'],
+        ['Plan B - LATE AUG DRY', ROD_B + '. Gillaroo feed on the bottom all season EXCEPT late summer, when they come up and take the dry. Very few boats will try this.'],
+        ['Plan B cast', 'Single dry: Green Peter Dry sz 10 or Dry Daddy sz 10. Static or the smallest twitch.'],
+        ['Best window', 'Good wave plus cloud. Daddy comes into its own on a warm breezy afternoon.'],
+        ['Switch signal', 'Any adult sedge on the water, or fish moving on top over the rocks, and the 5wt comes out.']
+      ],
+      warn: 'Risk: flat calm kills it dead and there is no depth to fall back on. Have the count-down plan ready as an escape.'
+    }
+  };
+
+  var FIRST30 = [
+    'Take a surface temp and a sounder depth before the first cast.',
+    'Ladder the count-down in fives across the first three drifts - find the band whatever the water.',
+    'Do NOT fish the same layer as your partner. If he is on the floater, you go sinking. You cover twice the water.',
+    'Ask about splitting the day in the first ten minutes, not at 2pm.',
+    'If he is local, he knows more than this app does. Listen first.'
+  ];
+
+  function css() {
+    if (document.getElementById('draw-brief-css')) return;
+    var s = document.createElement('style');
+    s.id = 'draw-brief-css';
+    s.textContent =
+      '.draw-wrap{margin-top:14px}' +
+      '.draw-tabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}' +
+      '.draw-tab{font-family:var(--font-m);font-size:11px;padding:5px 12px;border:1px solid var(--border);' +
+      'background:var(--surface);color:var(--text-muted);border-radius:3px;cursor:pointer;transition:all .15s}' +
+      '.draw-tab:hover{border-color:var(--border-light);color:var(--text-dim)}' +
+      '.draw-tab.active{border-color:var(--teal);color:var(--teal);background:#0a1810}' +
+      '.draw-panel{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);' +
+      'border-radius:4px;padding:12px 14px}' +
+      '.draw-hdr{font-family:var(--font-h);font-size:16px;color:var(--teal);font-style:italic;margin-bottom:2px}' +
+      '.draw-species{font-family:var(--font-m);font-size:10px;color:var(--gold);margin-bottom:10px}' +
+      '.draw-row{display:grid;grid-template-columns:120px 1fr;gap:10px;padding:5px 0;border-top:1px solid #1a2d2230;font-size:11px}' +
+      '.draw-row:first-of-type{border-top:none}' +
+      '.draw-k{font-family:var(--font-m);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}' +
+      '.draw-v{color:var(--text-dim);line-height:1.5}' +
+      '.draw-warn{margin-top:10px;padding:6px 10px;border-radius:3px;background:#1a0800;border:1px solid #503008;' +
+      'color:var(--amber);font-family:var(--font-m);font-size:10px}' +
+      '.draw-first{margin-top:8px;padding:10px 12px;background:#0a1400;border:1px solid #254518;border-radius:3px}' +
+      '.draw-first-t{font-family:var(--font-c);font-size:11px;letter-spacing:.5px;color:var(--teal);' +
+      'text-transform:uppercase;margin-bottom:5px}' +
+      '.draw-first div{font-size:11px;color:var(--text-dim);margin:3px 0;line-height:1.5}' +
+      '.draw-rods{font-family:var(--font-m);font-size:10px;color:var(--text-muted);margin-top:8px}' +
+      '@media(max-width:640px){.draw-row{grid-template-columns:1fr;gap:2px}}';
+    document.head.appendChild(s);
+  }
+
+  function render(key) {
+    var b = BRANCHES[key];
+    var rows = b.rows.map(function (r) {
+      return '<div class="draw-row"><div class="draw-k">' + r[0] + '</div><div class="draw-v">' + r[1] + '</div></div>';
+    }).join('');
+    return '<div class="draw-panel"><div class="draw-hdr">' + b.label + ' - ' + b.sub + '</div>' +
+      '<div class="draw-species">Target: ' + b.species + '</div>' + rows +
+      '<div class="draw-warn">' + b.warn + '</div></div>';
+  }
+
+  window.setDrawBranch = function (key, btn) {
+    var wrap = btn.closest('.draw-wrap');
+    wrap.querySelectorAll('.draw-tab').forEach(function (t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    wrap.querySelector('.draw-body').innerHTML = render(key);
+  };
+
+  function build() {
+    var panel = document.getElementById('lough-melvin');
+    if (!panel || panel.dataset.drawDone) return;
+    var anchor = panel.querySelector('.hatch-section');
+    if (!anchor) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'draw-wrap';
+    wrap.innerHTML =
+      '<div class="hatch-title">Competition draw briefing - GLMAA, 26-30 Aug' +
+      '<span style="font-size:9px;font-family:var(--font-m);color:var(--text-muted)"> - you do not pick the water, so plan both</span></div>' +
+      '<div class="draw-tabs">' +
+      '<button class="draw-tab active" onclick="setDrawBranch(\'deep\',this)">Deep draw</button>' +
+      '<button class="draw-tab" onclick="setDrawBranch(\'shallow\',this)">Shallow draw</button>' +
+      '</div><div class="draw-body">' + render('deep') + '</div>' +
+      '<div class="draw-first"><div class="draw-first-t">First 30 minutes - whatever the draw</div>' +
+      FIRST30.map(function (t) { return '<div>- ' + t + '</div>'; }).join('') + '</div>' +
+      '<div class="draw-rods">Boat rods: ' + ROD_A + '  |  ' + ROD_B + '</div>';
+
+    anchor.parentNode.insertBefore(wrap, anchor);
+    panel.dataset.drawDone = '1';
+  }
+
+  function start() {
+    css();
+    build();
+    var host = document.getElementById('lough-panels');
+    if (host && window.MutationObserver) {
+      new MutationObserver(function () { setTimeout(build, 60); }).observe(host, { childList: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(start, 900); });
+  } else {
+    setTimeout(start, 900);
+  }
 })();
 </script>
 </body>
