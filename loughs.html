@@ -1079,6 +1079,45 @@ function hatchTimelineHTML(lough){
 }
 
 // ════════════════════════════════════════════════════════════════
+// SUBSTRATE → FOOD → FLY  (bottom type crossed with active hatch)
+// ════════════════════════════════════════════════════════════════
+const SUBSTRATE_FLIES = {
+  marl:   { food: 'mayfly nymph, shrimp, snail',   flies: ['Mayfly Nymph','Green Drake','Spent Gnat','Golden Olive Bumble','Gosling'] },
+  stony:  { food: 'caddis, snail, stonefly',       flies: ['Green Peter','Murrough','Sedge','Bibio','Silver Invicta'] },
+  silt:   { food: 'chironomid, bloodworm',         flies: ['Black Buzzer','Olive Buzzer','Diawl Bach','Black Pennell'] },
+  weed:   { food: 'shrimp, corixa, damsel, snail', flies: ['Shrimp','Corixa','Damsel Nymph','Soldier Palmer'] },
+  sand:   { food: 'sparse',                        flies: [] },
+  gravel: { food: 'caddis, upwing nymph',          flies: ['Sedge','Silver Invicta','Sooty Olive'] },
+};
+
+// ⚠ SUBSTRATE NEEDS FIELD VERIFICATION FROM TADHG ⚠ — correct per lake.
+const LOUGH_SUBSTRATE = {
+  conn:    ['marl','stony','weed'],
+  corrib:  ['marl','stony','weed'],
+  melvin:  ['stony','marl','gravel'],
+  sheelin: ['marl','weed','silt'],
+};
+
+function substrateConfidentFlies(lough, month){
+  const subs = LOUGH_SUBSTRATE[lough.id] || [];
+  const subFlies = [], food = [];
+  for (const s of subs){
+    const e = SUBSTRATE_FLIES[s]; if(!e) continue;
+    food.push(e.food);
+    for (const f of e.flies) if(!subFlies.includes(f)) subFlies.push(f);
+  }
+  const activeHatches = lough.hatches.filter(h=>h.months.includes(month));
+  const activeFlyNames = activeHatches.flatMap(h=>h.flies);
+  const norm = x => x.toLowerCase().replace(/[^a-z]/g,'');
+  const activeNorm = activeFlyNames.map(norm);
+  const confident = subFlies.filter(f=>{
+    const sf = norm(f);
+    return activeNorm.some(af => af.includes(sf) || sf.includes(af));
+  });
+  return { substrates: subs, foodPresent: [...new Set(food)], substrateFlies: subFlies, confidentPicks: confident };
+}
+
+// ════════════════════════════════════════════════════════════════
 // FLY BOX HTML
 // ════════════════════════════════════════════════════════════════
 function flyBoxHTML(lough,month){
@@ -1098,7 +1137,16 @@ function flyBoxHTML(lough,month){
     return`<span class="fly-tag${isTop?' top':''}${isActive&&!isTop?' recommended':''}">${f}</span>`;
   };
 
+  // Substrate × hatch cross — the high-confidence picks
+  const sub = substrateConfidentFlies(lough, month);
+  const confidentBox = sub.confidentPicks.length ? `<div class="fly-box" style="grid-column:1/-1;border-color:#254535;background:#0a1810">
+      <div class="fly-box-title" style="color:var(--teal)">🎯 HIGH-CONFIDENCE NOW <span style="font-size:9px;color:var(--text-muted)">— hatch × bottom agree</span></div>
+      <div style="font-size:10px;font-family:var(--font-m);color:var(--text-dim);margin-bottom:6px">Bottom here: <b style="color:var(--text)">${sub.substrates.join(' / ')}</b> → food present: ${sub.foodPresent.join('; ')}</div>
+      ${sub.confidentPicks.map(f=>`<span class="fly-tag top">${f}</span>`).join('')}
+    </div>` : '';
+
   return`<div class="fly-box-grid">
+    ${confidentBox}
     <div class="fly-box">
       <div class="fly-box-title">🪰 WET FLIES NOW <span style="font-size:9px;color:var(--text-muted)">(team of 3)</span></div>
       <div style="font-size:9px;font-family:var(--font-m);margin-bottom:5px;display:flex;gap:10px;flex-wrap:wrap">
@@ -1319,7 +1367,11 @@ function renderLoughPanel(l,wx){
         <div id="plan-body-${l.id}">${renderHourlyTimeline(l,wx,month)}</div>
       </div>
 
-      <!-- HATCH TIMELINE -->\n      <div class="hatch-section">\n        <div class="hatch-title">Annual Hatch Calendar <span style="font-size:9px;font-family:var(--font-m)">– gold border = current month</span></div>\n        <div class="hatch-timeline">${hatchTimelineHTML(l)}</div>\n      </div>
+      <!-- HATCH TIMELINE -->
+      <div class="hatch-section">
+        <div class="hatch-title">Annual Hatch Calendar <span style="font-size:9px;font-family:var(--font-m)">– gold border = current month</span></div>
+        <div class="hatch-timeline">${hatchTimelineHTML(l)}</div>
+      </div>
 
       <!-- FLY BOXES -->
       <div class="fly-section">
@@ -1336,13 +1388,6 @@ function renderLoughPanel(l,wx){
         ${renderMossSection(l)}
         <div class="tactic-grid" style="margin-top:10px">
           <div class="tactic-card"><div class="tactic-name">Drifting</div><div class="tactic-text">Drift broadside to the wind in 3–6 knots using a drogue. Cast to the front/side. Team of 3 wet flies: point, middle dropper, bob fly. Dibble the bob in the ripple at the end of each swing.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Bob Fly</div><div class="tactic-text">The bob (top dropper) should be bushy – Bibio, Soldier Palmer, Sooty Olive Bumble. Dibble it in the surface as you lift off. Many takes come as the fly dances in the wave.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Dapping</div><div class="tactic-text">Use a 14–16ft dapping rod with floss silk blowline. Let the wind carry the natural or imitation fly to the surface. Count to 3 before striking. Natural mayfly locally sourced.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Buzzer / Nymph</div><div class="tactic-text">In calm conditions or early season, fish 2–3 buzzers on a slow-sinking or intermediate line. Static or very slow figure-of-8 retrieve. Look for subtle takes in the surface film.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Spent Gnat (evening)</div><div class="tactic-text">At dusk/dark during mayfly. Kill the engine. Stalk rising fish. Single fly on a light leader. Cast ahead of the fish's line. Do NOT strike immediately – wait for the fish to turn down.</div></div>
-          <div class="tactic-card"><div class="tactic-name">Safety</div><div class="tactic-text">Always wear a lifejacket. Check forecast before launching. Rule: if in doubt, don't go out. Always tell someone your plan and expected return. Carry a phone in a waterproof case.</div></div>
-        </div>
-      </div>
           <div class="tactic-card"><div class="tactic-name">Bob Fly</div><div class="tactic-text">The bob (top dropper) should be bushy – Bibio, Soldier Palmer, Sooty Olive Bumble. Dibble it in the surface as you lift off. Many takes come as the fly dances in the wave.</div></div>
           <div class="tactic-card"><div class="tactic-name">Dapping</div><div class="tactic-text">Use a 14–16ft dapping rod with floss silk blowline. Let the wind carry the natural or imitation fly to the surface. Count to 3 before striking. Natural mayfly locally sourced.</div></div>
           <div class="tactic-card"><div class="tactic-name">Buzzer / Nymph</div><div class="tactic-text">In calm conditions or early season, fish 2–3 buzzers on a slow-sinking or intermediate line. Static or very slow figure-of-8 retrieve. Look for subtle takes in the surface film.</div></div>
@@ -1524,6 +1569,130 @@ async function runLoughReport(){
 function updateClock(){document.getElementById('clock-sm').textContent=new Date().toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
 setInterval(updateClock,1000);updateClock();
 window.addEventListener('load',runLoughReport);
+</script>
+<!-- ══════════════════════════════════════════════════════════════════
+     DEPTH CHART BUTTONS — added 20 Jul 2026
+     Adds a "Depths" link to each lough's Drift Advisory box, opening the
+     i-Boating chart at that position. Self-contained: injects its own CSS,
+     touches no existing code. Delete this block to remove the feature.
+
+     Builds a hyperlink only. Does not fetch, copy, cache or re-host any
+     chart data — those charts are a licensed product (Bist LLC).
+     ══════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  var CHART_BASE = 'https://fishing-app.gpsnauticalcharts.com/i-boating-fishing-web-app/fishing-marine-charts-navigation.html';
+  var DEFAULT_ZOOM = 14.5;   // 13.4 = whole lough · 15.5 = drift scale · 16+ = very tight
+
+  // Only Melvin's title is VERIFIED (taken from a working URL). The others
+  // are unconfirmed — the map still centres correctly because the coordinates
+  // do that job, but check each lough actually has contour data before
+  // trusting the chart. Fill the title in from the URL bar once confirmed.
+  var CHART_TITLES = {
+    melvin:  'Melvin ( Lough ) boating app',   // verified
+    conn:    null,                             // unverified
+    corrib:  null,                             // unverified
+    sheelin: null                              // unverified
+  };
+
+  function buildUrl(lat, lng, title, zoom) {
+    if (typeof lat !== 'number' || typeof lng !== 'number') return null;
+    var q = title ? '?title=' + encodeURIComponent(title) : '';
+    // i-Boating reads position from the hash fragment as  zoom/lat/lng
+    return CHART_BASE + q + '#' + (zoom || DEFAULT_ZOOM) + '/' + lat.toFixed(4) + '/' + lng.toFixed(4);
+  }
+
+  function makeLink(lat, lng, title, label, tip, zoom) {
+    var url = buildUrl(lat, lng, title, zoom);
+    if (!url) return null;                       // no coords -> no dead button
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';               // required with target=_blank
+    a.className = 'btn-depth-chart';
+    a.textContent = label;
+    a.title = tip || 'Opens the i-Boating depth chart in a new tab';
+    return a;
+  }
+
+  function injectCss() {
+    if (document.getElementById('depth-chart-css')) return;
+    var s = document.createElement('style');
+    s.id = 'depth-chart-css';
+    s.textContent =
+      '.btn-depth-chart{display:inline-block;font-family:var(--font-m);font-size:10px;' +
+      'padding:3px 9px;margin:4px 4px 0 0;border-radius:3px;text-decoration:none;' +
+      'background:var(--card);border:1px solid var(--border);color:var(--text-muted);' +
+      'transition:all .15s;white-space:nowrap}' +
+      '.btn-depth-chart:hover{border-color:var(--teal);color:var(--teal);background:#0a1810}' +
+      '.depth-chart-row{margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}' +
+      '.depth-chart-note{font-family:var(--font-m);font-size:9px;color:var(--text-muted);' +
+      'display:block;margin-bottom:2px;letter-spacing:.5px;text-transform:uppercase}';
+    document.head.appendChild(s);
+  }
+
+  function decorate(panel) {
+    if (panel.dataset.depthDone) return;         // don't double-add on re-render
+    var id = panel.id.replace('lough-', '');
+    var lough = (typeof LOUGHS !== 'undefined') && LOUGHS.filter(function (l) { return l.id === id; })[0];
+    if (!lough) return;
+
+    var driftBox = panel.querySelector('.drift-section');
+    if (!driftBox) return;
+
+    var row = document.createElement('div');
+    row.className = 'depth-chart-row';
+    var lbl = document.createElement('span');
+    lbl.className = 'depth-chart-note';
+    lbl.textContent = 'Depth chart - what is under the boat';
+    row.appendChild(lbl);
+
+    var title = CHART_TITLES[id] || null;
+
+    var main = makeLink(lough.lat, lough.lon, title, 'Depths',
+      'Open the depth chart centred on ' + lough.name, 13.4);
+    if (main) row.appendChild(main);
+
+    // Per-drift buttons appear automatically once you add lat/lon to a
+    // bestAreas entry, e.g.
+    //   { name:'Rossinver Bay', wind:'W/NW', note:'...', lat:54.41, lon:-8.13 }
+    // This is where melvinDrifts.json coordinates plug in.
+    (lough.bestAreas || []).forEach(function (area) {
+      var link = makeLink(area.lat, area.lon, title,
+        area.name.length > 22 ? area.name.slice(0, 20) + '...' : area.name,
+        'Depth chart at ' + area.name, 15.5);
+      if (link) row.appendChild(link);
+    });
+
+    driftBox.appendChild(row);
+    panel.dataset.depthDone = '1';
+  }
+
+  function decorateAll() {
+    var panels = document.querySelectorAll('.lough-panel');
+    for (var i = 0; i < panels.length; i++) decorate(panels[i]);
+  }
+
+  function start() {
+    injectCss();
+    decorateAll();
+    var host = document.getElementById('lough-panels');
+    if (host && window.MutationObserver) {
+      new MutationObserver(function () { setTimeout(decorateAll, 60); })
+        .observe(host, { childList: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(start, 800); });
+  } else {
+    setTimeout(start, 800);
+  }
+
+  window.DepthChart = { buildUrl: buildUrl, refresh: decorateAll };
+})();
 </script>
 </body>
 </html>
