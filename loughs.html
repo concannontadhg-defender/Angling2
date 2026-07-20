@@ -1839,5 +1839,175 @@ window.addEventListener('load',runLoughReport);
   }
 })();
 </script>
+<script src="/src/data/melvinDrifts.js"></script>
+<!-- ══════════════════════════════════════════════════════════════════
+     MELVIN DRIFT LIBRARY — added 20 Jul 2026
+     Reads window.MELVIN_DRIFTS (loaded above) and does two things:
+       1. Feeds any drift that HAS coordinates into Melvin's bestAreas,
+          which lights up the per-drift depth chart buttons automatically.
+       2. Renders a collapsible drift library in the Melvin panel with
+          structure, hazards, confidence flags and the August override.
+
+     Confidence gating: drifts marked confidence:'low' are shown greyed
+     with a warning, never as fact. Empty fields stay visibly empty -
+     that is the point of the file.
+
+     Self-contained. Delete this block to remove the feature.
+     ══════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  var D = window.MELVIN_DRIFTS;
+  if (!D) return;
+
+  var MONTH = new Date().getMonth() + 1;
+  var LATE_SUMMER = (MONTH === 8 || MONTH === 9);
+
+  function hasCoords(pt) { return pt && typeof pt.lat === 'number' && typeof pt.lng === 'number'; }
+
+  // ---- 1. Push surveyed drifts into bestAreas so depth buttons appear ----
+  function mergeCoords() {
+    if (typeof LOUGHS === 'undefined') return 0;
+    var melvin = LOUGHS.filter(function (l) { return l.id === 'melvin'; })[0];
+    if (!melvin || melvin._driftsMerged) return 0;
+    var added = 0;
+    D.drifts.forEach(function (dr) {
+      if (!hasCoords(dr.startPoint)) return;
+      var existing = melvin.bestAreas.filter(function (a) {
+        return a.name.toLowerCase().indexOf(dr.bay.toLowerCase()) > -1 ||
+               dr.name.toLowerCase().indexOf(a.name.toLowerCase()) > -1;
+      })[0];
+      if (existing) {
+        if (existing.lat == null) { existing.lat = dr.startPoint.lat; existing.lon = dr.startPoint.lng; added++; }
+      } else {
+        melvin.bestAreas.push({
+          name: dr.name,
+          wind: (dr.windGood && dr.windGood.length) ? dr.windGood.join('/') : 'Any',
+          note: dr.structure || '',
+          lat: dr.startPoint.lat,
+          lon: dr.startPoint.lng
+        });
+        added++;
+      }
+    });
+    melvin._driftsMerged = true;
+    return added;
+  }
+
+  // ---- 2. Render the library ----
+  function badge(txt, cls) { return '<span class="dl-badge ' + cls + '">' + txt + '</span>'; }
+
+  function driftCard(dr) {
+    var conf = dr.confidence || 'low';
+    var confCls = conf === 'high' ? 'green' : conf === 'med' ? 'gold' : 'dim';
+    var badges = badge(conf + ' confidence', confCls);
+    if (dr.hazard) badges += badge('hazard', 'red');
+    if (!hasCoords(dr.startPoint)) badges += badge('no GPS yet', 'dim');
+    if (dr.jurisdiction === 'NI') badges += badge('NI permit', 'gold');
+    if (dr.inZone === 'rossinver-bay-fly-only') badges += badge('fly only', 'green');
+
+    var rows = '';
+    if (dr.structure) rows += '<div class="dl-row"><span class="dl-k">Bottom</span><span class="dl-v">' + dr.structure + '</span></div>';
+    var depth = (dr.depthMinM != null && dr.depthMaxM != null) ? dr.depthMinM + '-' + dr.depthMaxM + ' m' : 'unknown - sound it';
+    rows += '<div class="dl-row"><span class="dl-k">Depth</span><span class="dl-v">' + depth + '</span></div>';
+    if (dr.species && dr.species.length) rows += '<div class="dl-row"><span class="dl-k">Species</span><span class="dl-v">' + dr.species.join(', ') + '</span></div>';
+    if (dr.hazardNote) rows += '<div class="dl-row"><span class="dl-k" style="color:var(--red)">Warning</span><span class="dl-v" style="color:var(--red)">' + dr.hazardNote + '</span></div>';
+    if (dr.notes) rows += '<div class="dl-row"><span class="dl-k">Notes</span><span class="dl-v">' + dr.notes + '</span></div>';
+    if (LATE_SUMMER && dr.augustOverride) rows += '<div class="dl-aug">Late summer: ' + dr.augustOverride + '</div>';
+    if (conf === 'low') rows += '<div class="dl-low">Low confidence - position or geometry is inferred, not surveyed. Verify before trusting it.</div>';
+
+    return '<div class="dl-card' + (conf === 'low' ? ' faded' : '') + '">' +
+      '<div class="dl-name">' + dr.name + '</div><div class="dl-badges">' + badges + '</div>' + rows + '</div>';
+  }
+
+  function css() {
+    if (document.getElementById('drift-lib-css')) return;
+    var s = document.createElement('style');
+    s.id = 'drift-lib-css';
+    s.textContent =
+      '.dl-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:10px 12px;margin-bottom:6px}' +
+      '.dl-card.faded{opacity:.55}' +
+      '.dl-name{font-family:var(--font-h);font-size:15px;color:var(--text);margin-bottom:4px}' +
+      '.dl-badges{margin-bottom:6px}' +
+      '.dl-badge{display:inline-block;font-family:var(--font-m);font-size:9px;padding:1px 7px;margin:0 4px 3px 0;' +
+      'border-radius:20px;border:1px solid var(--border);color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}' +
+      '.dl-badge.green{border-color:#254535;background:#0a1810;color:var(--teal)}' +
+      '.dl-badge.gold{border-color:#4a3a08;background:#1a1200;color:var(--gold)}' +
+      '.dl-badge.red{border-color:#601010;background:#200808;color:var(--red)}' +
+      '.dl-badge.dim{opacity:.7}' +
+      '.dl-row{display:grid;grid-template-columns:70px 1fr;gap:8px;padding:2px 0;font-size:11px}' +
+      '.dl-k{font-family:var(--font-m);font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}' +
+      '.dl-v{color:var(--text-dim);line-height:1.5}' +
+      '.dl-aug{margin-top:6px;padding:5px 9px;border-radius:3px;background:#1a1200;border-left:2px solid var(--gold);' +
+      'font-size:10px;color:var(--gold);line-height:1.5}' +
+      '.dl-low{margin-top:6px;font-family:var(--font-m);font-size:9px;color:var(--text-muted);font-style:italic}' +
+      '.dl-meta{font-family:var(--font-m);font-size:10px;color:var(--text-muted);margin-bottom:8px;line-height:1.6}' +
+      '@media(max-width:640px){.dl-row{grid-template-columns:1fr;gap:1px}}';
+    document.head.appendChild(s);
+  }
+
+  function build() {
+    var panel = document.getElementById('lough-melvin');
+    if (!panel || panel.dataset.driftLibDone) return;
+    var anchor = panel.querySelector('.hatch-section');
+    if (!anchor) return;
+
+    var merged = mergeCoords();
+    var surveyed = D.drifts.filter(function (d) { return hasCoords(d.startPoint); }).length;
+
+    var zones = D.regulatoryZones.map(function (z) {
+      return '<div class="dl-row"><span class="dl-k">Rule</span><span class="dl-v"><b>' + z.name + '</b> - ' + z.rule + '</span></div>';
+    }).join('');
+
+    var wrap = document.createElement('div');
+    wrap.className = 'drift-lib-wrap';
+    wrap.innerHTML =
+      '<div class="sec-toggle" data-toggle="driftlib-melvin" onclick="toggleSec(\'driftlib-melvin\')">' +
+      '<span class="toggle-arrow">&#9654;</span>' +
+      '<span class="sec-toggle-title">Drift library - ' + D.drifts.length + ' marks</span>' +
+      '<span style="font-family:var(--font-m);font-size:9px;color:var(--text-muted);margin-left:8px">' +
+      surveyed + ' of ' + D.drifts.length + ' have GPS</span></div>' +
+      '<div id="driftlib-melvin" class="collapsible"><div style="margin-top:8px">' +
+      '<div class="dl-meta">Hand-authored from published fishery sources and personal recon. ' +
+      'No open bathymetric survey of Melvin exists - depths and geometry are unverified unless marked otherwise. ' +
+      'Coordinates are blank rather than invented; fill them in from the chart or your own GPS.</div>' +
+      '<div class="dl-card" style="border-left:3px solid var(--amber)">' +
+      '<div class="dl-name" style="font-size:13px">Regulatory</div>' + zones + '</div>' +
+      D.drifts.map(driftCard).join('') + '</div></div>';
+
+    anchor.parentNode.insertBefore(wrap, anchor);
+    panel.dataset.driftLibDone = '1';
+
+    if (merged && window.DepthChart && window.DepthChart.refresh) {
+      panel.querySelectorAll('[data-depth-done]').forEach(function (p) { delete p.dataset.depthDone; });
+      window.DepthChart.refresh();
+    }
+  }
+
+  function start() {
+    css();
+    build();
+    var host = document.getElementById('lough-panels');
+    if (host && window.MutationObserver) {
+      new MutationObserver(function () { setTimeout(build, 60); }).observe(host, { childList: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(start, 950); });
+  } else {
+    setTimeout(start, 950);
+  }
+
+  window.MelvinDrifts = {
+    all: function () { return D.drifts; },
+    byId: function (id) { return D.drifts.filter(function (d) { return d.id === id; })[0]; },
+    surveyed: function () { return D.drifts.filter(function (d) { return hasCoords(d.startPoint); }); },
+    forSpecies: function (sp) { return D.drifts.filter(function (d) { return (d.species || []).indexOf(sp) > -1; }); },
+    rules: D.speciesRules
+  };
+})();
+</script>
 </body>
 </html>
