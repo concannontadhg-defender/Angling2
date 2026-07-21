@@ -2009,5 +2009,160 @@ window.addEventListener('load',runLoughReport);
   };
 })();
 </script>
+<script src="/src/js/melvinMatcher.js"></script>
+<!-- ══════════════════════════════════════════════════════════════════
+     GHILLIE CALL — the wind-matcher UI. Added 20 Jul 2026.
+     Renders MelvinMatcher output at the TOP of the Melvin panel:
+     start-here drift, why, rod/line/depth/cast/retrieve, switch signal,
+     three-tap re-rank, and ranked alternatives.
+     Self-contained. Delete this block to remove.
+     ══════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+  if (!window.MelvinMatcher) return;
+
+  var LABELS = { swallows: 'Swallows', surface: 'Surface', rises: 'Rises' };
+  var OPTS = {
+    swallows: [['low','Low & tight'],['mid','Mid'],['high','High / none']],
+    surface:  [['glass','Glass'],['ripple','Ripple'],['wave','Good wave']],
+    rises:    [['none','Nothing'],['sipping','Sipping'],['slashing','Slashing']]
+  };
+
+  function css() {
+    if (document.getElementById('ghillie-css')) return;
+    var s = document.createElement('style');
+    s.id = 'ghillie-css';
+    s.textContent =
+      '.gh-wrap{margin:12px 0 4px}' +
+      '.gh-card{background:linear-gradient(135deg,#08130c,#0a1610);border:1px solid #1a3a20;' +
+      'border-left:3px solid var(--teal);border-radius:4px;padding:14px 16px}' +
+      '.gh-kicker{font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px}' +
+      '.gh-name{font-family:var(--font-h);font-size:22px;color:var(--teal);line-height:1.1;margin-bottom:4px}' +
+      '.gh-score{float:right;font-family:var(--font-h);font-size:26px;color:var(--gold);line-height:1}' +
+      '.gh-why{font-size:11px;color:var(--text-dim);margin:6px 0 10px;line-height:1.6}' +
+      '.gh-grid{display:grid;grid-template-columns:74px 1fr;gap:8px;font-size:11px;padding:4px 0;border-top:1px solid #1a2d2240}' +
+      '.gh-k{font-family:var(--font-m);font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}' +
+      '.gh-v{color:var(--text);line-height:1.5}' +
+      '.gh-fly{display:block;font-family:var(--font-m);font-size:11px;color:var(--teal)}' +
+      '.gh-sw{margin-top:8px;padding:6px 10px;border-radius:3px;background:#1a1200;border-left:2px solid var(--gold);' +
+      'font-size:10px;color:var(--gold);line-height:1.5}' +
+      '.gh-note{margin-top:6px;font-size:10px;color:var(--text-dim);font-style:italic;line-height:1.5}' +
+      '.gh-flags{margin-top:8px}' +
+      '.gh-flag{display:inline-block;font-family:var(--font-m);font-size:9px;padding:1px 7px;margin:0 4px 3px 0;' +
+      'border-radius:20px;border:1px solid var(--border);color:var(--text-muted)}' +
+      '.gh-flag.warn{border-color:#601010;background:#200808;color:var(--red)}' +
+      '.gh-obs{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 8px}' +
+      '.gh-obs-g{display:flex;flex-direction:column;gap:3px}' +
+      '.gh-obs-l{font-family:var(--font-m);font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}' +
+      '.gh-obs-b{display:flex;gap:3px}' +
+      '.gh-btn{font-family:var(--font-m);font-size:10px;padding:3px 8px;border:1px solid var(--border);' +
+      'background:var(--surface);color:var(--text-muted);border-radius:3px;cursor:pointer;transition:all .15s}' +
+      '.gh-btn:hover{border-color:var(--border-light)}' +
+      '.gh-btn.on{border-color:var(--teal);color:var(--teal);background:#0a1810}' +
+      '.gh-alts{margin-top:8px}' +
+      '.gh-alt{display:grid;grid-template-columns:1fr auto;gap:8px;padding:5px 0;border-top:1px solid #1a2d2230;font-size:11px}' +
+      '.gh-alt-n{color:var(--text-dim)}.gh-alt-s{font-family:var(--font-m);font-size:10px;color:var(--text-muted)}' +
+      '.gh-caveat{margin-top:8px;font-family:var(--font-m);font-size:9px;color:var(--text-muted);line-height:1.6}' +
+      '@media(max-width:640px){.gh-grid{grid-template-columns:1fr;gap:1px}.gh-name{font-size:18px}}';
+    document.head.appendChild(s);
+  }
+
+  window.ghSetObs = function (key, val, btn) {
+    var cur = window.MelvinMatcher.obs[key];
+    window.MelvinMatcher.obs[key] = (cur === val) ? null : val;
+    var panel = document.getElementById('lough-melvin');
+    if (panel) { delete panel.dataset.ghDone; render(); }
+  };
+
+  function obsRow() {
+    return '<div class="gh-obs">' + Object.keys(OPTS).map(function (k) {
+      return '<div class="gh-obs-g"><span class="gh-obs-l">' + LABELS[k] + '</span><span class="gh-obs-b">' +
+        OPTS[k].map(function (o) {
+          var on = window.MelvinMatcher.obs[k] === o[0] ? ' on' : '';
+          return '<button class="gh-btn' + on + '" onclick="ghSetObs(\'' + k + '\',\'' + o[0] + '\',this)">' + o[1] + '</button>';
+        }).join('') + '</span></div>';
+    }).join('') + '</div>';
+  }
+
+  function render() {
+    var panel = document.getElementById('lough-melvin');
+    if (!panel || panel.dataset.ghDone) return;
+    var body = panel.querySelector('.lough-body');
+    if (!body) return;
+
+    var r = window.MelvinMatcher.run();
+    if (!r.ranked.length) return;
+    var top = r.ranked[0];
+    var t = window.MelvinMatcher.tactics(top.drift, r.cond);
+    var c = r.cond;
+
+    var read = [
+      c.windCompass ? c.windCompass + ' ' + Math.round(c.windSpeed) + ' km/h' : null,
+      c.wave ? c.wave : null, c.light ? c.light : null,
+      c.pressure ? c.pressure + ' hPa ' + (c.trend || '') : null
+    ].filter(Boolean).join('  |  ');
+
+    var flags = top.flags.map(function (f) {
+      var w = /HAZARD|gusting|permit/i.test(f) ? ' warn' : '';
+      return '<span class="gh-flag' + w + '">' + f + '</span>';
+    }).join('');
+
+    var alts = r.ranked.slice(1, 4).map(function (x) {
+      return '<div class="gh-alt"><span class="gh-alt-n">' + x.drift.name + '</span>' +
+             '<span class="gh-alt-s">' + x.score.toFixed(1) + '</span></div>';
+    }).join('');
+
+    var wrap = document.createElement('div');
+    wrap.className = 'gh-wrap';
+    wrap.innerHTML =
+      '<div class="gh-card">' +
+      '<div class="gh-score">' + top.score.toFixed(1) + '</div>' +
+      '<div class="gh-kicker">Start here</div>' +
+      '<div class="gh-name">' + top.drift.name + '</div>' +
+      '<div class="gh-why">' + (top.why.join(' &middot; ') || 'Best available fit for current conditions.') + '</div>' +
+      '<div class="gh-grid"><span class="gh-k">Rod</span><span class="gh-v">' + t.rod + '</span></div>' +
+      '<div class="gh-grid"><span class="gh-k">Line</span><span class="gh-v">' + t.line + '</span></div>' +
+      '<div class="gh-grid"><span class="gh-k">Depth</span><span class="gh-v">' + t.depth + '</span></div>' +
+      '<div class="gh-grid"><span class="gh-k">Cast</span><span class="gh-v">' + t.cast.map(function (f) { return '<span class="gh-fly">' + f + '</span>'; }).join('') + '</span></div>' +
+      '<div class="gh-grid"><span class="gh-k">Retrieve</span><span class="gh-v">' + t.retrieve + '</span></div>' +
+      '<div class="gh-grid"><span class="gh-k">Style</span><span class="gh-v">' + t.style + '</span></div>' +
+      (t.note ? '<div class="gh-note">' + t.note + '</div>' : '') +
+      '<div class="gh-sw">Switch signal: ' + t.sw + '</div>' +
+      (flags ? '<div class="gh-flags">' + flags + '</div>' : '') +
+      '<div class="gh-kicker" style="margin-top:12px">What can you see? tap to re-rank</div>' +
+      obsRow() +
+      (alts ? '<div class="gh-alts"><div class="gh-kicker">Next best</div>' + alts + '</div>' : '') +
+      '<div class="gh-caveat">Read: ' + (read || 'no live weather') + '<br>' +
+      'This is a model built from published sources and your own logs, not measured data. ' +
+      'It is an opening opinion - if the water tells you different, the water wins.</div>' +
+      '</div>';
+
+    var existing = body.querySelector('.gh-wrap');
+    if (existing) existing.remove();
+    body.insertBefore(wrap, body.firstChild);
+    panel.dataset.ghDone = '1';
+  }
+
+  function start() {
+    css();
+    render();
+    var host = document.getElementById('lough-panels');
+    if (host && window.MutationObserver) {
+      new MutationObserver(function () {
+        var p = document.getElementById('lough-melvin');
+        if (p) delete p.dataset.ghDone;
+        setTimeout(render, 80);
+      }).observe(host, { childList: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(start, 1000); });
+  } else {
+    setTimeout(start, 1000);
+  }
+})();
+</script>
 </body>
 </html>
